@@ -8,6 +8,9 @@ Gruppe 24 er best!
  - `docs/` inneholder dokumentasjon.
  - `kode/` inneholder all server- og klientkode.
 
+
+## Hvordan bygger jeg prosjektet? 
+
 For å bygge prosjektet trenger du Maven. Dette er mest sansynlig inkludert i ditt IDE (som enten er Eclipse, eller IntelliJ).
 Her er akkurat hva du må gjøre for å på ting til å funke:
 
@@ -15,8 +18,6 @@ Her er akkurat hva du må gjøre for å på ting til å funke:
  - Under Maven, velg `Existing Maven Projects`
  - Trykk `Browse`, og velg finn frem til `kode` mappen.
  - Nå vil `/pom.xml` være markert i listen. Trykk Finish.
-
-## Hvordan bygger jeg prosjektet? 
 
 Dette er grunnen til at vi bruker maven. Først må vi sette opp en `run configuration`.
 
