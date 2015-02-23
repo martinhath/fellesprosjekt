@@ -27,6 +27,6 @@ Dette er grunnen til at vi bruker maven. Først må vi sette opp en `run configu
  - Trykk `Apply`, og `Run`. 
  - Nå skal du bygge `.jar`s. Smud.
 
-Merk at ingen ting kjøres. `.jar` filene ligger under `kode/target/`, og heter noe liknende `server-jar-with-dependencies` og `client-jar-with-dependencies`.
-Hvis du er i terminalen, og i `fellesprosjekt/kode/`, kan du skrive `java -jar target/server-with-dependencies`.
+Merk at ingen ting kjøres. `.jar` filene ligger under `kode/target/`, og heter noe liknende `server-jar-with-dependencies.jar` og `client-jar-with-dependencies.jar`.
+Hvis du er i terminalen, og i `fellesprosjekt/kode/`, kan du skrive `java -jar target/server-with-dependencies.jar`.
 
