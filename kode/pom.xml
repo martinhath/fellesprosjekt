@@ -36,7 +36,7 @@
             </goals>
             <phase>package</phase>
             <configuration>
-              <finalName>fellesprosjekt27-gui</finalName>
+              <finalName>client</finalName>
               <archive>
                 <manifest>
                   <mainClass>org.fellesprosjekt.gruppe24.client.main</mainClass>
@@ -54,7 +54,7 @@
             </goals>
             <phase>package</phase>
             <configuration>
-              <finalName>fellesprosjekt27-server</finalName>
+              <finalName>server</finalName>
               <archive>
                 <manifest>
                   <mainClass>org.fellesprosjekt.gruppe24.server.Main</mainClass>
