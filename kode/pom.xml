@@ -39,7 +39,7 @@
               <finalName>client</finalName>
               <archive>
                 <manifest>
-                  <mainClass>org.fellesprosjekt.gruppe24.client.main</mainClass>
+                  <mainClass>org.fellesprosjekt.gruppe24.client.Main</mainClass>
                 </manifest>
               </archive>
               <descriptorRefs>
