@@ -3,10 +3,12 @@ package org.fellesprosjekt.gruppe24.client;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import org.fellesprosjekt.gruppe24.common.models.KryoUtils;
+import org.fellesprosjekt.gruppe24.common.models.Group;
+import org.fellesprosjekt.gruppe24.common.KryoUtils;
 import org.fellesprosjekt.gruppe24.common.models.User;
 
 import java.io.IOException;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -23,6 +25,12 @@ public class Main {
             return;
         }
         User user = new User("Martin Thoresen");
+
+        List<Group> grupper = user.getGroups();
+        grupper.add(new Group("halla"));
+
+        System.out.println(user.getGroups().size());
+
         client.sendTCP(user);
 
         client.addListener(new Listener() {

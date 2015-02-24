@@ -1,6 +1,10 @@
-package org.fellesprosjekt.gruppe24.common.models;
+package org.fellesprosjekt.gruppe24.common;
 
 import com.esotericsoftware.kryo.Kryo;
+import org.fellesprosjekt.gruppe24.common.models.Group;
+import org.fellesprosjekt.gruppe24.common.models.User;
+
+import java.util.LinkedList;
 
 public class KryoUtils {
     /**
@@ -16,10 +20,15 @@ public class KryoUtils {
      *     KryoUtils.registerClasses(client.getKryo());
      *
      * etter vi har laget server- og klientobjektene.
+     * Obs! Dersom klassen har andre klasser som medlemsvariable,
+     * f.eks. User som har List<Group> som medlem, så må også
+     * den konkrete klassen (LinkedList) og Group også være med her.
      *
      * @param k En Kryo instans. Fåes f.eks. ved server.getKryo().
      */
     public static void registerClasses(Kryo k){
         k.register(User.class);
+        k.register(LinkedList.class);
+        k.register(Group.class);
     }
 }
