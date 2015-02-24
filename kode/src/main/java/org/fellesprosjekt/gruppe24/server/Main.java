@@ -25,10 +25,12 @@ public class Main {
         }
         server.addListener(new Listener() {
             public void received(Connection conn, Object obj) {
-                if (obj instanceof User){
+                if (obj instanceof User) {
                     User user = (User) obj;
                     System.out.println("Vi har fått en bruker");
                     System.out.println("Brukeren heter " + user.getName());
+                } else {
+                    System.out.println("Ukjent datatype.");
                 }
             }
         });
