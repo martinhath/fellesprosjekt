@@ -29,6 +29,8 @@ public class Main {
                     User user = (User) obj;
                     System.out.println("Vi har fått en bruker");
                     System.out.println("Brukeren heter " + user.getName());
+
+                    conn.sendTCP("Fikk en bruker som heter: "+user.getName());
                 } else {
                     System.out.println("Ukjent datatype.");
                 }

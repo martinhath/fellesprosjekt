@@ -1,6 +1,8 @@
 package org.fellesprosjekt.gruppe24.client;
 
 import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
 import org.fellesprosjekt.gruppe24.common.models.KryoUtils;
 import org.fellesprosjekt.gruppe24.common.models.User;
 
@@ -22,6 +24,12 @@ public class Main {
         }
         User user = new User("Martin Thoresen");
         client.sendTCP(user);
+
+        client.addListener(new Listener() {
+            public void received(Connection conn, Object obj) {
+                System.out.println(obj.toString());
+            }
+        });
     }
 
 }
