@@ -9,6 +9,10 @@ public class User {
 
     private List<Group> groups;
 
+    public User(){
+        System.out.println("Top lel");
+    }
+
     public User(String name){
         this.name = name;
     }
