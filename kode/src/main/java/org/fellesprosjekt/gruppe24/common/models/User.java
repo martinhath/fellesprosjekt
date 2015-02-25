@@ -18,14 +18,4 @@ public class User extends Entity {
     public User(String name){
         super(name);
     }
-
-    /**
-     * Denne bør bare bli kalt av Group.addMember(Entity);
-     * @param g
-     */
-    public void addGroup(Group g){
-        if (groups.contains(g))
-            return;
-        groups.add(g);
-    }
 }

@@ -18,7 +18,7 @@ public class Group extends Entity{
         if (members.contains(e))
             return;
         members.add(e);
-        e.addGroup(this);
+        e.getGroups().add(this);
     }
 
     public List<Entity> getMembers(){

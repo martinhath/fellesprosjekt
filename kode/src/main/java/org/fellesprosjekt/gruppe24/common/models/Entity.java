@@ -7,7 +7,8 @@ public abstract class Entity {
 
     private String name;
 
-    protected List<Group> groups;
+    // Gruppene denne entiteten er medlem av
+    protected transient List<Group> groups;
 
     public Entity(){}
 
@@ -24,7 +25,4 @@ public abstract class Entity {
         return groups;
     }
 
-    public void addGroup(Group g){
-        groups.add(g);
-    }
 }
