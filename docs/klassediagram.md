@@ -7,4 +7,12 @@ Eksempel på klassediagram:
 |+ owner: User|
 |+ meetings: List<Meeting>|
 
+| Meeting |
+|————————-|
+|+ description: String|
+|+ room: Room|
+
+
+
+
 
