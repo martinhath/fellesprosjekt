@@ -8,9 +8,6 @@ public class User extends Entity {
     // The users calendar
     private Calendar calendar;
 
-    // All groups the user are in
-    private List<Group> groups;
-
     /**
      * Vi må ha en konstruktør som ikke tar inn noen argumenter
      * pga. Kryonet. Denne blir kjørt, så vi holder den tom :)
@@ -19,15 +16,16 @@ public class User extends Entity {
     public User(){}
 
     public User(String name){
-        setName(name);
-        groups = new LinkedList<>();
+        super(name);
     }
 
-    public void addToGroup(Group g){
+    /**
+     * Denne bør bare bli kalt av Group.addMember(Entity);
+     * @param g
+     */
+    public void addGroup(Group g){
+        if (groups.contains(g))
+            return;
         groups.add(g);
-    }
-
-    public final List<Group> getGroups(){
-        return groups;
     }
 }
