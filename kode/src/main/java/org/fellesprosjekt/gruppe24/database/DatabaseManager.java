@@ -1,4 +1,6 @@
-package org.fellesprosjekt.gruppe24.server;
+package org.fellesprosjekt.gruppe24.database;
+
+import org.fellesprosjekt.gruppe24.server.Main;
 
 import java.sql.*;
 import java.util.logging.Level;
