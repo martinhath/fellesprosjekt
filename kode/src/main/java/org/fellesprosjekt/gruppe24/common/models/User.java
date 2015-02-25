@@ -3,9 +3,7 @@ package org.fellesprosjekt.gruppe24.common.models;
 import java.util.LinkedList;
 import java.util.List;
 
-public class User {
-
-    private String name;
+public class User extends Entity {
 
     // The users calendar
     private Calendar calendar;
@@ -21,13 +19,8 @@ public class User {
     public User(){}
 
     public User(String name){
-        System.out.println("halla gutta hva skjer a");
-        this.name = name;
+        setName(name);
         groups = new LinkedList<>();
-    }
-
-    public String getName(){
-        return name;
     }
 
     public void addToGroup(Group g){
