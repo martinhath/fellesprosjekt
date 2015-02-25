@@ -8,7 +8,7 @@ Eksempel på klassediagram:
 |+ meetings: List<Meeting>|
 
 | Meeting |
-|————————-|
+|----------|
 |+ description: String|
 |+ room: Room|
 |+ from: LocalDateTime|
@@ -17,7 +17,7 @@ Eksempel på klassediagram:
 |+ leader: User|
 
 | User |
-|—————-|
+|----------|
 |+ name: String|
 |+ calendar: Kalender|
 |+ group: List<Group>|
@@ -25,18 +25,18 @@ Eksempel på klassediagram:
 |+ password: String|
 
 | Group |
-|——————-|
+|----------|
 |+ name: String|
 |+ members: List<Entity>|
 |+ calendar: Kalender|
 
 | Notifications |
-|——————————————-|
+|----------|
 |+ user: User|
 |+ meeting: Meeting|
 
 | Room |
-|—————-|
+|----------|
 |+ capacity: int|
 |+ name: String|
 |+ location: String|
