@@ -1,7 +1,5 @@
 # Klassediagram
 
-Eksempel på klassediagram:
-
 | Kalender |
 |----------|
 |+ owner: User|
@@ -40,9 +38,4 @@ Eksempel på klassediagram:
 |+ capacity: int|
 |+ name: String|
 |+ location: String|
-
-
-
-
-
 
