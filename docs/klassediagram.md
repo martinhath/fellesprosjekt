@@ -2,40 +2,42 @@
 
 | Kalender |
 |----------|
-|+ owner: User|
-|+ meetings: List<Meeting>|
+|+ owner: `User`|
+|+ meetings: `List<Meeting>`|
 
 | Meeting |
 |----------|
-|+ description: String|
-|+ room: Room|
-|+ from: LocalDateTime|
-|+ to: LocalDateTime|
-|+ participant: List<User>|
-|+ leader: User|
+|+ description: `String`|
+|+ room: `Room`|
+|+ from: `LocalDateTime`|
+|+ to: `LocalDateTime`|
+|+ participant: `List<User>`|
+|+ leader: `User`|
 
 | User |
 |----------|
-|+ name: String|
-|+ calendar: Kalender|
-|+ group: List<Group>|
-|+ username: String|
-|+ password: String|
+|+ name: `String`|
+|+ calendar: `Kalender`|
+|+ group: `List<Group>`|
+|+ username: `String`|
+|+ password: `String`|
+|**Funksjoner**|
+|+ `bool verifyPassword(String)`|
 
 | Group |
 |----------|
-|+ name: String|
-|+ members: List<Entity>|
-|+ calendar: Kalender|
+|+ name: `String`|
+|+ members: `List<Entity>`|
+|+ calendar: `Kalender`|
 
 | Notifications |
 |----------|
-|+ user: User|
-|+ meeting: Meeting|
+|+ user: `User`|
+|+ meeting: `Meeting`|
 
 | Room |
 |----------|
-|+ capacity: int|
-|+ name: String|
-|+ location: String|
+|+ capacity: `int`|
+|+ name: `String`|
+|+ location: `String`|
 
