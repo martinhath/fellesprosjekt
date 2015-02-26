@@ -1,6 +1,11 @@
 # Klassediagram
 
-| Kalender |
+| Entity |
+|--------|
+|+ name: `String`|
+|+ calendar: `Calendar`
+
+| Calendar |
 |----------|
 |+ owner: `User`|
 |+ meetings: `List<Meeting>`|
@@ -14,21 +19,17 @@
 |+ participant: `List<User>`|
 |+ leader: `User`|
 
-| User |
+| User : Entity|
 |----------|
-|+ name: `String`|
-|+ calendar: `Kalender`|
 |+ group: `List<Group>`|
 |+ username: `String`|
 |+ password: `String`|
 |**Funksjoner**|
 |+ `bool verifyPassword(String)`|
 
-| Group |
+| Group : Entity|
 |----------|
-|+ name: `String`|
 |+ members: `List<Entity>`|
-|+ calendar: `Kalender`|
 
 | Notifications |
 |----------|
