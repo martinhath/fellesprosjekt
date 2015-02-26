@@ -25,7 +25,7 @@ public final class DatabaseManager {
      * @param password user's password to the database
      */
     public static void init(String url, String database, String user, String password) {
-    	lgr = Logger.getLogger(Main.class.getName());
+    	lgr = Logger.getLogger(CalendarServer.class.getName());
         
         // Connection Pooling
         cpds = new ComboPooledDataSource();
