@@ -17,7 +17,7 @@ public class DatabaseManager {
     private String password;
 
     /**
-     * Connects to a specific database
+     * Initializes a specific database
      *
      * @param url url to the database
      * @param user username in the database
@@ -27,18 +27,16 @@ public class DatabaseManager {
         this.url = url;
         this.user = user;
         this.password = password;
-        connect();
     }
 
     /**
-     * Connects to a default database
+     * Initializes a default database
      *
      */
     public DatabaseManager() {
         this.url = "jdbc:mysql://mysql.stud.ntnu.no:3306/hermanmk_calDB";
         this.user = "hermanmk_cal";
         this.password = "cal123";
-        connect();
     }
 
     /**
@@ -52,8 +50,10 @@ public class DatabaseManager {
         Logger lgr = Logger.getLogger(Main.class.getName());
         try {
             String query = String.format("SELECT * FROM %s;", from);
-            lgr.log(Level.INFO, "Executing query: " + query);
+            this.con = DriverManager.getConnection(this.url, this.user, this.password);
+            lgr.log(Level.INFO, this.con.toString());
             this.st = this.con.createStatement();
+            lgr.log(Level.INFO, "Executing query: " + query);
             this.rs = this.st.executeQuery(query);
 
             if (this.rs.next()) {
@@ -65,6 +65,9 @@ public class DatabaseManager {
 
         } finally {
             try {
+                if (this.con != null) {
+                    this.con.close();
+                }
                 if (this.rs != null) {
                     this.rs.close();
                 }
@@ -79,27 +82,8 @@ public class DatabaseManager {
     }
 
     /**
-     * Creates a connection to a database and makes a statement ready to be used
+     * Makes sure the connection to the database is closed
      */
-    private void connect() {
-        Logger lgr = Logger.getLogger(Main.class.getName());
-        try {
-            this.con = DriverManager.getConnection(this.url, this.user, this.password);
-            lgr.log(Level.INFO, this.con.toString());
-            /*
-            this.st = this.con.createStatement();
-            this.rs = this.st.executeQuery("SELECT * FROM Room;");
-
-            if (this.rs.next()) {
-                System.out.println(this.rs.getString("room_num"));
-            }
-            */
-
-        } catch (SQLException ex) {
-            lgr.log(Level.SEVERE, ex.getMessage(), ex);
-        }
-    }
-
     public void close() {
         Logger lgr = Logger.getLogger(Main.class.getName());
         try {
