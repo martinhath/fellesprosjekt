@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Group extends Entity{
+
     private List<Entity> members;
 
     @SuppressWarnings("unused")
