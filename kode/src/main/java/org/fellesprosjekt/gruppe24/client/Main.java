@@ -5,12 +5,12 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import org.fellesprosjekt.gruppe24.common.KryoUtils;
 import org.fellesprosjekt.gruppe24.common.models.LoginInfo;
-import org.fellesprosjekt.gruppe24.common.models.Request;
-import org.fellesprosjekt.gruppe24.common.models.Request.Type;
+import org.fellesprosjekt.gruppe24.common.models.net.Request;
+import org.fellesprosjekt.gruppe24.common.models.net.Request.Type;
 import org.fellesprosjekt.gruppe24.common.models.User;
+import org.fellesprosjekt.gruppe24.common.models.net.Response;
 
 import java.io.IOException;
-import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -26,6 +26,21 @@ public class Main {
             e.printStackTrace();
             return;
         }
+        client.addListener(new Listener() {
+            @Override
+            public void received(Connection conn, Object obj) {
+                System.out.println("KLienten fikk noe !!");
+                System.out.println("Client received");
+                if (obj instanceof Response) {
+                    Response res = (Response) obj;
+                    System.out.println(res.getType());
+                    System.out.println(res.getPayload());
+                }
+                else{
+                    System.out.println(obj.toString());
+                }
+            }
+        });
 
         LoginInfo login = new LoginInfo("martin", "passord123");
 
@@ -34,15 +49,10 @@ public class Main {
 
         client.sendTCP(req);
 
+        req = new Request(Type.GET, User.class);
+        req.setPayload(null);
+        client.sendTCP(req);
 
-        // client.sendTCP(login);
-        // client.sendTCP("halla hvem er jeg??");
-
-        client.addListener(new Listener() {
-            public void received(Connection conn, Object obj) {
-                System.out.println(obj.toString());
-            }
-        });
     }
 
 }

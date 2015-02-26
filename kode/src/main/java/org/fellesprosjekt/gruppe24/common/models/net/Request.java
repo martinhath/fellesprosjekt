@@ -1,4 +1,4 @@
-package org.fellesprosjekt.gruppe24.common.models;
+package org.fellesprosjekt.gruppe24.common.models.net;
 
 public class Request {
     public enum Type {GET, LIST, PUT};
