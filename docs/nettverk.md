@@ -1,6 +1,6 @@
 # Nettverk
 
-__for oversikt over klassene, se filene som ligger i `docs/klassediagram/`__
+_for oversikt over klassene, se filene som ligger i `docs/klassediagram/`_
 
 
 All kommunikasjon mellom klient og tjener skjer med `Request` og `Response`.
@@ -13,19 +13,19 @@ Den som sender en `Request` er den som ber om noe, f.eks. 'få brukeren med denn
 eller 'få alle gruppene til denne brukeren'.
 Førstnevnte `Request` kan se slik ut:
 
-```
+```java
 Request req = new Request(Request.Type.GET, User.class);
 req.setPayload(login_info);
 ```
 
 Sistnevnte kan se slik ut:
 
-```
+```java
 Request req = new Request(Request.Type.LIST, Calendar.class);
 req.setPayload(user);
 ```
 
 Merk at `model` feltet, her `Calendar.class`, ikke er klassen til `payload`, men klassen til
 det vi skal få tilbake. Siden vi i tillegg har `Request.Type.LIST`, skal typen til dataen
-vi får tilbake her være `List<Calendar>`. 
+vi får tilbake her være `List<Calendar>`.
 
