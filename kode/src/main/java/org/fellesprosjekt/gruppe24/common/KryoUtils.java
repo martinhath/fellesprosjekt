@@ -2,6 +2,7 @@ package org.fellesprosjekt.gruppe24.common;
 
 import com.esotericsoftware.kryo.Kryo;
 import org.fellesprosjekt.gruppe24.common.models.Group;
+import org.fellesprosjekt.gruppe24.common.models.LoginInfo;
 import org.fellesprosjekt.gruppe24.common.models.User;
 
 import java.util.LinkedList;
@@ -30,5 +31,6 @@ public class KryoUtils {
         k.register(User.class);
         k.register(LinkedList.class);
         k.register(Group.class);
+        k.register(LoginInfo.class);
     }
 }

@@ -4,17 +4,19 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import org.fellesprosjekt.gruppe24.common.KryoUtils;
-import org.fellesprosjekt.gruppe24.common.models.Entity;
-import org.fellesprosjekt.gruppe24.common.models.Group;
+import org.fellesprosjekt.gruppe24.common.models.LoginInfo;
 import org.fellesprosjekt.gruppe24.common.models.User;
 
 import java.io.IOException;
-import java.util.List;
 
 public class Main {
     public static void main(String[] args){
         System.out.println("Hello, Server!");
-        Server server = new Server();
+        Server server = new Server() {
+            protected Connection newConnection(){
+                return new ServerConnection();
+            }
+        };
         server.start();
 
         KryoUtils.registerClasses(server.getKryo());
@@ -28,7 +30,7 @@ public class Main {
             return;
         }
         server.addListener(new Listener() {
-            public void received(Connection conn, Object obj) {
+            public void received(Connection connection, Object obj) {
                 /*
                  * Her får vi tingen som ble sendt med client.sendTCP() i
                  * klienten. Vi sjekker typen dens med instanceof, og gjør
@@ -36,24 +38,23 @@ public class Main {
                  * (dvs, vi har ikke sagt hva som skal skje), så printer vi
                  * ut det til stderr.
                  */
-                if (obj instanceof User) {
-                    User user = (User) obj;
-                    System.out.println("Vi har fått en bruker");
-                    System.out.println("Brukeren heter " + user.getName());
+                ServerConnection conn = (ServerConnection) connection;
 
-                    System.out.println("Brukeren er medlem av disse gruppene:");
-                    List<Group> groups = user.getGroups();
-                    System.out.println(groups == null? "null":"hehe");
-                    for(Group g:groups){
-                        System.out.println(g.getName());
-                    }
+                if (obj instanceof LoginInfo){
+                    /* TODO: Hånter login-logikk
+                     */
+                    LoginInfo login = (LoginInfo) obj;
+                    User user = new User();
+                    user.setUsername(login.getUsername());
+                    user.setPassword(login.getPassword());
+                    conn.setUser(user);
 
-                    conn.sendTCP("Fikk en bruker som heter: " + user.getName());
-                } else if (obj instanceof Group) {
-                    Group gruppe = (Group) obj;
-                    System.out.println("Fikk en gruppe.");
-                    System.out.println("Her er medlemmene:");
-                    gruppe.printMembers();
+                } else if (obj instanceof User) {
+
+                } else if (obj instanceof String) {
+                    String str = (String) obj;
+                    System.out.println("User '" + conn.getUser().getUsername()+"' sier: ");
+                    System.out.println(str);
                 } else {
                     System.err.println("Ukjent datatype mottatt.");
                 }
