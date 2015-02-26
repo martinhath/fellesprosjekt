@@ -1,12 +1,13 @@
 package org.fellesprosjekt.gruppe24.common.models;
 
-import java.util.LinkedList;
-import java.util.List;
-
 public class User extends Entity {
 
     // The users calendar
-    private Calendar calendar;
+  
+ 
+    private String username;
+    private String password;
+    
 
     /**
      * Vi må ha en konstruktør som ikke tar inn noen argumenter
@@ -17,5 +18,18 @@ public class User extends Entity {
 
     public User(String name){
         super(name);
+        
+    }
+    
+    public String getUsername() {
+    	return username;
+    }
+    
+    public void setUsername(String username) {
+    	this.username = username;
+    }
+    
+    public void setPassword(String password) {
+    	this.password = password;
     }
 }
