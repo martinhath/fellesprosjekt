@@ -12,7 +12,6 @@ public class UserController extends ServerController{
     }
 
     public void put(Request req){
-        System.out.println("UserController.put()");
         LoginInfo login = (LoginInfo) req.getPayload();
         System.out.println("Fikk en bruker:");
         System.out.println("Brukernavn: " + login.getUsername());
@@ -26,7 +25,6 @@ public class UserController extends ServerController{
     }
 
     public void get(Request req){
-        System.out.println("UserController.get()");
         /**
          * Sender tilbake brukeren som er logget på.
          * Bør sjekke req om man har gitt med logininfo,
@@ -40,6 +38,7 @@ public class UserController extends ServerController{
         } else {
             res.setType(Response.Type.SUCCESS);
             res.setPayload(user);
+            res.setModel(User.class);
         }
         connection.sendTCP(res);
     }

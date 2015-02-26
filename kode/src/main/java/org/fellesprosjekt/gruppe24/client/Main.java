@@ -27,29 +27,29 @@ public class Main {
             return;
         }
         client.addListener(new Listener() {
-
-            @Override
-            public void connected(Connection c){
-                System.out.println("Client is connected.");
-            }
-
             @Override
             public void received(Connection conn, Object obj) {
-                System.out.println("KLienten fikk noe !!");
-                System.out.println("Client received");
                 if (obj instanceof Response) {
                     Response res = (Response) obj;
-                    System.out.println(res.getType());
-                    System.out.println(res.getPayload());
+                    if (res.getType() == Response.Type.FAILURE){
+                        System.err.println("Failure: " + res.getPayload());
+                        return;
+                    }
+                    Class t = res.getModel();
+
+                    if (t == User.class){
+                        User user = (User) res.getPayload();
+                        System.out.println("User: " +user.getUsername());
+                    } else {
+                        System.out.println(res.getType());
+                        System.out.println(res.getPayload());
+                    }
+
                 }
                 else{
+                    System.out.println("default");
                     System.out.println(obj.toString());
                 }
-            }
-
-            @Override
-            public void disconnected(Connection c){
-                System.out.println("Client is disconnected");
             }
         });
 

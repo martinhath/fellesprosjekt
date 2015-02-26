@@ -30,6 +30,10 @@ public class Response {
         return type;
     }
 
+    public void setModel(Class c){
+        model = c;
+    }
+
     public Class getModel(){
         return model;
     }
