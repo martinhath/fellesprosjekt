@@ -1,10 +1,11 @@
 package org.fellesprosjekt.gruppe24.common;
 
 import com.esotericsoftware.kryo.Kryo;
-import org.fellesprosjekt.gruppe24.common.models.Group;
-import org.fellesprosjekt.gruppe24.common.models.LoginInfo;
-import org.fellesprosjekt.gruppe24.common.models.User;
+import org.fellesprosjekt.gruppe24.common.models.*;
+import org.fellesprosjekt.gruppe24.common.models.net.Request;
+import org.fellesprosjekt.gruppe24.common.models.net.Response;
 
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 
 public class KryoUtils {
@@ -32,5 +33,16 @@ public class KryoUtils {
         k.register(LinkedList.class);
         k.register(Group.class);
         k.register(LoginInfo.class);
+        k.register(Calendar.class);
+        k.register(Meeting.class);
+        k.register(Room.class);
+        k.register(LocalDateTime.class);
+
+        k.register(Class.class);
+
+        k.register(Request.class);
+        k.register(Request.Type.class);
+        k.register(Response.class);
+        k.register(Response.Type.class);
     }
 }
