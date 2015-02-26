@@ -14,7 +14,11 @@ import java.util.List;
 public class Main {
     public static void main(String[] args){
         System.out.println("Hello, Server!");
-        Server server = new Server();
+        Server server = new Server() {
+            protected Connection getConnection(){
+                return new ServerConnection();
+            }
+        };
         server.start();
 
         KryoUtils.registerClasses(server.getKryo());
@@ -28,7 +32,7 @@ public class Main {
             return;
         }
         server.addListener(new Listener() {
-            public void received(Connection conn, Object obj) {
+            public void received(Connection connection, Object obj) {
                 /*
                  * Her får vi tingen som ble sendt med client.sendTCP() i
                  * klienten. Vi sjekker typen dens med instanceof, og gjør
@@ -36,6 +40,8 @@ public class Main {
                  * (dvs, vi har ikke sagt hva som skal skje), så printer vi
                  * ut det til stderr.
                  */
+                ServerConnection conn = (ServerConnection) connection;
+
                 if (obj instanceof User) {
                     User user = (User) obj;
                     System.out.println("Vi har fått en bruker");
