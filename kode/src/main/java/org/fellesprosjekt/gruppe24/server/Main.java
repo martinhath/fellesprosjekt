@@ -6,6 +6,7 @@ import com.esotericsoftware.kryonet.Server;
 import org.fellesprosjekt.gruppe24.common.KryoUtils;
 import org.fellesprosjekt.gruppe24.common.models.Entity;
 import org.fellesprosjekt.gruppe24.common.models.Group;
+import org.fellesprosjekt.gruppe24.common.models.LoginInfo;
 import org.fellesprosjekt.gruppe24.common.models.User;
 
 import java.io.IOException;
@@ -42,7 +43,11 @@ public class Main {
                  */
                 ServerConnection conn = (ServerConnection) connection;
 
-                if (obj instanceof User) {
+                if (obj instanceof LoginInfo){
+                    LoginInfo login = (LoginInfo) obj;
+                    // User user = new User(login.getUsername(), login.getPassword());
+                    // conn.setUser(user);
+                } else if (obj instanceof User) {
                     User user = (User) obj;
                     System.out.println("Vi har fått en bruker");
                     System.out.println("Brukeren heter " + user.getName());
