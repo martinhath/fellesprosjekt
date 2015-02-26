@@ -24,14 +24,13 @@ public class Main {
             e.printStackTrace();
             return;
         }
-        User user = new User("Martin Thoresen");
+        User martin = new User("Martin Thoresen");
 
-        List<Group> grupper = user.getGroups();
-        grupper.add(new Group("halla"));
+        Group gruppe = new Group("Gruppe 24");
+        gruppe.addMember(martin);
 
-        System.out.println(user.getGroups().size());
-
-        client.sendTCP(user);
+        client.sendTCP(martin);
+        client.sendTCP(gruppe);
 
         client.addListener(new Listener() {
             public void received(Connection conn, Object obj) {

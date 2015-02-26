@@ -1,15 +1,13 @@
 package org.fellesprosjekt.gruppe24.common.models;
 
-import java.util.LinkedList;
-import java.util.List;
-
 public class User extends Entity {
 
     // The users calendar
-    private Calendar calendar;
-
-    // All groups the user are in
-    private List<Group> groups;
+  
+ 
+    private String username;
+    private String password;
+    
 
     /**
      * Vi må ha en konstruktør som ikke tar inn noen argumenter
@@ -19,15 +17,19 @@ public class User extends Entity {
     public User(){}
 
     public User(String name){
-        setName(name);
-        groups = new LinkedList<>();
+        super(name);
+        
     }
-
-    public void addToGroup(Group g){
-        groups.add(g);
+    
+    public String getUsername() {
+    	return username;
     }
-
-    public final List<Group> getGroups(){
-        return groups;
+    
+    public void setUsername(String username) {
+    	this.username = username;
+    }
+    
+    public void setPassword(String password) {
+    	this.password = password;
     }
 }

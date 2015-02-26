@@ -4,9 +4,12 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import org.fellesprosjekt.gruppe24.common.KryoUtils;
+import org.fellesprosjekt.gruppe24.common.models.Entity;
+import org.fellesprosjekt.gruppe24.common.models.Group;
 import org.fellesprosjekt.gruppe24.common.models.User;
 
 import java.io.IOException;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args){
@@ -38,7 +41,19 @@ public class Main {
                     System.out.println("Vi har fått en bruker");
                     System.out.println("Brukeren heter " + user.getName());
 
-                    conn.sendTCP("Fikk en bruker som heter: "+user.getName());
+                    System.out.println("Brukeren er medlem av disse gruppene:");
+                    List<Group> groups = user.getGroups();
+                    System.out.println(groups == null? "null":"hehe");
+                    for(Group g:groups){
+                        System.out.println(g.getName());
+                    }
+
+                    conn.sendTCP("Fikk en bruker som heter: " + user.getName());
+                } else if (obj instanceof Group) {
+                    Group gruppe = (Group) obj;
+                    System.out.println("Fikk en gruppe.");
+                    System.out.println("Her er medlemmene:");
+                    gruppe.printMembers();
                 } else {
                     System.err.println("Ukjent datatype mottatt.");
                 }

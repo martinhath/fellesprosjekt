@@ -10,7 +10,26 @@ public class Group extends Entity{
     public Group(){}
 
     public Group(String name) {
-        setName(name);
+        super(name);
         members = new LinkedList<>();
+    }
+
+    public void addMember(Entity e){
+        if (members.contains(e))
+            return;
+        members.add(e);
+    }
+
+    public List<Entity> getMembers(){
+        return members;
+    }
+
+    public void printMembers(){
+        for (Entity e : getMembers()) {
+            if (e instanceof Group)
+                ((Group) e).printMembers();
+            else
+                System.out.println(e.getName());
+        }
     }
 }
