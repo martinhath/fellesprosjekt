@@ -39,7 +39,7 @@
               <finalName>client</finalName>
               <archive>
                 <manifest>
-                  <mainClass>org.fellesprosjekt.gruppe24.client.Main</mainClass>
+                  <mainClass>org.fellesprosjekt.gruppe24.client.CalendarClient</mainClass>
                 </manifest>
               </archive>
               <descriptorRefs>
@@ -57,7 +57,7 @@
               <finalName>server</finalName>
               <archive>
                 <manifest>
-                  <mainClass>org.fellesprosjekt.gruppe24.server.Main</mainClass>
+                  <mainClass>org.fellesprosjekt.gruppe24.server.CalendarServer</mainClass>
                 </manifest>
               </archive>
               <descriptorRefs>

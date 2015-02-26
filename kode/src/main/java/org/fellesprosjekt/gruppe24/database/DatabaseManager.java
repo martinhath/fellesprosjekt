@@ -1,6 +1,6 @@
 package org.fellesprosjekt.gruppe24.database;
 
-import org.fellesprosjekt.gruppe24.server.Main;
+import org.fellesprosjekt.gruppe24.server.CalendarServer;
 
 import java.beans.PropertyVetoException;
 import java.sql.*;
@@ -48,7 +48,7 @@ public final class DatabaseManager {
     /**
      * Initializes a default database
      *
-     */    
+     */
     static{
     	init("mysql.stud.ntnu.no","hermanmk_calDB","hermanmk_cal","cal123");
     }
