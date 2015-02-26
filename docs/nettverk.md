@@ -29,3 +29,20 @@ Merk at `model` feltet, her `Calendar.class`, ikke er klassen til `payload`, men
 det vi skal få tilbake. Siden vi i tillegg har `Request.Type.LIST`, skal typen til dataen
 vi får tilbake her være `List<Calendar>`.
 
+
+## Response
+
+For å svare på en `Request` sender man en `Response`. Svarene på requestene over
+kan se slik ut:
+
+```java
+Response res = new Response(Response.Type.SUCCESS, User.class);
+res.setPayload(user);
+```
+
+og
+
+```java
+Reponse res = new Response(Response.Type.SUCCESS, Calendar.class);
+res.setPayload(lst);
+```
