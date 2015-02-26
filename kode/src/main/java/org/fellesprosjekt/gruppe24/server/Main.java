@@ -28,7 +28,7 @@ public class Main {
             return;
         }
 
-        ServerListener serverListener = new ServerListener(server, null);
+        ServerListener serverListener = new ServerListener();
 
         server.addListener(serverListener);
     }

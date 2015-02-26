@@ -9,20 +9,8 @@ import org.fellesprosjekt.gruppe24.common.models.net.Response;
 
 public class ServerListener extends Listener{
 
-    private Server server;
-    private ServerConnection connection;
-
-    private UserController userController;
-
-    public ServerListener(Server server, ServerConnection connection){
-        this.server = server;
-        this.connection = connection;
-
-        userController = new UserController(connection);
-    }
-
     public void received(Connection connection, Object obj) {
-        userController.setConnection((ServerConnection) connection);
+        UserController userController = new UserController((ServerConnection) connection);
 
         Request req = (Request) obj;
 
