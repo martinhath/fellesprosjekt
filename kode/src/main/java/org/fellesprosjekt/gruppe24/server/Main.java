@@ -41,15 +41,20 @@ public class Main {
                 ServerConnection conn = (ServerConnection) connection;
 
                 if (obj instanceof LoginInfo){
+                    /* TODO: Hånter login-logikk
+                     */
                     LoginInfo login = (LoginInfo) obj;
-                    // Midlertidig
-                    // User user = new User(login.getUsername(), login.getPassword());
-                    // conn.setUser(user);
+                    User user = new User();
+                    user.setUsername(login.getUsername());
+                    user.setPassword(login.getPassword());
+                    conn.setUser(user);
+
                 } else if (obj instanceof User) {
+
                 } else if (obj instanceof String) {
-                    // String str = (String) obj;
-                    // System.out.println("User '" + conn.getUser().getName());
-                    // System.out.println(str);
+                    String str = (String) obj;
+                    System.out.println("User '" + conn.getUser().getUsername()+"' sier: ");
+                    System.out.println(str);
                 } else {
                     System.err.println("Ukjent datatype mottatt.");
                 }
