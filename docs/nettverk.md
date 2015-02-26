@@ -14,15 +14,13 @@ eller 'få alle gruppene til denne brukeren'.
 Førstnevnte `Request` kan se slik ut:
 
 ```java
-Request req = new Request(Request.Type.GET, User.class);
-req.setPayload(login_info);
+Request req = new Request(Request.Type.GET, User.class, login_info);
 ```
 
 Sistnevnte kan se slik ut:
 
 ```java
-Request req = new Request(Request.Type.LIST, Calendar.class);
-req.setPayload(user);
+Request req = new Request(Request.Type.LIST, Calendar.class, user);
 ```
 
 Merk at `model` feltet, her `Calendar.class`, ikke er klassen til `payload`, men klassen til
@@ -36,13 +34,11 @@ For å svare på en `Request` sender man en `Response`. Svarene på requestene o
 kan se slik ut:
 
 ```java
-Response res = new Response(Response.Type.SUCCESS, User.class);
-res.setPayload(user);
+Response res = new Response(Response.Type.SUCCESS, User.class, user);
 ```
 
 og
 
 ```java
-Reponse res = new Response(Response.Type.SUCCESS, Calendar.class);
-res.setPayload(lst);
+Reponse res = new Response(Response.Type.SUCCESS, Calendar.class, list);
 ```
