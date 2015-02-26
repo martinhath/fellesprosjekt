@@ -5,6 +5,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import org.fellesprosjekt.gruppe24.common.KryoUtils;
 import org.fellesprosjekt.gruppe24.common.models.LoginInfo;
+import org.fellesprosjekt.gruppe24.common.models.Request;
 import org.fellesprosjekt.gruppe24.common.models.User;
 
 import java.io.IOException;
@@ -39,6 +40,10 @@ public class Main {
                  * ut det til stderr.
                  */
                 ServerConnection conn = (ServerConnection) connection;
+
+                Request req = (Request) obj;
+
+
 
                 if (obj instanceof LoginInfo){
                     /* TODO: Hånter login-logikk

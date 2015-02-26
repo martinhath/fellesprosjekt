@@ -5,6 +5,9 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import org.fellesprosjekt.gruppe24.common.KryoUtils;
 import org.fellesprosjekt.gruppe24.common.models.LoginInfo;
+import org.fellesprosjekt.gruppe24.common.models.Request;
+import org.fellesprosjekt.gruppe24.common.models.Request.Type;
+import org.fellesprosjekt.gruppe24.common.models.User;
 
 import java.io.IOException;
 import java.util.List;
@@ -26,9 +29,14 @@ public class Main {
 
         LoginInfo login = new LoginInfo("martin", "passord123");
 
-        client.sendTCP(login);
+        Request req = new Request(Type.PUT, User.class);
+        req.setPayload(login);
 
-        client.sendTCP("halla hvem er jeg??");
+        client.sendTCP(req);
+
+
+        // client.sendTCP(login);
+        // client.sendTCP("halla hvem er jeg??");
 
         client.addListener(new Listener() {
             public void received(Connection conn, Object obj) {
