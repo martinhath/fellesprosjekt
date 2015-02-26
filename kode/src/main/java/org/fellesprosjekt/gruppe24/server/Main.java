@@ -30,6 +30,10 @@ public class Main {
             server.stop();
             return;
         }
+
+        UserController userController = new UserController();
+
+
         server.addListener(new Listener() {
             public void received(Connection connection, Object obj) {
                 /*
@@ -43,11 +47,18 @@ public class Main {
 
                 Request req = (Request) obj;
 
+                Class model = req.getModel();
+
+                if (model == User.class){
+                    userController.handleRequest(req);
+                }else{
+                    System.err.println("Ukjent klasse: " + model.getCanonicalName());
+                }
 
 
+                /**
                 if (obj instanceof LoginInfo){
-                    /* TODO: Hånter login-logikk
-                     */
+                    // TODO: Hånter login-logikk
                     LoginInfo login = (LoginInfo) obj;
                     User user = new User();
                     user.setUsername(login.getUsername());
@@ -63,6 +74,7 @@ public class Main {
                 } else {
                     System.err.println("Ukjent datatype mottatt.");
                 }
+                */
             }
         });
     }

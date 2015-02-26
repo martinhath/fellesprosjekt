@@ -33,5 +33,7 @@ public class KryoUtils {
 
         k.register(Request.class);
         k.register(Meeting.class);
+        k.register(Class.class);
+        k.register(Request.Type.class);
     }
 }
