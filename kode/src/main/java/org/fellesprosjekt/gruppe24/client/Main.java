@@ -27,6 +27,12 @@ public class Main {
             return;
         }
         client.addListener(new Listener() {
+
+            @Override
+            public void connected(Connection c){
+                System.out.println("Client is connected.");
+            }
+
             @Override
             public void received(Connection conn, Object obj) {
                 System.out.println("KLienten fikk noe !!");
@@ -39,6 +45,11 @@ public class Main {
                 else{
                     System.out.println(obj.toString());
                 }
+            }
+
+            @Override
+            public void disconnected(Connection c){
+                System.out.println("Client is disconnected");
             }
         });
 
@@ -53,6 +64,11 @@ public class Main {
         req.setPayload(null);
         client.sendTCP(req);
 
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 }

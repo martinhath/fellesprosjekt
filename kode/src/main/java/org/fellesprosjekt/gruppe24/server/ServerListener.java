@@ -5,6 +5,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import org.fellesprosjekt.gruppe24.common.models.net.Request;
 import org.fellesprosjekt.gruppe24.common.models.User;
+import org.fellesprosjekt.gruppe24.common.models.net.Response;
 
 public class ServerListener extends Listener{
 
@@ -21,9 +22,6 @@ public class ServerListener extends Listener{
     }
 
     public void received(Connection connection, Object obj) {
-        connection.sendTCP("hallo!!!!!!!!!!!!!!!!!!!!!");
-        server.sendToAllTCP("ALLE FÅR DETTE");
-        System.out.println("Server received");
         userController.setConnection((ServerConnection) connection);
 
         Request req = (Request) obj;
@@ -41,8 +39,9 @@ public class ServerListener extends Listener{
             }
         } else {
             System.err.println("Ukjent klasse: " + model.getCanonicalName());
+            Response res = new Response(Response.Type.FAILURE, String.class);
+            res.setPayload("Unknown class: "+model.getCanonicalName());
+            connection.sendTCP(res);
         }
-
-        connection.sendTCP("halla");
     }
 }
