@@ -5,6 +5,7 @@ public abstract class Entity {
 
     private String name;
     private Calendar calendar;
+    private int ID;
 
 
     public Entity(){}
@@ -13,6 +14,10 @@ public abstract class Entity {
         this();
         this.name = name;
         this.calendar = new Calendar();
+    }
+    
+    public Entity(int ID) {
+    	this.ID = ID;
     }
 
     public String getName() {
@@ -23,5 +28,8 @@ public abstract class Entity {
     	return calendar;
     }
 
+    public int getID() {
+    	return ID;
+    }
 
 }
