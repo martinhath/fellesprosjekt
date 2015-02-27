@@ -26,7 +26,7 @@ public class UserDatabaseHandler {
 		//User user = new user(info.get("userid"), info.get("username"), info.get("email"), info.get("password"),
 		//		info.get("create_time"), info.get("update_time"));
 		// TODO: Add proper constructor so the previous lines can be uncommented.
-		User user = new User(Integer.parseInt(info.get("userid")), info.get("name"));
+		User user = new User(Integer.parseInt(info.get("userid")), info.get("name"), info.get("email"));
 		return user;
 	}
 	
