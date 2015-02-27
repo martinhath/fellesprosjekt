@@ -4,6 +4,7 @@ import org.fellesprosjekt.gruppe24.server.CalendarServer;
 
 import java.beans.PropertyVetoException;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -204,5 +205,21 @@ public final class DatabaseManager {
 		return result;
 	}
 
+	/**
+	 * Takes a string of a timestamp like one from a SQL DateTime Field and returns a LocalDateTime object
+	 * To be used when getting raw strings from a SQL select query
+	 *
+	 * @param timestamp string of a timestamp like SQL DateTime
+	 * @return LocalDateTime object
+	 */
+	public static LocalDateTime stringToDateTime(String timestamp) {
+		try {
+			return java.sql.Timestamp.valueOf(timestamp).toLocalDateTime();
+		} catch (Exception ex) {
+			lgr.log(Level.SEVERE, "Could not convert timestamp to LocalDateTime");
+			lgr.log(Level.SEVERE, ex.getMessage(), ex);
+			return null;
+		}
+	}
 
 }
