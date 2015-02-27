@@ -33,28 +33,7 @@ public class CalendarClient {
         client.close();
     }
 
-
     public Client getClient(){
         return client;
-    }
-
-
-
-    public static void main(String[] args) {
-        CalendarClient client = new CalendarClient("127.0.0.1", 9001, 9002);
-        Client c = client.getClient();
-        KryoUtils.registerClasses(c.getKryo());
-
-        client.init();
-
-        try {
-            client.start();
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        client.stop();
     }
 }
