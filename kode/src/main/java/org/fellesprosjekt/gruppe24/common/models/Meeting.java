@@ -22,13 +22,6 @@ public class Meeting {
 	private Group group;
 	private String location;
 
-	public Group getGroup() {
-		return group;
-	}
-
-	public void setGroup(Group group) {
-		this.group = group;
-	}
 	public Meeting(String name,
 				   String description,
 				   Room room,
@@ -47,6 +40,34 @@ public class Meeting {
 		this.owner = owner;
 
 		this.id = MeetingDatabaseHandler.getNextId();
+	}
+	public Meeting(int id,
+				   String name,
+				   String description,
+				   Room room,
+				   LocalDateTime from,
+				   LocalDateTime to,
+				   String location,
+				   List<User> participant,
+				   User owner) {
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.room = room;
+		this.from = from;
+		this.to = to;
+		this.location = location;
+		this.participant = participant;
+		this.owner = owner;
+
+		this.id = MeetingDatabaseHandler.getNextId();
+	}
+	public Group getGroup() {
+		return group;
+	}
+
+	public void setGroup(Group group) {
+		this.group = group;
 	}
 
 	public int getId() {
