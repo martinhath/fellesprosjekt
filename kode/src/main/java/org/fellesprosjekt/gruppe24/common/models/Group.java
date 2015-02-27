@@ -7,6 +7,7 @@ public class Group extends Entity{
 
     private List<Entity> members;
 
+
     @SuppressWarnings("unused")
     public Group(){}
 
