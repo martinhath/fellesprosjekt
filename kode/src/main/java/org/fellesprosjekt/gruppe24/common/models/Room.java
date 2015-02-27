@@ -13,7 +13,7 @@ public class Room {
 		this.capacity = capacity;
 	}
 
-	public int getId() {
+	public int getID() {
 		return id;
 	}
 

@@ -42,8 +42,8 @@ public final class MeetingDatabaseHandler {
             ps.setString(2, meeting.getDescription());
             ps.setTimestamp(3, java.sql.Timestamp.valueOf(meeting.getFrom()));
             ps.setTimestamp(4, java.sql.Timestamp.valueOf(meeting.getTo()));
-            ps.setInt(5, meeting.getRoom().getId());
-            ps.setInt(6, meeting.getOwner().getId());
+            ps.setInt(5, meeting.getRoom().getID());
+            ps.setInt(6, meeting.getOwner().getID());
             ps.setInt(7, 1); // TODO should be a groupID
             return ps.execute();
 
