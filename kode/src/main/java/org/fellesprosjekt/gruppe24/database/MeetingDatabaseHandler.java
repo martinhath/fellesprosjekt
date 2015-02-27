@@ -33,13 +33,20 @@ public final class MeetingDatabaseHandler {
     public static boolean insertMeeting(Meeting meeting) {
         try {
             Connection con = DatabaseManager.createConnection();
-            String query = "INSERT INTO Meeting" +
-                    "(name, description, start_time, end_time, Room_roomid, location, owner_id, Group_groupid)" +
-                    "?, ?, ?, ?, ?, ?, ?, ?";
+            String query = "INSERT INTO Meeting " +
+                    "(name, description, start_time, end_time, Room_roomid, location, owner_id, Group_groupid) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setString(1, meeting.getName());
+            ps.setTime(3, java.sql.Time.valueOf(meeting.getFrom().toLocalTime()));
+            ps.setTime(4, java.sql.Time.valueOf(meeting.getTo().toLocalTime()));
+            ps.setString(2, meeting.getDescription());
+            ps.setString(6, meeting.getLocation());
+            ps.setInt(5, meeting.getRoom().getId());
+            ps.setInt(7, meeting.getOwner().getId());
+            ps.setInt(8, meeting.getGroup().getId());
+            return ps.execute();
 
-            return true;
         } catch (SQLException ex) {
             Logger lgr = Logger.getLogger(DatabaseManager.class.getName());
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
