@@ -1,6 +1,7 @@
 package org.fellesprosjekt.gruppe24.server;
 
 import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.FrameworkMessage;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import org.fellesprosjekt.gruppe24.common.models.net.Request;
@@ -11,6 +12,13 @@ public class ServerListener extends Listener{
 
     public void received(Connection connection, Object obj) {
         UserController userController = new UserController((ServerConnection) connection);
+
+        /**
+         * Klienten sender en melding nå og da for å ikke
+         * miste tilkoblingen.
+         */
+        if (obj instanceof FrameworkMessage.KeepAlive)
+            return;
 
         Request req = (Request) obj;
 
