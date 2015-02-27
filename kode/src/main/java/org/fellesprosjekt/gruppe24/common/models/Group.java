@@ -10,8 +10,8 @@ public class Group extends Entity{
     @SuppressWarnings("unused")
     public Group(){}
 
-    public Group(String name) {
-        super(name);
+    public Group(int id, String name) {
+        super(id, name);
         members = new LinkedList<>();
     }
 

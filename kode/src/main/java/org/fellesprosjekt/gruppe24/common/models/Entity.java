@@ -10,8 +10,9 @@ public abstract class Entity {
 
     public Entity(){}
 
-    public Entity(String name){
+    public Entity(int ID, String name){
         this();
+        this.ID = ID;
         this.name = name;
         this.calendar = new Calendar();
     }
