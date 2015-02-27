@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="171.0" prefWidth="347.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+   <children>
+      <Button layoutX="92.0" layoutY="94.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="71.0" text="JA" />
+      <Button layoutX="185.0" layoutY="94.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="71.0" text="NEI" />
+      <Label layoutX="132.0" layoutY="45.0" text="Er du sikker?">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
