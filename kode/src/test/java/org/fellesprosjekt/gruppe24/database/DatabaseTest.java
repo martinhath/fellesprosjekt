@@ -1,4 +1,4 @@
-package org.fellesprosjekt.gruppe24;
+package org.fellesprosjekt.gruppe24.database;
 
 import junit.framework.TestCase;
 

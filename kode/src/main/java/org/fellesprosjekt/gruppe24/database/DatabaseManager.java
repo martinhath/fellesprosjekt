@@ -123,7 +123,7 @@ public final class DatabaseManager {
     /**
 	 * SQL Query that do not alter the database. Eg. SELECT queries
 	 * 
-	 * @param sql
+	 * @param query
 	 * @return ResultSet
 	 * @throws SQLException
 	 */
@@ -143,7 +143,7 @@ public final class DatabaseManager {
 	 * SQL Query that alters the database. Eg. CREATE TABLE, INSERT, UPDATE,
 	 * DELETE query.
 	 * 
-	 * @param sql
+	 * @param query
 	 * @throws SQLException
 	 */
 	public static void updateQuery(String query) {
@@ -203,4 +203,6 @@ public final class DatabaseManager {
 		}
 		return result;
 	}
+
+
 }

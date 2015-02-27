@@ -17,7 +17,7 @@ public class UserController extends ServerController{
         System.out.println("Brukernavn: " + login.getUsername());
         System.out.println("Passord:    " + login.getPassword());
 
-        User user = new User("");
+        User user = new User();
         user.setUsername(login.getUsername());
         user.setPassword(login.getPassword());
 
