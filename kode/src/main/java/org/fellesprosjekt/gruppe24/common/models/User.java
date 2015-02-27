@@ -17,9 +17,8 @@ public class User extends Entity {
     @SuppressWarnings("unused")
     public User(){}
 
-    public User(String name){
-        super(name);
-        
+    public User(int id, String name){
+        super(id, name);
     }
     
     public String getUsername() {

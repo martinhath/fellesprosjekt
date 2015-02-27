@@ -65,6 +65,26 @@ public final class DatabaseManager {
          }
     }
     
+    public static PreparedStatement getPreparedStatement(String query) {
+    	try {
+    		Connection con = createConnection();
+    		PreparedStatement ps = con.prepareStatement(query);
+    		return ps; 
+    	} catch (SQLException ex) {
+    		lgr.log(Level.SEVERE, ex.getMessage(), ex);
+    	}
+    	return null;
+    }
+    
+    public static boolean executePS(PreparedStatement ps) {
+    	try {
+    		return ps.execute();
+    	} catch (SQLException ex) {
+    		lgr.log(Level.SEVERE, ex.getMessage(), ex);
+    	}
+    	return false;
+    }
+    
     public static Statement getStatement() {
     	try {
     		Statement st = createConnection().createStatement();
