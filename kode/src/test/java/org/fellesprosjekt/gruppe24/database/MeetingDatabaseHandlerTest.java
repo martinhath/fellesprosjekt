@@ -8,6 +8,7 @@ import org.fellesprosjekt.gruppe24.common.models.User;
 import javax.xml.crypto.Data;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -32,7 +33,9 @@ public class MeetingDatabaseHandlerTest extends TestCase {
         MeetingDatabaseHandler.insertMeeting(meeting);
 
         String expected = "fredagspils";
-        String actual= DatabaseManager.getCell("name", "Meeting");
+        ArrayList<HashMap<String, String>> result = DatabaseManager.getList("SELECT * FROM Meeting;");
+        System.out.println("ALL MEETINGS: " + result);
+        String actual = result.get(0).get("name");
         TestCase.assertEquals(expected, actual);
     }
 

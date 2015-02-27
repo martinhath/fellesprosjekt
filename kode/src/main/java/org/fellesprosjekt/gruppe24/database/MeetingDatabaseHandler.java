@@ -33,18 +33,18 @@ public final class MeetingDatabaseHandler {
     public static boolean insertMeeting(Meeting meeting) {
         try {
             Connection con = DatabaseManager.createConnection();
-            String query = "INSERT INTO Meeting " +
-                    "(name, description, start_time, end_time, Room_roomid, location, owner_id, Group_groupid) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+            String query =
+                    "INSERT INTO Meeting " +
+                    "(name, description, start_time, end_time, Room_roomid, owner_id, Group_groupid) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?);";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setString(1, meeting.getName());
-            ps.setTime(3, java.sql.Time.valueOf(meeting.getFrom().toLocalTime()));
-            ps.setTime(4, java.sql.Time.valueOf(meeting.getTo().toLocalTime()));
             ps.setString(2, meeting.getDescription());
-            ps.setString(6, meeting.getLocation());
+            ps.setTimestamp(3, java.sql.Timestamp.valueOf(meeting.getFrom()));
+            ps.setTimestamp(4, java.sql.Timestamp.valueOf(meeting.getTo()));
             ps.setInt(5, meeting.getRoom().getId());
-            ps.setInt(7, meeting.getOwner().getId());
-            ps.setInt(8, meeting.getGroup().getId());
+            ps.setInt(6, meeting.getOwner().getId());
+            ps.setInt(7, 1); // TODO should be a groupID
             return ps.execute();
 
         } catch (SQLException ex) {

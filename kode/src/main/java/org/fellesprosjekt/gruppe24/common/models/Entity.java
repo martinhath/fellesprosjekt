@@ -3,7 +3,6 @@ package org.fellesprosjekt.gruppe24.common.models;
 
 public abstract class Entity {
 
-    private int id;
     private String name;
     private Calendar calendar;
     private int ID;
@@ -20,10 +19,6 @@ public abstract class Entity {
     
     public Entity(int ID) {
     	this.ID = ID;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public String getName() {
