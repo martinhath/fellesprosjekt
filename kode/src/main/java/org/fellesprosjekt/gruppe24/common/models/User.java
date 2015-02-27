@@ -17,12 +17,17 @@ public class User extends Entity {
     @SuppressWarnings("unused")
     public User(){}
 
-    public User(int id, String name){
+    public User(int id, String name, String email){
         super(id, name);
+        this.email = email;
     }
     
     public String getUsername() {
     	return username;
+    }
+    
+    public String getEmail() {
+    	return email;
     }
     
     public void setUsername(String username) {
