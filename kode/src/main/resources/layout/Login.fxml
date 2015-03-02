@@ -6,20 +6,22 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="org.fellesprosjekt.gruppe24.client.controllers.LoginController" >
    <children>
       <Pane prefHeight="200.0" prefWidth="353.0">
          <children>
             <TextField layoutX="160.0" layoutY="76.0" />
             <Label layoutX="43.0" layoutY="76.0" prefHeight="26.0" prefWidth="92.0" text="Brukernavn:" />
             <Label layoutX="43.0" layoutY="113.0" prefHeight="16.0" prefWidth="112.0" text="Passord:" />
-            <Button layoutX="286.0" layoutY="147.0" mnemonicParsing="false" text="OK" />
             <Label layoutX="154.0" layoutY="31.0" text="Login">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
             <PasswordField layoutX="160.0" layoutY="108.0" />
+            <Button layoutX="286.0" layoutY="147.0" mnemonicParsing="false" text="OK"
+                    onAction="#loginClick" />
          </children>
       </Pane>
    </children>

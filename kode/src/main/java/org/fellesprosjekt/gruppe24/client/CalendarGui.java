@@ -3,10 +3,11 @@ package org.fellesprosjekt.gruppe24.client;
 import com.esotericsoftware.kryonet.Client;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.fellesprosjekt.gruppe24.client.controllers.Controller;
+import org.fellesprosjekt.gruppe24.client.controllers.LoginController;
 import org.fellesprosjekt.gruppe24.common.KryoUtils;
 
 import java.io.IOException;
@@ -16,7 +17,7 @@ public class CalendarGui extends Application{
     CalendarClient calendarClient;
     Stage stage;
     Scene scene;
-    Controller controller;
+    Initializable controller;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -32,10 +33,10 @@ public class CalendarGui extends Application{
 
         this.stage = primaryStage;
 
-        setScene("/layout/Login.fxml");
+        controller = setScene("/layout/Login.fxml");
     }
 
-    public void setScene(String path){
+    public Initializable setScene(String path){
         FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
         Parent root;
         try {
@@ -47,7 +48,7 @@ public class CalendarGui extends Application{
         }
         stage.setScene(scene);
         stage.show();
-
+        return (Initializable) loader.getController();
     }
 
     public static void main(String[] args) {
