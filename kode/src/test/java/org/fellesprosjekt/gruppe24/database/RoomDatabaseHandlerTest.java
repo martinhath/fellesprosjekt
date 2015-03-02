@@ -22,10 +22,10 @@ public class RoomDatabaseHandlerTest extends TestCase {
     @Test(expected = java.sql.SQLException.class)
     public void testCanInsertAndDeleteRoom() {
         Room room = new Room("nytt_rom_fra_test", 4, true);
-        Room room2 = RoomDatabaseHandler.getById(room.getID());
+        Room room2 = RoomDatabaseHandler.getById(room.getId());
         TestCase.assertTrue(room.equals(room2));
-        RoomDatabaseHandler.deleteById(room.getID());
-        Room room3 = RoomDatabaseHandler.getById(room.getID());
+        RoomDatabaseHandler.deleteById(room.getId());
+        Room room3 = RoomDatabaseHandler.getById(room.getId());
     }
     public void testCanNotInsertCorruptRoom() {
         // valideringa tas av når man lager objektet, tror jeg

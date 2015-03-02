@@ -31,12 +31,12 @@ public class MeetingDatabaseHandlerTest extends TestCase {
                 "P15",
                 new ArrayList<User>(),
                 new User());
-        Meeting meeting2 = MeetingDatabaseHandler.getById(meeting.getID());
+        Meeting meeting2 = MeetingDatabaseHandler.getById(meeting.getId());
         //TestCase.assertEquals(meeting.toString(), meeting2.toString());
-        TestCase.assertEquals(meeting.getID(), meeting2.getID());
+        TestCase.assertEquals(meeting.getId(), meeting2.getId());
 
-        MeetingDatabaseHandler.deleteById(meeting.getID());
-        MeetingDatabaseHandler.deleteById(meeting.getID());
+        MeetingDatabaseHandler.deleteById(meeting.getId());
+        MeetingDatabaseHandler.deleteById(meeting.getId());
     }
 
     public void testCanRetrieveMeetingFromDB() {

@@ -68,7 +68,7 @@ public class Meeting {
 		this.group = group;
 	}
 
-	public int getID() {
+	public int getId() {
 		return this.id;
 	}
 	public String getName() {

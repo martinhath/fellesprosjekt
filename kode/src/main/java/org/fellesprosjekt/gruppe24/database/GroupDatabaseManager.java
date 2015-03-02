@@ -38,7 +38,7 @@ public class GroupDatabaseManager {
 	}
 	
 	public static void main(String[] args) {
-		GroupDatabaseManager.getAllGroupsForUser(new User(1, "Herman", "her@"));
+		GroupDatabaseManager.getAllGroupsForUser(new User(1, "Herman"));
 	}
 	
 	public static List<User> getAllUsersInGroup(Group group) {
