@@ -6,13 +6,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.fellesprosjekt.gruppe24.client.controllers.Controller;
 import org.fellesprosjekt.gruppe24.common.KryoUtils;
 
 import java.io.IOException;
-import java.net.URL;
 
 public class CalendarGui extends Application{
+
     CalendarClient calendarClient;
+    Stage stage;
+    Scene scene;
+    Controller controller;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -26,16 +30,24 @@ public class CalendarGui extends Application{
             e.printStackTrace();
         }
 
-        URL u = getClass().getResource("/layout/Login.fxml");
-        Parent root = FXMLLoader.load(u);
-        primaryStage.setTitle("Dette er en tittel");
-        Scene s = new Scene(root, 800, 800);
-        primaryStage.setScene(s);
-        primaryStage.show();
+        this.stage = primaryStage;
+
+        setScene("/layout/Login.fxml");
     }
 
     public void setScene(String path){
         FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
+        Parent root;
+        try {
+            root = loader.load();
+            scene = new Scene(root, 800, 600);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        stage.setScene(scene);
+        stage.show();
+
     }
 
     public static void main(String[] args) {
