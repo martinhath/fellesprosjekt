@@ -1,9 +1,10 @@
-package org.fellesprosjekt.gruppe24.server;
+package org.fellesprosjekt.gruppe24.server.controllers;
 
 import org.fellesprosjekt.gruppe24.common.models.LoginInfo;
 import org.fellesprosjekt.gruppe24.common.models.net.Request;
 import org.fellesprosjekt.gruppe24.common.models.User;
 import org.fellesprosjekt.gruppe24.common.models.net.Response;
+import org.fellesprosjekt.gruppe24.server.ServerConnection;
 
 public class UserController extends ServerController{
 

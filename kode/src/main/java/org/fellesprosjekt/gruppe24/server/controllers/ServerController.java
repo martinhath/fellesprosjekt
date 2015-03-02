@@ -1,11 +1,10 @@
-package org.fellesprosjekt.gruppe24.server;
+package org.fellesprosjekt.gruppe24.server.controllers;
 
-import org.fellesprosjekt.gruppe24.common.models.net.Request;
+import org.fellesprosjekt.gruppe24.server.ServerConnection;
 
 public abstract class ServerController {
 
-    ServerConnection connection;
-
+    protected ServerConnection connection;
 
     public ServerController(ServerConnection conn){
         connection = conn;
