@@ -34,6 +34,10 @@ public class CalendarGui extends Application{
         primaryStage.show();
     }
 
+    public void setScene(String path){
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
+    }
+
     public static void main(String[] args) {
         launch(args);
     }
