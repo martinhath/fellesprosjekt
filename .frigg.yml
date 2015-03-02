@@ -1,2 +1,2 @@
 tasks:
-    - mvn -f kode -B package
+    - mvn -f kode/pom.xml -B package

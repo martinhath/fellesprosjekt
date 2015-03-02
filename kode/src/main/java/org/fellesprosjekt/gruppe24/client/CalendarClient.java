@@ -7,19 +7,24 @@ import java.io.IOException;
 
 public class CalendarClient {
 
+    private static CalendarClient calendarClient;
+
     Client client;
     int portTCP;
     int portUDP;
     String host;
 
-    public CalendarClient(String host, int portTCP, int portUDP){
-        client = new com.esotericsoftware.kryonet.Client();
+    private CalendarClient(){}
+
+    public void setConnectionInfo(String host, int portTCP, int portUDP){
         this.host = host;
         this.portTCP = portTCP;
         this.portUDP = portUDP;
     }
 
     public void init(){
+        client = new com.esotericsoftware.kryonet.Client();
+
         client.addListener(new ClientListener());
     }
 
@@ -35,5 +40,11 @@ public class CalendarClient {
 
     public Client getClient(){
         return client;
+    }
+
+    public static CalendarClient GetInstance() {
+        if (calendarClient == null)
+            calendarClient = new CalendarClient();
+        return calendarClient;
     }
 }

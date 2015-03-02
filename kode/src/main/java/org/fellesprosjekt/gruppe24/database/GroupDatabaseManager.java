@@ -25,7 +25,7 @@ public class GroupDatabaseManager {
 
 	public static List<Group> getAllGroupsForUser(User user) {
 		String query = String.format("SELECT * FROM User_group AS ug, User AS u, User_group_has_User AS ughu WHERE "
-				+ "u.userid = ughu.User_userid AND ug.groupid = ughu.User_group_groupid AND u.userid = %s;", user.getID());
+				+ "u.userid = ughu.User_userid AND ug.groupid = ughu.User_group_groupid AND u.userid = %s;", user.getId());
 		return getAllGroups(query);
 	}
 	
@@ -43,7 +43,7 @@ public class GroupDatabaseManager {
 	
 	public static List<User> getAllUsersInGroup(Group group) {
 		String query = String.format("SELECT * FROM User AS u, User_group AS ug, User_group_has_User AS ughu WHERE "
-				+ "ug.groupid = ughu.User_group_groupid AND u.userid = ughu.userid AND ug.groupid = %s;", group.getID());
+				+ "ug.groupid = ughu.User_group_groupid AND u.userid = ughu.userid AND ug.groupid = %s;", group.getId());
 		return UserDatabaseHandler.getAllUsers(query);
 	}
 	
