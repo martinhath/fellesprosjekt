@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 
 import org.fellesprosjekt.gruppe24.database.DatabaseManager;
 
+import javax.xml.crypto.Data;
 import java.util.HashMap;
 
 /**
@@ -15,23 +16,9 @@ public class DatabaseTest extends TestCase {
     }
 
     public void testCanConnectToDefaultDB() {
-        DatabaseManager dbm = new DatabaseManager();
-        String expected = "abc";
-        String actual= dbm.getCell("room_num", "Room");
-        TestCase.assertEquals(expected, actual);
+        TestCase.assertNotNull(DatabaseManager.getStatement());
     }
 
-    public void testCanGetRoom() {
-        DatabaseManager dbm = new DatabaseManager();
-        System.out.println(dbm.getRow("SELECT * FROM Room"));
-        TestCase.assertNotNull(dbm.getRow("SELECT * FROM Room"));
-    }
-
-    public void testCanGetUser() {
-        DatabaseManager dbm = new DatabaseManager();
-        System.out.println(dbm.getRow("SELECT * FROM User"));
-        TestCase.assertNotNull(dbm.getRow("SELECT * FROM User"));
-    }
 
     public void testGetAutoIncrement() {
         int result = DatabaseManager.getAutoIncrement("Room");
