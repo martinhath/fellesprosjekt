@@ -1,4 +1,4 @@
-#HALLLO!!
+#HALLLO!!  [![Build status](https://ci.frigg.io/badges/martinhath/fellesprosjekt/)](https://ci.frigg.io/martinhath/fellesprosjekt/last/)
 
 Gruppe 24 er best! 
 

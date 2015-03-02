@@ -1,0 +1,2 @@
+tasks:
+    - mvn -f kode -B package
