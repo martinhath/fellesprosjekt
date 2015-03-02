@@ -36,4 +36,13 @@ public class RoomDatabaseHandlerTest extends TestCase {
         TestCase.assertNotNull(allRooms);
     }
 
+    public void testCanUpdateRoom() {
+        Room room = RoomDatabaseHandler.getById(1);
+        TestCase.assertTrue(DatabaseManager.updateField(1, "room_num", "Room", "Nytt_romnavn"));
+        Room room2 = RoomDatabaseHandler.getById(1);
+        TestCase.assertTrue(room2.getName().equals("Nytt_romnavn"));
+        TestCase.assertTrue(DatabaseManager.updateField(1, "room_num", "Room", "Enda nyere romnavn"));
+        room2 = RoomDatabaseHandler.getById(1);
+        TestCase.assertTrue(room2.getName().equals("Enda nyere romnavn"));
+    }
 }
