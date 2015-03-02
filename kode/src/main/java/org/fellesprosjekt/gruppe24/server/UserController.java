@@ -24,12 +24,17 @@ public class UserController extends ServerController{
         connection.setUser(user);
     }
 
+    private boolean login(LoginInfo loginInfo){
+        /**
+         * Håndter login-logikk
+         * Returnerer om login er good.
+         */
+        return true;
+    }
+
     public void get(Request req){
         /**
-         * Sender tilbake brukeren som er logget på.
-         * Bør sjekke req om man har gitt med logininfo,
-         * da skal den sende tilbake en bruker dersom infoen
-         * finnes i databasen.
+         * Kanskje det finnes en bedre måte å håndtere alt dette?
          */
         System.out.println("Request: "+req);
         Response res = new Response();
@@ -37,10 +42,14 @@ public class UserController extends ServerController{
         if (user == null){
             res.setType(Response.Type.FAILURE);
             if (req.getPayload() instanceof LoginInfo){
-                LoginInfo login = (LoginInfo) req.getPayload();
-                System.out.println("Fikk en bruker:");
-                System.out.println("Brukernavn: " + login.getUsername());
-                System.out.println("Passord:    " + login.getPassword());
+                LoginInfo loginInfo = (LoginInfo) req.getPayload();
+                boolean success = login(loginInfo);
+                if (success){
+                    res.setType(Response.Type.SUCCESS);
+                }
+                else{
+                    res.setType(Response.Type.FAILURE);
+                }
             }
         } else {
             res.setType(Response.Type.SUCCESS);
