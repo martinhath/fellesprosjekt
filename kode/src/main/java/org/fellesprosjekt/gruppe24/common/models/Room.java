@@ -37,7 +37,7 @@ public class Room implements Comparable<Room> {
 		this.id = RoomDatabaseHandler.insertRoom(this); // gets id from the database handler
 	}
 
-	public int getID() {
+	public int getId() {
 		return id;
 	}
 
@@ -55,7 +55,7 @@ public class Room implements Comparable<Room> {
 
 	public boolean equals(Room other) {
 		return (
-				this.getID() == other.getID() &&
+				this.getId() == other.getId() &&
 				this.getName().equals(other.getName()) &&
 				this.accessible == other.accessible &&
 				this.getCapacity() == other.getCapacity()
