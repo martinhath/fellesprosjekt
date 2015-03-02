@@ -14,7 +14,7 @@ eller 'få alle gruppene til denne brukeren'.
 Førstnevnte `Request` kan se slik ut:
 
 ```java
-Request req = new Request(Request.Type.GET, User.class, login_info);
+Request req = new Request(Request.Type.AUTH, User.class, loginInfo);
 ```
 
 Sistnevnte kan se slik ut:

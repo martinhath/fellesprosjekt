@@ -30,14 +30,20 @@ public class LoginController implements Initializable{
         String password = passwordField.getText();
         LoginInfo loginInfo = new LoginInfo(username, password);
 
-        Request req = new Request(Request.Type.GET, User.class, loginInfo);
+        Request req = new Request(Request.Type.AUTH, User.class, loginInfo);
 
         client.sendTCP(req);
 
         client.addListener(new Listener(){
             @Override
             public void received(Connection conn, Object obj){
-                if (((Response) obj).getType() == Response.Type.SUCCESS){
+                if (!(obj instanceof Response)){
+                    System.err.println("Response error: " + obj);
+                    return;
+                }
+                Response res = (Response) obj;
+
+                if (res.getType() == Response.Type.SUCCESS){
                     System.out.println("Vi er nå logget inn");
                 } else{
                     System.out.println("Vi er ikke logget inn :(");
@@ -45,8 +51,6 @@ public class LoginController implements Initializable{
                 client.removeListener(this);
             }
         });
-
-        System.out.println("Trykk!");
     }
 
     @Override

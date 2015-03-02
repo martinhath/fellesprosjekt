@@ -12,7 +12,6 @@ public class ServerListener extends Listener{
 
     public void received(Connection connection, Object obj) {
         UserController userController = new UserController((ServerConnection) connection);
-
         /**
          * Klienten sender en melding nå og da for å ikke
          * miste tilkoblingen.
@@ -31,6 +30,9 @@ public class ServerListener extends Listener{
                     break;
                 case GET:
                     userController.get(req);
+                    break;
+                case AUTH:
+                    userController.auth(req);
                     break;
             }
         } else {

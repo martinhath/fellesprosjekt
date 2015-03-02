@@ -1,7 +1,7 @@
 package org.fellesprosjekt.gruppe24.common.models.net;
 
 public class Response {
-    public enum Type {SUCCESS, FAILURE};
+    public enum Type {SUCCESS, FAILURE}
 
     private Type type;
 

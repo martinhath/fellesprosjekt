@@ -1,7 +1,7 @@
 package org.fellesprosjekt.gruppe24.common.models.net;
 
 public class Request {
-    public enum Type {GET, LIST, PUT};
+    public enum Type {GET, LIST, PUT, AUTH }
 
     private Type type;
 

@@ -13,9 +13,6 @@ public class UserController extends ServerController{
 
     public void put(Request req){
         LoginInfo login = (LoginInfo) req.getPayload();
-        System.out.println("Fikk en bruker:");
-        System.out.println("Brukernavn: " + login.getUsername());
-        System.out.println("Passord:    " + login.getPassword());
 
         User user = new User();
         user.setUsername(login.getUsername());
@@ -24,39 +21,34 @@ public class UserController extends ServerController{
         connection.setUser(user);
     }
 
-    private boolean login(LoginInfo loginInfo){
+    public void get(Request req){
+        System.out.println("GET " + req.getModel());
+    }
+
+    public void auth(Request req){
+        System.out.println("GET " + req.getModel());
+
+        Response res = new Response();
+        if (connection.getUser() != null){
+            res.setType(Response.Type.FAILURE);
+            res.setModel(String.class);
+            res.setPayload("You are already logged in");
+            connection.sendTCP(res);
+            return;
+        }
+        LoginInfo loginInfo = (LoginInfo) req.getPayload();
+        User user = login(loginInfo);
+        res.setType(user != null ? Response.Type.SUCCESS : Response.Type.FAILURE);
+        res.setPayload(user);
+        connection.sendTCP(res);
+    }
+
+    private User login(LoginInfo loginInfo){
         /**
          * Håndter login-logikk
          * Returnerer om login er good.
          */
-        return true;
-    }
-
-    public void get(Request req){
-        /**
-         * Kanskje det finnes en bedre måte å håndtere alt dette?
-         */
-        System.out.println("Request: "+req);
-        Response res = new Response();
-        User user = connection.getUser();
-        if (user == null){
-            res.setType(Response.Type.FAILURE);
-            if (req.getPayload() instanceof LoginInfo){
-                LoginInfo loginInfo = (LoginInfo) req.getPayload();
-                boolean success = login(loginInfo);
-                if (success){
-                    res.setType(Response.Type.SUCCESS);
-                }
-                else{
-                    res.setType(Response.Type.FAILURE);
-                }
-            }
-        } else {
-            res.setType(Response.Type.SUCCESS);
-            res.setPayload(user);
-            res.setModel(User.class);
-        }
-        connection.sendTCP(res);
+        return new User();
     }
 
 }

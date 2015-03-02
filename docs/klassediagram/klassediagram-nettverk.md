@@ -20,6 +20,7 @@
 | GET |
 | LIST | 
 | PUT |
+| AUTH |
 
 
 | Response.Type |
