@@ -5,20 +5,20 @@ public abstract class Entity {
 
     private String name;
     private Calendar calendar;
-    private int ID;
+    private int Id;
 
 
     public Entity(){}
 
-    public Entity(int ID, String name){
+    public Entity(int Id, String name){
         this();
-        this.ID = ID;
+        this.Id = Id;
         this.name = name;
         this.calendar = new Calendar();
     }
     
-    public Entity(int ID) {
-    	this.ID = ID;
+    public Entity(int Id) {
+    	this.Id = Id;
     }
 
     public String getName() {
@@ -29,8 +29,8 @@ public abstract class Entity {
     	return calendar;
     }
 
-    public int getID() {
-    	return ID;
+    public int getId() {
+    	return Id;
     }
 
 }
