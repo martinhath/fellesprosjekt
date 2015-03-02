@@ -7,7 +7,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.fellesprosjekt.gruppe24.client.controllers.LoginController;
 import org.fellesprosjekt.gruppe24.common.KryoUtils;
 
 import java.io.IOException;
@@ -21,10 +20,13 @@ public class CalendarGui extends Application{
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        calendarClient = new CalendarClient("127.0.0.1", 9001, 9002);
+
+        calendarClient = CalendarClient.GetInstance();
+        calendarClient.setConnectionInfo("127.0.0.1", 9001, 9002);
+        calendarClient.init();
+
         Client c = calendarClient.getClient();
         KryoUtils.registerClasses(c.getKryo());
-        calendarClient.init();
         try {
             calendarClient.start();
         } catch (IOException e) {

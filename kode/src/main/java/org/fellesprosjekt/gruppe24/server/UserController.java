@@ -31,10 +31,17 @@ public class UserController extends ServerController{
          * da skal den sende tilbake en bruker dersom infoen
          * finnes i databasen.
          */
+        System.out.println("Request: "+req);
         Response res = new Response();
         User user = connection.getUser();
         if (user == null){
             res.setType(Response.Type.FAILURE);
+            if (req.getPayload() instanceof LoginInfo){
+                LoginInfo login = (LoginInfo) req.getPayload();
+                System.out.println("Fikk en bruker:");
+                System.out.println("Brukernavn: " + login.getUsername());
+                System.out.println("Passord:    " + login.getPassword());
+            }
         } else {
             res.setType(Response.Type.SUCCESS);
             res.setPayload(user);
