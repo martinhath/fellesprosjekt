@@ -12,21 +12,15 @@ public class UserController extends ServerController{
     }
 
     public void put(Request req){
-        LoginInfo login = (LoginInfo) req.getPayload();
-
-        User user = new User();
-        user.setUsername(login.getUsername());
-        user.setPassword(login.getPassword());
-
-        connection.setUser(user);
+        System.out.println("PUT User");
     }
 
     public void get(Request req){
-        System.out.println("GET " + req.getModel());
+        System.out.println("GET User");
     }
 
     public void auth(Request req){
-        System.out.println("GET " + req.getModel());
+        System.out.println("AUTH User");
 
         Response res = new Response();
         if (connection.getUser() != null){
@@ -38,9 +32,15 @@ public class UserController extends ServerController{
         }
         LoginInfo loginInfo = (LoginInfo) req.getPayload();
         User user = login(loginInfo);
-        res.setType(user != null ? Response.Type.SUCCESS : Response.Type.FAILURE);
+        if (user == null) {
+            res.setType(Response.Type.FAILURE);
+            connection.sendTCP(res);
+            return;
+        }
+        res.setType(Response.Type.SUCCESS);
         res.setPayload(user);
         connection.sendTCP(res);
+        connection.setUser(user);
     }
 
     private User login(LoginInfo loginInfo){
