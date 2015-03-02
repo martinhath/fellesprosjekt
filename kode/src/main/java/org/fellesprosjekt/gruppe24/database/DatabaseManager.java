@@ -1,5 +1,6 @@
 package org.fellesprosjekt.gruppe24.database;
 
+import org.fellesprosjekt.gruppe24.common.models.Room;
 import org.fellesprosjekt.gruppe24.server.CalendarServer;
 
 import java.beans.PropertyVetoException;
@@ -69,7 +70,8 @@ public final class DatabaseManager {
     public static PreparedStatement getPreparedStatement(String query) {
     	try {
     		Connection con = createConnection();
-    		PreparedStatement ps = con.prepareStatement(query);
+			// RETURN GENERATED KEYS makes it possible to get the ID of a newly inserted row
+    		PreparedStatement ps = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
     		return ps; 
     	} catch (SQLException ex) {
     		lgr.log(Level.SEVERE, ex.getMessage(), ex);
@@ -82,8 +84,8 @@ public final class DatabaseManager {
     		return ps.execute();
     	} catch (SQLException ex) {
     		lgr.log(Level.SEVERE, ex.getMessage(), ex);
+			return false;
     	}
-    	return false;
     }
     
     public static Statement getStatement() {
@@ -155,7 +157,6 @@ public final class DatabaseManager {
 		} catch (SQLException ex) {
 			lgr.log(Level.SEVERE, ex.getMessage(), ex);
 		}
-
 	}
     
     /**
@@ -221,5 +222,22 @@ public final class DatabaseManager {
 			return null;
 		}
 	}
-
+	// TODO virker ikke, gir bare 0 nå
+	public static int getAutoIncrement(String table) {
+		try {
+			Statement st = getStatement();
+			ResultSet rs = st.executeQuery(String.format(
+							"SELECT last_insert_id() AS last_id " +
+							"FROM %s;", table));
+			if (rs.next()) {
+				lgr.log(Level.INFO,String.format("Next increment id for %s is %d", table, rs.getInt("last_id")));
+				return rs.getInt("last_id");
+			} else {
+				return -1;
+			}
+		} catch (Exception ex) {
+			lgr.log(Level.SEVERE, ex.getMessage(), ex);
+			return -1;
+		}
+	}
 }
