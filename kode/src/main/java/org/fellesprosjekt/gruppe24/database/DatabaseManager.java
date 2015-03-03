@@ -376,7 +376,26 @@ public final class DatabaseManager {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
             return false;
         }
+    }
 
+    public static boolean updateField(
+            int pk1, int pk2, String table, String field, String foreignTable1, String foreignTable2, boolean newValue)
+            throws SQLException {
+        try {
+            PreparedStatement ps = getPreparedStatement(String.format(
+                    "UPDATE %s " +
+                            "SET %s = ? " +
+                            "WHERE %s_%sid=? " +
+                            "AND %s_%sid=?", table, field, foreignTable1, foreignTable1, foreignTable2, foreignTable2));
+            ps.setBoolean(1, newValue);
+            ps.setInt(2, pk1);
+            ps.setInt(3, pk2);
+            executePS(ps);
+            return true;
+        } catch (Exception ex) {
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+            return false;
+        }
     }
 
     public static void deleteRow(String table, int id) throws SQLException {
