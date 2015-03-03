@@ -20,4 +20,8 @@ public class Calendar {
     public List<Meeting> getMeetings() {
     	return meetings;
     }
+
+    public boolean addMeeting(Meeting meeting) {
+        return this.meetings.add(meeting);
+    }
 }

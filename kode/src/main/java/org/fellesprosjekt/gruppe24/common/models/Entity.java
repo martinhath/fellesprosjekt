@@ -1,24 +1,32 @@
 package org.fellesprosjekt.gruppe24.common.models;
 
 
+import org.fellesprosjekt.gruppe24.database.UserDatabaseHandler;
+
 public abstract class Entity {
 
     private String name;
     private Calendar calendar;
-    private int Id;
+    private int id;
 
 
     public Entity(){}
 
-    public Entity(int Id, String name){
+    public Entity(String name){
         this();
-        this.Id = Id;
+        this.name = name;
+        this.calendar = new Calendar();
+    }
+
+    public Entity(int id, String name){
+        this();
+        this.id = id;
         this.name = name;
         this.calendar = new Calendar();
     }
     
-    public Entity(int Id) {
-    	this.Id = Id;
+    public Entity(int id) {
+    	this.id = id;
     }
 
     public String getName() {
@@ -30,7 +38,15 @@ public abstract class Entity {
     }
 
     public int getId() {
-    	return Id;
+    	return id;
+    }
+
+    /**
+     * Used when creating new object without ID until it has been inserted in the database
+     * @param id a correct database index
+     */
+    protected void setId(int id) {
+        this.id = id;
     }
 
 }

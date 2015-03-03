@@ -1,11 +1,14 @@
 package org.fellesprosjekt.gruppe24.common.models;
 
+import org.fellesprosjekt.gruppe24.database.UserDatabaseHandler;
+
 public class User extends Entity {
 
     // The users calendar
   
  
     private String username;
+    private String name;
     private String password;
     private String email;
     
@@ -17,8 +20,15 @@ public class User extends Entity {
     @SuppressWarnings("unused")
     public User(){}
 
-    public User(int id, String name) {
+    public User(String username, String name, String password) {
+        super(name);
+        this.username = username;
+        this.setId(UserDatabaseHandler.addNewUser(this, password));
+    }
+
+    public User(int id, String username, String name) {
         super(id, name);
+        this.username = username;
     }
 
     public String getUsername() {
