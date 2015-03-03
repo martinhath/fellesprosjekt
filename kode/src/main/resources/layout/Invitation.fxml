@@ -6,8 +6,8 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane prefHeight="461.0" prefWidth="350.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+<AnchorPane fx:controller="org.fellesprosjekt.gruppe24.client.controllers.InvitationController" 
+prefHeight="461.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.fellesprosjekt.gruppe24.client.controllers.InvitationController">
    <children>
       <Label layoutX="23.0" layoutY="21.0" text="Møteinvitasjon" AnchorPane.leftAnchor="23.0">
          <font>
@@ -67,34 +67,49 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <CheckBox mnemonicParsing="false" text="Aksepter" GridPane.columnIndex="1" GridPane.rowIndex="7">
+            <!-- beskrivning -->
+            <TextArea fx:id="decriptionField" disable="true" editable="false" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" />
+            <!-- rum -->
+            <TextField fx:id="roomField" disable="true" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <!-- starttid -->
+            <TextField fx:id="startField" disable="true" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <!-- sluttid -->
+            <TextField fx:id="endField" disable="true" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <!-- möteledare -->
+            <TextField fx:id="leaderField" disable="true" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <!-- deltagare -->
+            <ListView fx:id="participantField" disable="true" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <RadioButton mnemonicParsing="false" text="Aksepter" GridPane.columnIndex="1" GridPane.rowIndex="7">
                <font>
                   <Font size="14.0" />
                </font>
-            </CheckBox>
-            <CheckBox mnemonicParsing="false" text="Avvis" GridPane.columnIndex="1" GridPane.rowIndex="8">
+               <toggleGroup>
+                  <ToggleGroup fx:id="gruppe" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton mnemonicParsing="false" text="Avvis" toggleGroup="$gruppe" GridPane.columnIndex="1" GridPane.rowIndex="8">
                <font>
                   <Font size="14.0" />
                </font>
-            </CheckBox>
-            <CheckBox mnemonicParsing="false" text="Venter" GridPane.columnIndex="1" GridPane.rowIndex="9">
+            </RadioButton>
+            <RadioButton mnemonicParsing="false" text="Venter" toggleGroup="$gruppe" GridPane.columnIndex="1" GridPane.rowIndex="9">
                <font>
                   <Font size="14.0" />
                </font>
-            </CheckBox>
+            </RadioButton>
          </children>
       </GridPane>
-      <Button layoutX="23.0" layoutY="396.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="99.0" text="OK">
+      <Button onAction="#pressOkButton" layoutX="23.0" layoutY="396.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="99.0" text="OK">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button layoutX="126.0" layoutY="396.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="99.0" text="Avbryt">
+      <Button onAction="#pressAvbrytButton" layoutX="126.0" layoutY="396.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="99.0" text="Avbryt">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button layoutX="231.0" layoutY="396.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="99.0" text="Skjul" AnchorPane.leftAnchor="229.0">
+      <Button onAction="#pressSkjulButton" layoutX="231.0" layoutY="396.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="99.0" text="Skjul" AnchorPane.leftAnchor="229.0">
          <font>
             <Font size="18.0" />
          </font>
