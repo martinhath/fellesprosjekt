@@ -170,4 +170,14 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
         }
         return result;
     }
+
+    public static void confirmMeeting(User user, Meeting meeting) {
+        try {
+            lgr.log(Level.INFO, String.format("Confirming User %s coming to Meeting %s", user.getUsername(), meeting.getName()));
+            DatabaseManager.updateField(
+                    user.getId(), meeting.getId(), "User_invited_to_meeting", "confirmed", "user", "meeting", true);
+        } catch (SQLException ex) {
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+        }
+    }
 }

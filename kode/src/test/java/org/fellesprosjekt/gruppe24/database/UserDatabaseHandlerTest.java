@@ -49,7 +49,7 @@ public class UserDatabaseHandlerTest extends TestCase {
     public void testCanGetAllMeetingsOfUser() {
         User user = UserDatabaseHandler.getAllUsers().get(0);
         List<Meeting> allMeetings = MeetingDatabaseHandler.getAllMeetings();
-        Meeting meeting= allMeetings.get(0);
+        Meeting meeting = allMeetings.get(0);
         Meeting meeting2 = allMeetings.get(1);
 
         MeetingDatabaseHandler.addUserToMeeting(meeting, user);
@@ -60,5 +60,12 @@ public class UserDatabaseHandlerTest extends TestCase {
         for (int i = 0; i < userMeetings.size(); i++) {
             TestCase.assertEquals(allMeetings.get(i).getId(), userMeetings.get(i).getId());
         }
+    }
+
+    public void testCanConfirmMeeting() {
+        User user = UserDatabaseHandler.getAllUsers().get(0);
+        Meeting meeting = MeetingDatabaseHandler.getAllMeetings().get(0);
+
+        UserDatabaseHandler.confirmMeeting(user, meeting);
     }
 }
