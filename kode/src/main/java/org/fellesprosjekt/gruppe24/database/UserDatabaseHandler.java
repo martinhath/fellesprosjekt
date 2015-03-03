@@ -148,4 +148,26 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
 		DatabaseManager.updateQuery(query);
 		return true;
 	}
+    public static List<Meeting> getMeetingsOfUser(User user) {
+        List<Meeting> result = new ArrayList<>();
+        try {
+            for (int meetingid : selectMeetingIDsOfUser(user.getId())) {
+                result.add(MeetingDatabaseHandler.getById(meetingid));
+            }
+            return result;
+        } catch (SQLException ex) {
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+            return result;
+        }
+    }
+
+    private static List<Integer> selectMeetingIDsOfUser(int userid) throws SQLException {
+        List<Integer> result = new ArrayList<>();
+        String query = String.format("SELECT Meeting_meetingid FROM User_invited_to_meeting WHERE User_userid=%d", userid);
+        ArrayList<HashMap<String, String>> resultSet = DatabaseManager.getList(query);
+        for (HashMap<String, String> row: resultSet) {
+            result.add(Integer.parseInt(row.get("Meeting_meetingid")));
+        }
+        return result;
+    }
 }
