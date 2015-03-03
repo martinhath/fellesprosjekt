@@ -13,9 +13,6 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Created by viktor on 27.02.15.
- */
 public final class MeetingDatabaseHandler {
     private static Logger lgr = Logger.getLogger(MeetingDatabaseHandler.class.getName());
 

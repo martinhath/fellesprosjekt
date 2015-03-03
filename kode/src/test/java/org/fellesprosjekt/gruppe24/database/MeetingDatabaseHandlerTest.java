@@ -11,9 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by viktor on 27.02.15.
- */
 
 public class MeetingDatabaseHandlerTest extends TestCase {
     public void setUp() {
