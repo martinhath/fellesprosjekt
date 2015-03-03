@@ -4,7 +4,11 @@ import org.fellesprosjekt.gruppe24.common.models.LoginInfo;
 import org.fellesprosjekt.gruppe24.common.models.net.Request;
 import org.fellesprosjekt.gruppe24.common.models.User;
 import org.fellesprosjekt.gruppe24.common.models.net.Response;
+import org.fellesprosjekt.gruppe24.database.UserDatabaseHandler;
 import org.fellesprosjekt.gruppe24.server.ServerConnection;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class UserController extends ServerController{
 
@@ -49,7 +53,11 @@ public class UserController extends ServerController{
          * Håndter login-logikk
          * Returnerer om login er good.
          */
-        return new User();
+        User user = UserDatabaseHandler.authenticate(
+                loginInfo.getUsername(),
+                loginInfo.getPassword());
+        Logger.getLogger(getClass().getName()).log(Level.INFO, "User: " + user);
+        return user;
     }
 
 }
