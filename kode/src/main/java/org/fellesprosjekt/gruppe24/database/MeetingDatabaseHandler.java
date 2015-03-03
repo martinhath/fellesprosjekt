@@ -1,26 +1,27 @@
 package org.fellesprosjekt.gruppe24.database;
 
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
+import org.fellesprosjekt.gruppe24.common.models.Room;
+import org.fellesprosjekt.gruppe24.common.models.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Created by viktor on 27.02.15.
- */
 public final class MeetingDatabaseHandler {
+    private static Logger lgr = Logger.getLogger(MeetingDatabaseHandler.class.getName());
 
     public static ArrayList<Meeting> getAllMeetings() {
         ArrayList<Meeting> allMeetings = new ArrayList<Meeting>();
         String query = "SELECT * FROM Meeting;";
         ArrayList<HashMap<String, String>> result = DatabaseManager.getList(query);
         for (HashMap<String, String> hm : result) {
-            //allMeetings.add(generateMeeting(hm));
+            allMeetings.add(generateMeeting(hm));
         }
         return allMeetings;
     }
@@ -30,14 +31,13 @@ public final class MeetingDatabaseHandler {
      *
      * @param meeting
      */
-    public static boolean insertMeeting(Meeting meeting) {
+    public static int insertMeeting(Meeting meeting) {
         try {
-            Connection con = DatabaseManager.createConnection();
             String query =
                     "INSERT INTO Meeting " +
-                    "(name, description, start_time, end_time, Room_roomid, owner_id, Group_groupid) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?);";
-            PreparedStatement ps = con.prepareStatement(query);
+                    "(name, description, start_time, end_time, Room_roomid, owner_id, Group_groupid, location) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+            PreparedStatement ps = DatabaseManager.getPreparedStatement(query);
             ps.setString(1, meeting.getName());
             ps.setString(2, meeting.getDescription());
             ps.setTimestamp(3, java.sql.Timestamp.valueOf(meeting.getFrom()));
@@ -45,26 +45,61 @@ public final class MeetingDatabaseHandler {
             ps.setInt(5, meeting.getRoom().getId());
             ps.setInt(6, meeting.getOwner().getId());
             ps.setInt(7, 1); // TODO should be a groupID
-            return ps.execute();
-
+            ps.setString(8, meeting.getLocation());
+            return DatabaseManager.executePS(ps);
         } catch (SQLException ex) {
             Logger lgr = Logger.getLogger(DatabaseManager.class.getName());
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
+            return -1;
         }
-        return false;
     }
-    /*
+
     private static Meeting generateMeeting(HashMap<String, String> info) {
-        //Meeting meeting = new Meeting(info.get("Meetingid"), info.get("Meetingname"), info.get("email"), info.get("password"),
-        //		info.get("create_time"), info.get("update_time"));
-        // TODO: Add proper constructor so the previous lines can be uncommented.
-        Meeting meeting = new Meeting(info.get("Meetingname"));
+        try {
+            lgr.log(Level.INFO, "Generating meeting object based on: " + info.toString());
+        Meeting meeting = new Meeting(
+                Integer.parseInt(info.get("meetingid")),
+                info.get("name"),
+                info.get("description"),
+        		RoomDatabaseHandler.getById(Integer.parseInt(info.get("Room_roomid"))),
+                DatabaseManager.stringToDateTime(info.get("start_time")),
+                DatabaseManager.stringToDateTime(info.get("end_time")),
+                info.get("location"),
+                new ArrayList<User>(),
+                new User()
+        );
+        lgr.log(Level.INFO, "Meeting successfully generated");
         return meeting;
+        } catch (Exception ex) {
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+            return null;
+        }
     }
-    */
 
     public static int getNextId() {
         return 1; // TODO actually ask the database for next id
+    }
+
+    public static Meeting getById(int id) {
+        try {
+            lgr.log(Level.INFO, "Trying to get meeting by id: " + id);
+            HashMap<String, String> info = DatabaseManager.getRow(String.format("SELECT * FROM Meeting WHERE meetingid=%d", id));
+            lgr.log(Level.INFO, "Trying to generate meeting from: " + info.toString());
+            return generateMeeting(info);
+        } catch (Exception ex) {
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+            return null;
+        }
+    }
+    public static boolean deleteById(int id) {
+        try {
+            lgr.log(Level.INFO, "Trying to delete meeting by id: " + id);
+            DatabaseManager.updateQuery(String.format("DELETE FROM Meeting WHERE meetingid=%d", id));
+            return true;
+        } catch (Exception ex) {
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+            return false;
+        }
     }
 
 }

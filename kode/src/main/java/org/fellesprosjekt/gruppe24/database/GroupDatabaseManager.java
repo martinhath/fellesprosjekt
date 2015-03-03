@@ -37,10 +37,6 @@ public class GroupDatabaseManager {
 		return group;
 	}
 	
-	public static void main(String[] args) {
-		GroupDatabaseManager.getAllGroupsForUser(new User(1, "Herman"));
-	}
-	
 	public static List<User> getAllUsersInGroup(Group group) {
 		String query = String.format("SELECT * FROM User AS u, User_group AS ug, User_group_has_User AS ughu WHERE "
 				+ "ug.groupid = ughu.User_group_groupid AND u.userid = ughu.userid AND ug.groupid = %s;", group.getId());

@@ -17,25 +17,18 @@ public class Meeting {
 	private Room room;
 	private LocalDateTime from;
 	private LocalDateTime to;
-	private List<User> participant;
+	private List<User> participants;
 	private User owner;
 	private Group group;
 	private String location;
 
-	public Group getGroup() {
-		return group;
-	}
-
-	public void setGroup(Group group) {
-		this.group = group;
-	}
 	public Meeting(String name,
 				   String description,
 				   Room room,
 				   LocalDateTime from,
 				   LocalDateTime to,
 				   String location,
-				   List<User> participant,
+				   List<User> participants,
 				   User owner) {
 		this.name = name;
 		this.description = description;
@@ -43,10 +36,36 @@ public class Meeting {
 		this.from = from;
 		this.to = to;
 		this.location = location;
-		this.participant = participant;
+		this.participants = participants;
 		this.owner = owner;
 
-		this.id = MeetingDatabaseHandler.getNextId();
+		this.id = MeetingDatabaseHandler.insertMeeting(this);
+	}
+	public Meeting(int id,
+				   String name,
+				   String description,
+				   Room room,
+				   LocalDateTime from,
+				   LocalDateTime to,
+				   String location,
+				   List<User> participants,
+				   User owner) {
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.room = room;
+		this.from = from;
+		this.to = to;
+		this.location = location;
+		this.participants = participants;
+		this.owner = owner;
+	}
+	public Group getGroup() {
+		return group;
+	}
+
+	public void setGroup(Group group) {
+		this.group = group;
 	}
 
 	public int getId() {
@@ -92,12 +111,12 @@ public class Meeting {
 		this.to = to;
 	}
 
-	public List<User> getParticipant() {
-		return participant;
+	public List<User> getParticipants() {
+		return participants;
 	}
 
-	public void setParticipant(List<User> participant) {
-		this.participant = participant;
+	public void setParticipants(List<User> participants) {
+		this.participants = participants;
 	}
 
 	public User getOwner() {
@@ -115,6 +134,40 @@ public class Meeting {
 		this.location = location;
 	}
 
+	@Override
+	public String toString() {
+		return "Meeting{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", description='" + description + '\'' +
+				", room=" + room +
+				", from=" + from +
+				", to=" + to +
+				", participants=" + participants +
+				", owner=" + owner +
+				", group=" + group +
+				", location='" + location + '\'' +
+				'}';
+	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
 
+		Meeting meeting = (Meeting) o;
+
+		if (id != meeting.id) return false;
+		if (description != null ? !description.equals(meeting.description) : meeting.description != null) return false;
+		if (!from.equals(meeting.from)) return false;
+		if (group != null ? !group.equals(meeting.group) : meeting.group != null) return false;
+		if (location != null ? !location.equals(meeting.location) : meeting.location != null) return false;
+		if (!name.equals(meeting.name)) return false;
+		if (!owner.equals(meeting.owner)) return false;
+		if (!participants.equals(meeting.participants)) return false;
+		if (room != null ? !room.equals(meeting.room) : meeting.room != null) return false;
+		if (!to.equals(meeting.to)) return false;
+
+		return true;
+	}
 }
