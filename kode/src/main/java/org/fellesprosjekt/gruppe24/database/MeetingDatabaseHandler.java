@@ -46,12 +46,7 @@ public final class MeetingDatabaseHandler {
             ps.setInt(6, meeting.getOwner().getId());
             ps.setInt(7, 1); // TODO should be a groupID
             ps.setString(8, meeting.getLocation());
-            DatabaseManager.executePS(ps);
-            ResultSet rs = ps.getGeneratedKeys();
-            if (rs.next()) {
-                lgr.log(Level.INFO, "Meeting created with id: " + rs.getInt(1));
-                return rs.getInt(1);
-            } else return -1;
+            return DatabaseManager.executePS(ps);
         } catch (SQLException ex) {
             Logger lgr = Logger.getLogger(DatabaseManager.class.getName());
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
