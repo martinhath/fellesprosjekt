@@ -14,7 +14,14 @@ import java.util.List;
 
 public class MeetingDatabaseHandlerTest extends TestCase {
     public void setUp() {
-
+        User user = UserDatabaseHandler.getAllUsers().get(0);
+        Meeting meeting = MeetingDatabaseHandler.getAllMeetings().get(0);
+        MeetingDatabaseHandler.addUserToMeeting(meeting, user);
+    }
+    public void tearDown() {
+        User user = UserDatabaseHandler.getAllUsers().get(0);
+        Meeting meeting = MeetingDatabaseHandler.getAllMeetings().get(0);
+        MeetingDatabaseHandler.removeUserFromMeeting(meeting, user);
     }
     
     @Test(expected = java.sql.SQLException.class)
@@ -44,4 +51,22 @@ public class MeetingDatabaseHandlerTest extends TestCase {
         TestCase.assertNotNull(meeting.getName());
     }
 
+    public void testCanAddAndRemoveUserToMeeting() {
+        User user = UserDatabaseHandler.getAllUsers().get(1);
+        Meeting meeting = MeetingDatabaseHandler.getAllMeetings().get(0);
+        int sizeBefore = MeetingDatabaseHandler.getUsersOfMeeting(meeting).size();
+
+        MeetingDatabaseHandler.addUserToMeeting(meeting, user);
+        TestCase.assertTrue(MeetingDatabaseHandler.getUsersOfMeeting(meeting).size() > sizeBefore);
+
+        MeetingDatabaseHandler.removeUserFromMeeting(meeting, user);
+        TestCase.assertEquals(sizeBefore, MeetingDatabaseHandler.getUsersOfMeeting(meeting).size());
+    }
+
+    public void testCanGetUsersOfMeeting() {
+        Meeting meeting = MeetingDatabaseHandler.getAllMeetings().get(0);
+        List<User> users = MeetingDatabaseHandler.getUsersOfMeeting(meeting);
+        TestCase.assertNotNull(users);
+        TestCase.assertNotNull(users.get(0).getUsername());
+    }
 }

@@ -2,6 +2,7 @@ package org.fellesprosjekt.gruppe24.database;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -50,12 +51,11 @@ public class UserDatabaseHandler {
     }
 
     public static User authenticate(String username, String password) {
-        String query = String.format("SELECT * FROM User WHERE username=\"%s\" AND password=\"%s\"", username, password);
-
-        try{
-            User user = generateUser(DatabaseManager.getRow(query));
-            return user;
-        } catch (Exception e){
+        String query = String.format("SELECT * FROM User WHERE username='%s' AND password='%s'", username, password);
+        try {
+            return generateUser(DatabaseManager.getRow(query));
+        } catch (SQLException ex) {
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
             return null;
         }
     }
@@ -96,11 +96,16 @@ public class UserDatabaseHandler {
 		String query = "SELECT * FROM User;";
 		return getAllUsers(query);
 	}
-	
+
 	public static User getUserFromUsername(String username) {
 		String query = "SELECT * FROM User WHERE username = '" + username + "';";
-		HashMap<String, String> row = DatabaseManager.getRow(query);
-		return generateUser(row);
+        try {
+            HashMap<String, String> row = DatabaseManager.getRow(query);
+            return generateUser(row);
+        } catch (SQLException ex) {
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+            return null;
+        }
 	}
 	
 	public static void addNewUser(User user) {
