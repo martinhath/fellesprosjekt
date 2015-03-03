@@ -61,10 +61,10 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
 
     public User authenticate(String username, String password) {
         String query = String.format("SELECT * FROM User WHERE username=\"%s\" AND password=\"%s\"", username, password);
-
         try{
             return generateUser(DatabaseManager.getRow(query));
-        } catch (Exception e){
+        } catch (SQLException ex) {
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
             return null;
         }
     }
@@ -77,11 +77,16 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
 		}
 		return allUsers;
 	}
-	
+
 	public User getUserFromUsername(String username) {
 		String query = "SELECT * FROM User WHERE username = '" + username + "';";
-		HashMap<String, String> row = DatabaseManager.getRow(query);
-		return generateUser(row);
+		try {
+			HashMap<String, String> row = DatabaseManager.getRow(query);
+			return generateUser(row);
+		} catch (SQLException ex) {
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+			return null;
+		}
 	}
 
 	@Override
