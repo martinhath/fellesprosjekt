@@ -39,7 +39,7 @@
               <finalName>client</finalName>
               <archive>
                 <manifest>
-                  <mainClass>org.fellesprosjekt.gruppe24.client.CalendarGui</mainClass>
+                  <mainClass>org.fellesprosjekt.gruppe24.client.CalendarApplication</mainClass>
                 </manifest>
               </archive>
               <descriptorRefs>

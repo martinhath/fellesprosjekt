@@ -17,18 +17,8 @@ public class ClientListener extends Listener{
             }
             Class t = res.getModel();
 
-            if (t == User.class){
-                User user = (User) res.getPayload();
-                System.out.println("User: " +user.getUsername());
-            } else {
-                System.out.println(res.getType());
-                System.out.println(res.getPayload());
-            }
-
         }
         else{
-            System.out.println("default");
-            System.out.println(obj.toString());
         }
     }
 }

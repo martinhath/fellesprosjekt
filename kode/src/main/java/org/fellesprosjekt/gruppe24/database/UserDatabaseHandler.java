@@ -33,8 +33,12 @@ public class UserDatabaseHandler {
         //User user = new user(info.get("userid"), info.get("username"), info.get("email"), info.get("password"),
         //		info.get("create_time"), info.get("update_time"));
         // TODO: Add proper constructor so the previous lines can be uncommented.
-        User user = new User(Integer.parseInt(info.get("userid")), info.get("username"), info.get("name"));
-        return user;
+        try {
+            User user = new User(Integer.parseInt(info.get("userid")), info.get("username"), info.get("name"));
+            return user;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /**
@@ -70,9 +74,14 @@ public class UserDatabaseHandler {
     }
 
     public static User authenticate(String username, String password) {
-        String query = String.format("SELECT * FROM User WHERE username=%s AND password=%s", username, password);
+        String query = String.format("SELECT * FROM User WHERE username=\"%s\" AND password=\"%s\"", username, password);
 
-        return generateUser(DatabaseManager.getRow(query));
+        try{
+            User user = generateUser(DatabaseManager.getRow(query));
+            return user;
+        } catch (Exception e){
+            return null;
+        }
     }
 
     public static User getById(int id) {

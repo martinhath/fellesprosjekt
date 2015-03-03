@@ -2,21 +2,22 @@ package org.fellesprosjekt.gruppe24.client;
 
 import com.esotericsoftware.kryonet.Client;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.fellesprosjekt.gruppe24.client.controllers.ClientController;
 import org.fellesprosjekt.gruppe24.common.KryoUtils;
 
 import java.io.IOException;
 
-public class CalendarGui extends Application{
+public class CalendarApplication extends Application{
 
     CalendarClient calendarClient;
     Stage stage;
     Scene scene;
-    Initializable controller;
+    ClientController controller;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -38,19 +39,32 @@ public class CalendarGui extends Application{
         controller = setScene("/layout/Login.fxml");
     }
 
-    public Initializable setScene(String path){
+    public ClientController setScene(String path){
         FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
-        Parent root;
         try {
-            root = loader.load();
-            scene = new Scene(root, 800, 600);
+            final Parent root = loader.load();
+
+            /* Siden denne metoden kan bli kalt fra en
+             * annen tråd enn UI-tråden, må vi ha denne.
+             */
+            Platform.runLater(() -> {
+                scene = new Scene(root, 800, 600);
+                stage.setScene(scene);
+                stage.show();
+            });
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
         }
-        stage.setScene(scene);
-        stage.show();
-        return (Initializable) loader.getController();
+
+        ClientController controller = loader.getController();
+        if (controller == null){
+            System.err.println("loader.getController() returned null!");
+            return null;
+        }
+        controller.setApplication(this);
+        this.controller = controller;
+        return controller;
     }
 
     public static void main(String[] args) {
