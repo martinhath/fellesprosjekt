@@ -26,7 +26,7 @@ public class GroupDatabaseHandler {
 
 	public static List<Group> getAllGroupsForUser(User user) {
 		String query = String.format("SELECT ug.* FROM User_group_has_User AS ughu JOIN User_group AS ug "
-				+ "ON ug.groupid = ughu.User_group_groupid WHERE ughu.User_userid = %s;", user.getID());
+				+ "ON ug.groupid = ughu.User_group_groupid WHERE ughu.User_userid = %s;", user.getId());
 		return getAllGroups(query);
 	}
 	
@@ -44,14 +44,14 @@ public class GroupDatabaseHandler {
 	
 	public static List<User> getAllUsersInGroup(Group group) {
 		String query = String.format("SELECT u.* FROM User_group_has_User AS ughu JOIN User AS u "
-				+ "ON u.userid = ughu.User_userid WHERE ughu.User_group_groupid = %s;", group.getID());
+				+ "ON u.userid = ughu.User_userid WHERE ughu.User_group_groupid = %s;", group.getId());
 		return UserDatabaseHandler.getAllUsers(query);
 	}
 	
 	public static List<GroupNotification> getAllGroupInvites(User user) {
 		List<GroupNotification> invites = new ArrayList<GroupNotification>();
 		String query = String.format("SELECT ughu.*, ug.name, ug.owner_id FROM User_group_has_User AS ughu JOIN User_group AS ug "
-				+ "ON ug.groupid = ughu.User_group_groupid WHERE ughu.User_userid = %s;", user.getID());
+				+ "ON ug.groupid = ughu.User_group_groupid WHERE ughu.User_userid = %s;", user.getId());
 		ArrayList<HashMap<String, String>> result = DatabaseManager.getList(query);
 		for(HashMap<String, String> hm : result) {
 			System.out.println(hm.get("notification_message"));
@@ -61,7 +61,7 @@ public class GroupDatabaseHandler {
 	
 	public static void updateGroup(Group group) {
 		String query = String.format("UPDATE User_group SET name = '%s', owner_id = %s WHERE groupid = %s",
-				group.getName(), "TODO", group.getID());
+				group.getName(), "TODO", group.getId());
 		// TODO: owner_id
 		DatabaseManager.updateQuery(query);
 	}
