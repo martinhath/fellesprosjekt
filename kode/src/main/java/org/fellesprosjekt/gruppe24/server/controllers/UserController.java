@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class UserController extends ServerController{
+    Logger logger = Logger.getLogger(getClass().getName());
 
     public UserController(ServerConnection conn) {
         super(conn);
@@ -24,27 +25,26 @@ public class UserController extends ServerController{
         System.out.println("GET User");
     }
 
-    public void auth(Request req){
-        System.out.println("AUTH User");
+    public void post(Request req){
+        logger.log(Level.INFO, "POST User");
 
         Response res = new Response();
         if (connection.getUser() != null){
-            res.setType(Response.Type.FAILURE);
-            res.setModel(String.class);
-            res.setPayload("You are already logged in");
+            res = Response.GetFailResponse("You are already logged in");
             connection.sendTCP(res);
             return;
         }
-        LoginInfo loginInfo = (LoginInfo) req.getPayload();
+        LoginInfo loginInfo = (LoginInfo) req.payload;
         User user = login(loginInfo);
         if (user == null) {
-            res.setType(Response.Type.FAILURE);
+            res = Response.GetFailResponse("Username or password was wrong.");
             connection.sendTCP(res);
             return;
         }
-        res.setType(Response.Type.SUCCESS);
-        res.setPayload(user);
+        res.type = Response.Type.OK;
+        res.payload = user;
         connection.sendTCP(res);
+
         connection.setUser(user);
     }
 
