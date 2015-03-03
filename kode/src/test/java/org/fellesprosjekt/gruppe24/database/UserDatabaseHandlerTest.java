@@ -1,6 +1,7 @@
 package org.fellesprosjekt.gruppe24.database;
 
 import junit.framework.TestCase;
+import org.fellesprosjekt.gruppe24.common.models.Meeting;
 import org.fellesprosjekt.gruppe24.common.models.User;
 import org.junit.Test;
 
@@ -43,5 +44,21 @@ public class UserDatabaseHandlerTest extends TestCase {
 
         TestCase.assertNotNull(user);
         TestCase.assertEquals(username, user.getUsername());
+    }
+
+    public void testCanGetAllMeetingsOfUser() {
+        User user = UserDatabaseHandler.getAllUsers().get(0);
+        List<Meeting> allMeetings = MeetingDatabaseHandler.getAllMeetings();
+        Meeting meeting= allMeetings.get(0);
+        Meeting meeting2 = allMeetings.get(1);
+
+        MeetingDatabaseHandler.addUserToMeeting(meeting, user);
+        MeetingDatabaseHandler.addUserToMeeting(meeting2, user);
+
+        List<Meeting> userMeetings = UserDatabaseHandler.getMeetingsOfUser(user);
+
+        for (int i = 0; i < userMeetings.size(); i++) {
+            TestCase.assertEquals(allMeetings.get(i).getId(), userMeetings.get(i).getId());
+        }
     }
 }
