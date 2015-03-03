@@ -44,12 +44,7 @@ public final class RoomDatabaseHandler {
             ps.setInt(2, room.getCapacity());
             //ps.setBoolean(3, room.isAccessible());
             // gikk ikke an å sette boolean-field ...
-            DatabaseManager.executePS(ps);
-            ResultSet rs = ps.getGeneratedKeys();
-            if (rs.next()) {
-                lgr.log(Level.INFO, "Room created with id: " + rs.getInt(1));
-                return rs.getInt(1);
-            } else return -1;
+            return DatabaseManager.executePS(ps);
         } catch (SQLException ex) {
             Logger lgr = Logger.getLogger(DatabaseManager.class.getName());
             lgr.log(Level.SEVERE, ex.getMessage(), ex);

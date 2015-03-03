@@ -44,7 +44,8 @@ public final class DatabaseManager {
         // the settings below are optional -- c3p0 can work with defaults
         cpds.setMinPoolSize(5);
         cpds.setAcquireIncrement(5);
-        cpds.setMaxPoolSize(20);
+        cpds.setMaxPoolSize(20); // klikka under tester da den bare var 20
+        cpds.setMaxIdleTime(1);
     }
 
     /**
@@ -79,13 +80,24 @@ public final class DatabaseManager {
         return null;
     }
 
-    public static boolean executePS(PreparedStatement ps) {
+    public static int executePS(PreparedStatement ps) {
         try {
-            return ps.execute();
+            ps.execute();
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
         } catch (SQLException ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
-            return false;
+            return -1;
+        } finally {
+            try {
+                ps.getConnection().close();
+            } catch (Exception ex) {
+                lgr.log(Level.SEVERE, ex.getMessage(), ex);
+            }
         }
+        return -1;
     }
 
     public static Statement getStatement() {
@@ -106,9 +118,9 @@ public final class DatabaseManager {
      * @return a string representing the value of desired cell
      */
     public static String getCell(String select, String from) {
+        Statement st = getStatement();
         try {
             String query = String.format("SELECT * FROM %s;", from);
-            Statement st = getStatement();
             lgr.log(Level.INFO, "Executing query: " + query);
             ResultSet rs = st.executeQuery(query);
 
@@ -118,7 +130,12 @@ public final class DatabaseManager {
 
         } catch (SQLException ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
-
+        } finally {
+            try {
+                st.getConnection().close();
+            } catch (Exception ex) {
+                lgr.log(Level.SEVERE, ex.getMessage(), ex);
+            }
         }
         return null;
     }
@@ -131,8 +148,8 @@ public final class DatabaseManager {
      * @throws SQLException
      */
     public static ResultSet readQuery(String query) {
+        Statement st = getStatement();
         try {
-            Statement st = getStatement();
             lgr.log(Level.INFO, "Executing query: " + query);
             ResultSet rs = st.executeQuery(query);
             return rs;
@@ -150,8 +167,8 @@ public final class DatabaseManager {
      * @throws SQLException
      */
     public static void updateQuery(String query) {
+        Statement st = getStatement();
         try {
-            Statement st = getStatement();
             lgr.log(Level.INFO, "Executing query: " + query);
             st.executeUpdate(query);
         } catch (SQLException ex) {
@@ -178,6 +195,12 @@ public final class DatabaseManager {
             }
         } catch (SQLException ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
+        } finally {
+            try {
+                rs.getStatement().getConnection().close();
+            } catch (Exception ex) {
+                lgr.log(Level.SEVERE, ex.getMessage(), ex);
+            }
         }
         return result;
     }
@@ -228,8 +251,7 @@ public final class DatabaseManager {
     // TODO virker ikke, gir bare 0 nå
     public static int getAutoIncrement(String table) {
         try {
-            Statement st = getStatement();
-            ResultSet rs = st.executeQuery(String.format(
+            ResultSet rs = readQuery(String.format(
                     "SELECT last_insert_id() AS last_id " +
                             "FROM %s;", table));
             if (rs.next()) {
