@@ -17,13 +17,11 @@ public class UserDatabaseHandler {
 
 
     private static User generateUser(HashMap<String, String> info) {
-        //User user = new user(info.get("userid"), info.get("username"), info.get("email"), info.get("password"),
-        //		info.get("create_time"), info.get("update_time"));
-        // TODO: Add proper constructor so the previous lines can be uncommented.
         try {
-            User user = new User(Integer.parseInt(info.get("userid")), info.get("username"), info.get("name"));
-            return user;
-        } catch (Exception e) {
+            lgr.log(Level.INFO, "Generating user based on: " + info);
+            return new User(Integer.parseInt(info.get("userid")), info.get("username"), info.get("name"));
+        } catch (Exception ex) {
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
             return null;
         }
     }
@@ -35,11 +33,6 @@ public class UserDatabaseHandler {
      * @param password the user's desired password
      */
     public static int addNewUser(User user, String password) {
-        //String query = String.format("INSERT INTO User (username, email, password, create_time) VALUES"
-        //		+ " ('%s', '%s', '%s', CURRENT_TIMESTAMP)", user.getUsername());
-        // TODO:
-        //String query = String.format("INSERT INTO User (username, name, email, password, create_time) VALUES"
-        //		+ " ('%s', '%s', '%s', CURRENT_TIMESTAMP)", user.getUsername(), user.getName(), "sd", "ll");
         try {
             String query =
                     "INSERT INTO User " +
@@ -130,5 +123,4 @@ public class UserDatabaseHandler {
 		String query = "DELETE FROM User WHERE userid = " + user.getId() + ";";
 		DatabaseManager.updateQuery(query);
 	}
-	
 }
