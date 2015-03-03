@@ -13,9 +13,6 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Created by viktor on 02.03.15.
- */
 public final class RoomDatabaseHandler {
     private static Logger lgr = Logger.getLogger(RoomDatabaseHandler.class.getName());
 

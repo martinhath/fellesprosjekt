@@ -37,6 +37,8 @@ public class Room implements Comparable<Room> {
 		this.id = RoomDatabaseHandler.insertRoom(this); // gets id from the database handler
 	}
 
+	public Room() {}
+
 	public int getId() {
 		return id;
 	}

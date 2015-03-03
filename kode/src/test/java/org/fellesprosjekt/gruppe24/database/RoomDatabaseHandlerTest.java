@@ -6,9 +6,6 @@ import org.junit.Test;
 
 import java.util.List;
 
-/**
- * Created by viktor on 02.03.15.
- */
 public class RoomDatabaseHandlerTest extends TestCase {
     public void setUp() {
 
