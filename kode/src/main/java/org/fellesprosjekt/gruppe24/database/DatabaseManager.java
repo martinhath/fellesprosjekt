@@ -80,6 +80,11 @@ public final class DatabaseManager {
         return null;
     }
 
+    /**
+     *
+     * @param ps the PreparedStatement to execute
+     * @return an integer representing the key added to the database row if inserted
+     */
     public static int executePS(PreparedStatement ps) {
         try {
             ps.execute();
@@ -250,10 +255,9 @@ public final class DatabaseManager {
 
     // TODO virker ikke, gir bare 0 nå
     public static int getAutoIncrement(String table) {
+        ResultSet rs = readQuery(String.format("SELECT last_insert_id() AS last_id " +
+                "FROM %s;", table));
         try {
-            ResultSet rs = readQuery(String.format(
-                    "SELECT last_insert_id() AS last_id " +
-                            "FROM %s;", table));
             if (rs.next()) {
                 lgr.log(Level.INFO, String.format("Next increment id for %s is %d", table, rs.getInt("last_id")));
                 return rs.getInt("last_id");
@@ -263,17 +267,77 @@ public final class DatabaseManager {
         } catch (Exception ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
             return -1;
+        } finally {
+            try {
+                rs.getStatement().getConnection().close();
+            } catch (Exception ex) {
+                lgr.log(Level.SEVERE, ex.getMessage(), ex);
+            }
         }
     }
 
+    /**
+     * Updates one field in a table that can be represented by a String
+     * @param id
+     * @param field
+     * @param table
+     * @param newValue
+     * @return
+     */
     public static boolean updateField(int id, String field, String table, String newValue) {
         try {
-
             PreparedStatement ps = getPreparedStatement(String.format(
                             "UPDATE %s " +
                             "SET %s = ? " +
                             "WHERE %sid=?", table, field, table));
             ps.setString(1, newValue);
+            ps.setInt(2, id);
+            executePS(ps);
+            return true;
+        } catch (Exception ex) {
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+            return false;
+        }
+
+    }
+    /**
+     * Updates one field in a table that can be represented by an Integer
+     * @param id
+     * @param field
+     * @param table
+     * @param newValue
+     * @return
+     */
+    public static boolean updateField(int id, String field, String table, int newValue) {
+        try {
+            PreparedStatement ps = getPreparedStatement(String.format(
+                    "UPDATE %s " +
+                            "SET %s = ? " +
+                            "WHERE %sid=?", table, field, table));
+            ps.setInt(1, newValue);
+            ps.setInt(2, id);
+            executePS(ps);
+            return true;
+        } catch (Exception ex) {
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+            return false;
+        }
+    }
+    /**
+     * Updates one field in a table that can be represented by a LocalDateTime
+     * @param id
+     * @param field
+     * @param table
+     * @param newValue
+     * @return
+     */
+    public static boolean updateField(int id, String field, String table, LocalDateTime newValue) {
+        try {
+            PreparedStatement ps = getPreparedStatement(String.format(
+                    "UPDATE %s " +
+                            "SET %s = ? " +
+                            "WHERE %sid=?", table, field, table));
+            ps.setTimestamp(1, java.sql.Timestamp.valueOf(newValue));
             ps.setInt(2, id);
             executePS(ps);
             return true;
