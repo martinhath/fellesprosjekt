@@ -74,9 +74,14 @@ public class UserDatabaseHandler {
     }
 
     public static User authenticate(String username, String password) {
-        String query = String.format("SELECT * FROM User WHERE username=%s AND password=%s", username, password);
+        String query = String.format("SELECT * FROM User WHERE username=\"%s\" AND password=\"%s\"", username, password);
 
-        return generateUser(DatabaseManager.getRow(query));
+        try{
+            User user = generateUser(DatabaseManager.getRow(query));
+            return user;
+        } catch (Exception e){
+            return null;
+        }
     }
 
     public static User getById(int id) {
