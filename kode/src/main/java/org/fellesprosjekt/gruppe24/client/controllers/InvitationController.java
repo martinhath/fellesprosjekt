@@ -62,13 +62,5 @@ public class InvitationController extends ClientController {
     
     
     
-    
-    
-	
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-    	
-	
 
-    }
 }
