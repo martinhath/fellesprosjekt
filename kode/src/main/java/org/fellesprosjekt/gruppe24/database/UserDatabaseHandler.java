@@ -12,6 +12,8 @@ import java.util.logging.Logger;
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
 import org.fellesprosjekt.gruppe24.common.models.User;
 
+import javax.xml.crypto.Data;
+
 public class UserDatabaseHandler extends DatabaseHandler<User> {
 
     private static Logger lgr = Logger.getLogger(MeetingDatabaseHandler.class.getName());
@@ -23,13 +25,37 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
 		return instance;
 	}
 
-    public User generateUser(HashMap<String, String> info) {
+    private User generateUser(HashMap<String, String> info) {
+		try {
+			lgr.log(Level.INFO, "Generating user based on: " + info);
+			User user = new User(Integer.parseInt(info.get("userid")), info.get("username"), info.get("name"),
+					info.get("password"), info.get("email"));
+			return user;
+		} catch (Exception ex) {
+			lgr.log(Level.SEVERE, ex.getMessage(), ex);
+			return null;
+		}
+	}
+    /**
+     * Inserts a new user into the database
+     *
+     * @param user     a user object
+     * @param password the user's desired password
+     */
+    public static int addNewUser(User user, String password) {
         try {
-            User user = new User(Integer.parseInt(info.get("userid")), info.get("username"), info.get("name"),
-            		info.get("password"), info.get("email"));
-            return user;
-        } catch (Exception e) {
-            return null;
+            String query =
+                    "INSERT INTO User " +
+                            "(username, name, password) " +
+                            "VALUES (?, ?, ?)";
+            PreparedStatement ps = DatabaseManager.getPreparedStatement(query);
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getName());
+            ps.setString(3, password);
+            return DatabaseManager.executePS(ps);
+        } catch (Exception ex) {
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+            return -1;
         }
     }
 
@@ -37,21 +63,9 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
         String query = String.format("SELECT * FROM User WHERE username=\"%s\" AND password=\"%s\"", username, password);
 
         try{
-            User user = generateUser(DatabaseManager.getRow(query));
-            return user;
+            return generateUser(DatabaseManager.getRow(query));
         } catch (Exception e){
             return null;
-        }
-    }
-
-    public boolean deleteById(int id) {
-        try {
-            lgr.log(Level.INFO, "Trying to delete user by id: " + id);
-            DatabaseManager.updateQuery(String.format("DELETE FROM User WHERE userid=%d", id));
-            return true;
-        } catch (Exception ex) {
-            lgr.log(Level.SEVERE, ex.getMessage(), ex);
-            return false;
         }
     }
 
@@ -112,9 +126,14 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
 
 	@Override
 	public boolean delete(User user) {
-		String query = "DELETE FROM User WHERE userid = " + user.getId() + ";";
-		DatabaseManager.updateQuery(query);
-		return true;
+		try {
+			lgr.log(Level.INFO, "Trying to delete user by id: " + user.getId());
+			DatabaseManager.updateQuery(String.format("DELETE FROM User WHERE userid=%d", user.getId()));
+			return true;
+		} catch (Exception ex) {
+			lgr.log(Level.SEVERE, ex.getMessage(), ex);
+			return false;
+		}
 	}
 
 	@Override
@@ -124,5 +143,4 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
 		DatabaseManager.updateQuery(query);
 		return true;
 	}
-	
 }
