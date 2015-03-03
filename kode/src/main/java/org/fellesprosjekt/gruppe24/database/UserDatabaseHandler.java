@@ -2,6 +2,7 @@ package org.fellesprosjekt.gruppe24.database;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -68,9 +69,13 @@ public class UserDatabaseHandler {
     }
 
     public static User authenticate(String username, String password) {
-        String query = String.format("SELECT * FROM User WHERE username=%s AND password=%s", username, password);
-
-        return generateUser(DatabaseManager.getRow(query));
+        String query = String.format("SELECT * FROM User WHERE username='%s' AND password='%s'", username, password);
+        try {
+            return generateUser(DatabaseManager.getRow(query));
+        } catch (SQLException ex) {
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+            return null;
+        }
     }
 
     public static User getById(int id) {

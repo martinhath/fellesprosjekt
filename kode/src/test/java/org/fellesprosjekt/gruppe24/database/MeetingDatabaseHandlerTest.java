@@ -44,4 +44,25 @@ public class MeetingDatabaseHandlerTest extends TestCase {
         TestCase.assertNotNull(meeting.getName());
     }
 
+    public void testCanAddAndRemoveUserToMeeting() {
+        User user = UserDatabaseHandler.getAllUsers().get(0);
+        Meeting meeting = MeetingDatabaseHandler.getAllMeetings().get(0);
+        int sizeBefore = MeetingDatabaseHandler.getUsersOfMeeting(meeting).size();
+
+        MeetingDatabaseHandler.addUserToMeeting(meeting, user);
+        TestCase.assertTrue(MeetingDatabaseHandler.getUsersOfMeeting(meeting).size() > sizeBefore);
+        int user2Id = MeetingDatabaseHandler.getUsersOfMeeting(meeting).get(0).getId();
+
+        TestCase.assertEquals(user.getId(), user2Id);
+
+        MeetingDatabaseHandler.removeUserFromMeeting(meeting, user);
+        TestCase.assertEquals(sizeBefore, MeetingDatabaseHandler.getUsersOfMeeting(meeting).size());
+    }
+
+    public void testCanGetUsersOfMeeting() {
+        Meeting meeting = MeetingDatabaseHandler.getAllMeetings().get(0);
+        List<User> users = MeetingDatabaseHandler.getUsersOfMeeting(meeting);
+        TestCase.assertNotNull(users);
+        TestCase.assertNotNull(users.get(0).getUsername());
+    }
 }

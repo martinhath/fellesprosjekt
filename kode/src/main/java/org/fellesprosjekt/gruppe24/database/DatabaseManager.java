@@ -81,7 +81,6 @@ public final class DatabaseManager {
     }
 
     /**
-     *
      * @param ps the PreparedStatement to execute
      * @return an integer representing the key added to the database row if inserted
      */
@@ -188,7 +187,8 @@ public final class DatabaseManager {
      * @param query
      * @return a HashMap<String, String> with the column labels as keys.
      */
-    public static HashMap<String, String> getRow(String query) {
+    /*
+    public static HashMap<String, String> getRow(String query) throws SQLException {
         HashMap<String, String> result = new HashMap<String, String>();
         ResultSet rs = readQuery(query);
         try {
@@ -200,6 +200,7 @@ public final class DatabaseManager {
             }
         } catch (SQLException ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
+            throw ex;
         } finally {
             try {
                 rs.getStatement().getConnection().close();
@@ -208,6 +209,24 @@ public final class DatabaseManager {
             }
         }
         return result;
+    }
+    */
+    public static HashMap<String, String> getRow(String query) throws SQLException {
+        HashMap<String, String> result = new HashMap<String, String>();
+        ResultSet rs = readQuery(query);
+        if (rs.next()) {
+            ResultSetMetaData rsmd = rs.getMetaData();
+            for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+                result.put(rsmd.getColumnLabel(i), rs.getString(i));
+            }
+        }
+        try {
+            rs.getStatement().getConnection().close();
+        } catch (Exception ex) {
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+        }
+        return result;
+        //blir connection lukket nå?
     }
 
     /**
@@ -232,6 +251,12 @@ public final class DatabaseManager {
             }
         } catch (SQLException ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
+        } finally {
+            try {
+                rs.getStatement().getConnection().close();
+            } catch (Exception ex) {
+                lgr.log(Level.SEVERE, ex.getMessage(), ex);
+            }
         }
         return result;
     }
@@ -243,6 +268,7 @@ public final class DatabaseManager {
      * @param timestamp string of a timestamp like SQL DateTime
      * @return LocalDateTime object
      */
+
     public static LocalDateTime stringToDateTime(String timestamp) {
         try {
             return java.sql.Timestamp.valueOf(timestamp).toLocalDateTime();
@@ -278,6 +304,7 @@ public final class DatabaseManager {
 
     /**
      * Updates one field in a table that can be represented by a String
+     *
      * @param id
      * @param field
      * @param table
@@ -287,7 +314,7 @@ public final class DatabaseManager {
     public static boolean updateField(int id, String field, String table, String newValue) {
         try {
             PreparedStatement ps = getPreparedStatement(String.format(
-                            "UPDATE %s " +
+                    "UPDATE %s " +
                             "SET %s = ? " +
                             "WHERE %sid=?", table, field, table));
             ps.setString(1, newValue);
@@ -300,8 +327,10 @@ public final class DatabaseManager {
         }
 
     }
+
     /**
      * Updates one field in a table that can be represented by an Integer
+     *
      * @param id
      * @param field
      * @param table
@@ -323,8 +352,10 @@ public final class DatabaseManager {
             return false;
         }
     }
+
     /**
      * Updates one field in a table that can be represented by a LocalDateTime
+     *
      * @param id
      * @param field
      * @param table
@@ -347,4 +378,22 @@ public final class DatabaseManager {
         }
 
     }
+
+    public static void deleteRow(String table, int id) throws SQLException {
+        String query = String.format("DELETE FROM %s WHERE %sid=?", table, table);
+        PreparedStatement ps = getPreparedStatement(query);
+        ps.setInt(1, id);
+        executePS(ps);
+    }
+
+    public static void deleteRow(
+            String table, String foreignTable1, String foreignTable2, int fk1, int fk2) throws SQLException {
+        String query = String.format("DELETE FROM %s WHERE %s_%sid=? AND %s_%sid=?",
+                table, foreignTable1, foreignTable1, foreignTable2, foreignTable2);
+        PreparedStatement ps = getPreparedStatement(query);
+        ps.setInt(1, fk1);
+        ps.setInt(2, fk2);
+        executePS(ps);
+    }
+
 }
