@@ -17,11 +17,10 @@
 
 | Request.Type |
 |--------------|
-| GET |
-| LIST | 
-| PUT |
-| AUTH |
 | POST |
+| PUT |
+| LIST | 
+| GET |
 
 
 | Response.Type |
