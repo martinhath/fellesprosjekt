@@ -58,6 +58,10 @@ public class CalendarApplication extends Application{
         }
 
         ClientController controller = loader.getController();
+        if (controller == null){
+            System.err.println("loader.getController() returned null!");
+            return null;
+        }
         controller.setApplication(this);
         this.controller = controller;
         return controller;
