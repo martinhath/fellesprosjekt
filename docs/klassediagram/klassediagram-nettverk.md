@@ -21,6 +21,7 @@
 | LIST | 
 | PUT |
 | AUTH |
+| POST |
 
 
 | Response.Type |

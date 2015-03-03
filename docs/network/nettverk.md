@@ -54,26 +54,27 @@ Her skriver vi en _komplett_ liste over alle `Request`s og `Response`s som vi br
 
 Request:
 ```java
-Requset req = new Request(Request.Type.AUTH, User.class, loginInfo);
+Request req = new Request(Request.Type.AUTH, User.class, loginInfo);
 ```
 Response:
 ```java
 Response res = new Response(Response.Type.SUCCESS, User.class, user);
 // eller
-Response res = new Response(Response.Type.FAILURE, User.class, null);
+Response res = new Response(Response.Type.FAILURE, String.class, errMsg);
 ```
 
 ### Logout
 
 Request:
 ```java
-Requset req = new Request(Request.Type.AUTH, User.class, null); // er dette litt vel jalla?
+// TODO: Finn på noe bedre enn dette!
+Request req = new Request(Request.Type.AUTH, User.class, null);
 ```
 Response:
 ```java
 Response res = new Response(Response.Type.SUCCESS, User.class, null);
 // eller
-Response res = new Response(Response.Type.FAILURE, User.class, user);
+Response res = new Response(Response.Type.FAILURE, String.class, errMsg);
 ```
 
 
@@ -83,44 +84,105 @@ Gjelder for egentlig alle klasser:
 
 Request:
 ```java
-Requset req = new Request(Request.Type.GET, <Klasse>.class, id);
+Request req = new Request(Request.Type.GET, <Klasse>.class, id);
 ```
 Response:
 ```java
 Response res = new Response(Response.Type.SUCCESS, <Klasse>.class, item);
 // eller
-Response res = new Response(Response.Type.FAILURE, <Klasse>.class, null);
+Response res = new Response(Response.Type.FAILURE, String.class, errMsg);
 ```
 
+## Brukere
+
+### Få brukeren med en gitt id 
+
+Request:
+
+```java
+Request req = new Request(Request.Type.GET, User.class, id);
+```
+Response:
+```java
+Response res = new Response(Response.Type.SUCCESS, User.class, user);
+// eller
+Response res = new Response(Response.Type.FAILURE, String.class, errMsg);
+```
 
 ## Kalender
 
-### Få kalender til en bruker
+### Få kalenderen med en gitt id
 
 Request:
 ```java
-Requset req = new Request(Request.Type.GET, Calendar.class, user);
+Request req = new Request(Request.Type.GET, Calendar, id);
+```
+Response:
+```java
+Response res = new Response(Response.Type.SUCCESS, Calendar, calendar);
+// eller
+Response res = new Response(Response.Type.FAILURE, String.class, errMsg);
+```
+
+
+### Få kalenderen til en bruker eller gruppe
+
+Request:
+```java
+Request req = new Request(Request.Type.GET, Calendar.class, entity);
 ```
 Response:
 ```java
 Response res = new Response(Response.Type.SUCCESS, Calendar.class, calendar);
 // eller
-Response res = new Response(Response.Type.FAILURE, Calendar.class, null);
+Response res = new Response(Response.Type.FAILURE, String.class, errMsg);
 ```
 
 
 ## Grupper
 
-### Få gruppene til en bruker
+### Få gruppen med en gitt id
 
 Request:
 ```java
-Requset req = new Request(Request.Type.LIST, Group.class, user);
+Request req = new Request(Request.Type.GET, Group, id);
+```
+Response:
+```java
+Response res = new Response(Response.Type.SUCCESS, Group, group);
+// eller
+Response res = new Response(Response.Type.FAILURE, String.class, errMsg);
+```
+
+
+### Få gruppene til en bruker eller gruppe
+
+Request:
+```java
+Request req = new Request(Request.Type.LIST, Group.class, entity);
 ```
 Response:
 ```java
 Response res = new Response(Response.Type.SUCCESS, Group.class, listGroups);
 // eller
-Response res = new Response(Response.Type.FAILURE, Group.class, null);
+Response res = new Response(Response.Type.FAILURE, String.class, errMsg);
 ```
+
+## Notifications
+
+Disse er litt spesielle, fordi de sendes som en request __fra serveren__.
+
+Request:
+```java
+Request req = new Requset(Requset.Type.POST, Notification.class, notification);
+```
+Response:
+```java
+// TODO: fiks:
+// trenger vi egentlig noen?
+// Vi kan sende bekreftelse om at vi har fått den, og alt er good. Hvis serveren
+// ikke får en respons, kan den lagre notifikasjonen, og sende den neste gang 
+// brukeren får kontakt med serveren.
+```
+
 
