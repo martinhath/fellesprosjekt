@@ -13,8 +13,8 @@ public class GroupDatabaseHandler {
 	public static List<Group> getAllGroups(String query) {
 		List<Group> groups = new ArrayList<Group>();
 		ArrayList<HashMap<String, String>> result = DatabaseManager.getList(query);
-		for(HashMap<String, String> hm : result) {
-			groups.add(generateGroup(hm));
+		for(HashMap<String, String> row : result) {
+			groups.add(generateGroup(row));
 		}
 		return groups;
 	}
@@ -25,8 +25,8 @@ public class GroupDatabaseHandler {
 	}
 
 	public static List<Group> getAllGroupsForUser(User user) {
-		String query = String.format("SELECT * FROM User_group AS ug, User AS u, User_group_has_User AS ughu WHERE "
-				+ "u.userid = ughu.User_userid AND ug.groupid = ughu.User_group_groupid AND u.userid = %s;", user.getID());
+		String query = String.format("SELECT ug.* FROM User_group_has_User AS ughu JOIN User_group AS ug "
+				+ "ON ug.groupid = ughu.User_group_groupid WHERE ughu.User_userid = %s;", user.getID());
 		return getAllGroups(query);
 	}
 	
@@ -43,20 +43,27 @@ public class GroupDatabaseHandler {
 	}
 	
 	public static List<User> getAllUsersInGroup(Group group) {
-		String query = String.format("SELECT * FROM User AS u, User_group AS ug, User_group_has_User AS ughu WHERE "
-				+ "ug.groupid = ughu.User_group_groupid AND u.userid = ughu.User_userid AND ug.groupid = %s;", group.getID());
+		String query = String.format("SELECT u.* FROM User_group_has_User AS ughu JOIN User AS u "
+				+ "ON u.userid = ughu.User_userid WHERE ughu.User_group_groupid = %s;", group.getID());
 		return UserDatabaseHandler.getAllUsers(query);
 	}
 	
 	public static List<GroupNotification> getAllGroupInvites(User user) {
 		List<GroupNotification> invites = new ArrayList<GroupNotification>();
-		String query = String.format("SELECT * FROM User AS u, User_group AS ug, User_group_has_User AS ughu WHERE "
-				+ "ughu.User_userid = u.userid AND u.userid = %s;", user.getID());
+		String query = String.format("SELECT ughu.*, ug.name, ug.owner_id FROM User_group_has_User AS ughu JOIN User_group AS ug "
+				+ "ON ug.groupid = ughu.User_group_groupid WHERE ughu.User_userid = %s;", user.getID());
 		ArrayList<HashMap<String, String>> result = DatabaseManager.getList(query);
 		for(HashMap<String, String> hm : result) {
 			System.out.println(hm.get("notification_message"));
 		}
 		return invites;
+	}
+	
+	public static void updateGroup(Group group) {
+		String query = String.format("UPDATE User_group SET name = '%s', owner_id = %s WHERE groupid = %s",
+				group.getName(), "TODO", group.getID());
+		// TODO: owner_id
+		DatabaseManager.updateQuery(query);
 	}
 	
 }

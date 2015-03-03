@@ -12,22 +12,9 @@ import org.fellesprosjekt.gruppe24.common.models.Meeting;
 import org.fellesprosjekt.gruppe24.common.models.User;
 
 public class UserDatabaseHandler {
+
     private static Logger lgr = Logger.getLogger(MeetingDatabaseHandler.class.getName());
 
-
-    public static List<User> getAllUsers(String query) {
-        List<User> allUsers = new ArrayList<User>();
-        ArrayList<HashMap<String, String>> result = DatabaseManager.getList(query);
-        for (HashMap<String, String> hm : result) {
-            allUsers.add(generateUser(hm));
-        }
-        return allUsers;
-    }
-
-    public static List<User> getAllUsers() {
-        String query = "SELECT * FROM User;";
-        return getAllUsers(query);
-    }
 
     private static User generateUser(HashMap<String, String> info) {
         //User user = new user(info.get("userid"), info.get("username"), info.get("email"), info.get("password"),
@@ -69,10 +56,6 @@ public class UserDatabaseHandler {
         }
     }
 
-    public static void updateUser(User user) {
-        //String query = String.format("UPDATE User SET username = ", args)
-    }
-
     public static User authenticate(String username, String password) {
         String query = String.format("SELECT * FROM User WHERE username=\"%s\" AND password=\"%s\"", username, password);
 
@@ -107,4 +90,45 @@ public class UserDatabaseHandler {
         }
     }
 
+	public static List<User> getAllUsers(String query) {
+		List<User> allUsers = new ArrayList<User>();
+		ArrayList<HashMap<String, String>> result = DatabaseManager.getList(query);
+		for(HashMap<String, String> row : result) {
+			allUsers.add(generateUser(row));
+		}
+		return allUsers;
+	}
+
+	public static List<User> getAllUsers() {
+		String query = "SELECT * FROM User;";
+		return getAllUsers(query);
+	}
+	
+	public static User getUserFromUsername(String username) {
+		String query = "SELECT * FROM User WHERE username = '" + username + "';";
+		HashMap<String, String> row = DatabaseManager.getRow(query);
+		return generateUser(row);
+	}
+	
+	public static void addNewUser(User user) {
+		//String query = String.format("INSERT INTO User (username, email, password, create_time) VALUES"
+		//		+ " ('%s', '%s', '%s', CURRENT_TIMESTAMP)", user.getUsername());
+		// TODO: Password
+		String query = String.format("INSERT INTO User (username, name, email, password, create_time) VALUES"
+				+ " ('%s', '%s', '%s', '%s', CURRENT_TIMESTAMP)", user.getUsername(), user.getName(), user.getEmail(), "TODO");
+		DatabaseManager.updateQuery(query);
+	}
+	
+	public static void updateUser(User user) {
+		String query = String.format("UPDATE User SET username = '%s', name = '%s', password = '%s', email = '%s'"
+				+ " WHERE userid = %s;", user.getUsername(), user.getName(), "TODO", user.getEmail(), user.getId());
+		// TODO: Password
+		DatabaseManager.updateQuery(query);
+	}
+	
+	public static void deleteUser(User user) {
+		String query = "DELETE FROM User WHERE userid = " + user.getId() + ";";
+		DatabaseManager.updateQuery(query);
+	}
+	
 }
