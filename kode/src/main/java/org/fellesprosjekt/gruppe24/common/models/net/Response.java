@@ -1,48 +1,20 @@
 package org.fellesprosjekt.gruppe24.common.models.net;
 
 public class Response {
-    public enum Type {SUCCESS, FAILURE}
+    public enum Type {OK, FAIL}
 
-    private Type type;
-
-    private Class model;
-
-    private Object payload;
-
+    public Type type;
+    public Object payload;
 
     public Response() {}
 
-    public Response(Type t, Class c){
-        this(t, c, null);
-    }
-
-    public Response(Type t, Class c, Object payload){
-        type = t;
-        model = c;
+    public Response(Type type, Object payload){
+        this.type = type;
         this.payload = payload;
     }
 
-    public void setType(Type t){
-        type = t;
+    public static Response GetFailResponse(String s){
+        return new Response(Type.FAIL, s);
     }
 
-    public Type getType(){
-        return type;
-    }
-
-    public void setModel(Class c){
-        model = c;
-    }
-
-    public Class getModel(){
-        return model;
-    }
-
-    public void setPayload(Object payload){
-        this.payload = payload;
-    }
-
-    public Object getPayload(){
-        return payload;
-    }
 }

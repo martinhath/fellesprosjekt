@@ -58,21 +58,21 @@ _merk: ikke fullstendig API referanse_
 
 ```java
 LoginRequest req = new LoginRequest();
-req.setType(Request.Type.POST);
-req.setPayload(loginInfo);
+req.type = Request.Type.POST;
+req.payload = loginInfo;
 ```
-Deretter vil klienten vente på repons fra serveren, som skal inneholde
+response:
 ```java
 Response res = new Response();
-res.setType(Reponse.Type.OK);
-res.setPayload(user);
+res.type = Reponse.Type.OK;
+res.payload = user;
 ```
 
 ### Logge ut:
 
 ```java
 LogoutRequest req = new LogoutRequest();
-req.setType(Request.Type.POST);
+req.type = Request.Type.POST;
 ```
 (trenger vi å vente på respons?)
 
@@ -82,14 +82,14 @@ req.setType(Request.Type.POST);
 request:
 ```java
 UserRequest req = new UserRequest();
-req.setType(Request.Type.GET);
-req.setPayload(id);
+req.type = Request.Type.GET;
+req.payload = id;
 ```
 response:
 ```java
 Response res = new Response();
-res.setType(Response.Type.OK);
-res.setPayload(user);
+res.type = Response.Type.OK;
+res.payload = user;
 ```
 
 
@@ -98,13 +98,13 @@ res.setPayload(user);
 request:
 ```java
 UserRequest req = new UserRequest();
-req.setType(Request.Type.LIST);
+req.type = Request.Type.LIST;
 ```
 response:
 ```java
 Response res = new Response();
-res.setType(Response.Type.OK);
-res.setPayload(users);
+res.type = Response.Type.OK;
+res.payload = users;
 ```
 
 ### Få en brukers grupper
@@ -112,14 +112,14 @@ res.setPayload(users);
 request:
 ```java
 GroupRequest req = new GroupRequest();
-req.setType(Request.Type.LIST);
-req.setPayload(user);
+req.type = Request.Type.LIST;
+req.payload = user;
 ```
 reseponse:
 ```java
 Response res = new Response();
-res.setType(Response.Type.OK);
-res.setPayload(groups);
+res.type = Response.Type.OK;
+res.payload = groups;
 ```
 
 ### Få en gruppes medlemmer
@@ -127,14 +127,14 @@ res.setPayload(groups);
 request:
 ```java
 UserRequest req = new UserRequest();
-req.setType(Request.Type.LIST);
-req.setPayload(group);
+req.type = Request.Type.LIST;
+req.payload = group;
 ```
 reseponse:
 ```java
 Response res = new Response();
-res.setType(Response.Type.OK);
-res.setPayload(entities);
+res.type = Response.Type.OK;
+res.payload = entities;
 ```
 
 ### Server sender en `Notification`:
@@ -144,13 +144,13 @@ _merk at det her er serveren som sender requesten._
 request:
 ```java
 NotificationRequest req = new NotificationRequest();
-req.setType(Request.Type.POST);
-req.setPayload(notification);
+req.type = Request.Type.POST;
+req.payload = notification;
 ```
 response:
 ```java
 Response res = new Reponse();
-res.setType(Reponse.Type.OK);
+res.type = Reponse.Type.OK;
 ```
 
 
