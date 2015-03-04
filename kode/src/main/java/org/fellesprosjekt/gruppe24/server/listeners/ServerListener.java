@@ -1,9 +1,10 @@
-package org.fellesprosjekt.gruppe24.server;
+package org.fellesprosjekt.gruppe24.server.listeners;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.FrameworkMessage;
 import org.fellesprosjekt.gruppe24.common.models.net.Request;
 import org.fellesprosjekt.gruppe24.common.models.net.Response;
+import org.fellesprosjekt.gruppe24.server.ServerConnection;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

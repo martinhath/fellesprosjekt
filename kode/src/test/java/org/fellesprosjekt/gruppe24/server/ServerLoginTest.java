@@ -7,7 +7,7 @@ import junit.framework.TestCase;
 import org.fellesprosjekt.gruppe24.common.KryoUtils;
 import org.fellesprosjekt.gruppe24.common.models.LoginInfo;
 import org.fellesprosjekt.gruppe24.common.models.User;
-import org.fellesprosjekt.gruppe24.common.models.net.LoginRequest;
+import org.fellesprosjekt.gruppe24.common.models.net.AuthRequest;
 import org.fellesprosjekt.gruppe24.common.models.net.Request;
 import org.fellesprosjekt.gruppe24.common.models.net.Response;
 import org.fellesprosjekt.gruppe24.database.UserDatabaseHandler;
@@ -43,7 +43,8 @@ public class ServerLoginTest extends TestCase {
     public void testLoginWithUser() throws Exception {
         LoginInfo loginInfo = new LoginInfo(
                 "martinhath", "marinerkul");
-        Request req = new LoginRequest(Request.Type.POST, loginInfo);
+        Request req = new AuthRequest(Request.Type.POST,
+                AuthRequest.Action.LOGIN, loginInfo);
         client.sendTCP(req);
 
         client.addListener(new Listener() {
@@ -67,7 +68,8 @@ public class ServerLoginTest extends TestCase {
     public void testLoginWithoutUser() throws Exception {
         LoginInfo loginInfo = new LoginInfo(
                 "jegfinnesikke", "martinerkul");
-        Request req = new LoginRequest(Request.Type.POST, loginInfo);
+        Request req = new AuthRequest(Request.Type.POST,
+                AuthRequest.Action.LOGIN, loginInfo);
         client.sendTCP(req);
 
         client.addListener(new Listener() {

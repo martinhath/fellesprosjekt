@@ -4,7 +4,7 @@ import com.esotericsoftware.kryo.Kryo;
 
 import org.fellesprosjekt.gruppe24.common.models.*;
 import org.fellesprosjekt.gruppe24.common.models.net.InvitationRequest;
-import org.fellesprosjekt.gruppe24.common.models.net.LoginRequest;
+import org.fellesprosjekt.gruppe24.common.models.net.AuthRequest;
 import org.fellesprosjekt.gruppe24.common.models.net.Request;
 import org.fellesprosjekt.gruppe24.common.models.net.Response;
 
@@ -45,9 +45,11 @@ public class KryoUtils {
         // Requests
         k.register(Request.class);
         k.register(Request.Type.class);
-        k.register(LoginRequest.class);
         k.register(InvitationRequest.class);
         k.register(InvitationRequest.Answer.class);
+        k.register(AuthRequest.class);
+        k.register(AuthRequest.Action.class);
+        k.register(AuthRequest.class);
 
         // Response
         k.register(Response.class);
