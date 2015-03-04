@@ -2,39 +2,43 @@ package org.fellesprosjekt.gruppe24.server;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.FrameworkMessage;
-import com.esotericsoftware.kryonet.Listener;
 import org.fellesprosjekt.gruppe24.common.models.net.Request;
-import org.fellesprosjekt.gruppe24.common.models.User;
 import org.fellesprosjekt.gruppe24.common.models.net.Response;
-import org.fellesprosjekt.gruppe24.common.models.net.UserRequest;
-import org.fellesprosjekt.gruppe24.server.controllers.UserController;
 
-public class ServerListener extends Listener{
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+public class ServerListener extends com.esotericsoftware.kryonet.Listener{
+    Logger logger = Logger.getLogger(getClass().getName());
+
+    public void receivedRequest(ServerConnection conn, Request req) {
+    }
+
+    public void receivedResponse(ServerConnection conn, Response res) {
+    }
+
+    public void received(ServerConnection conn, Object obj){
+        if (obj instanceof Request) {
+            receivedRequest(conn, (Request) obj);
+        } else if (obj instanceof Response) {
+            receivedResponse(conn, (Response) obj);
+        } else{
+            logger.log(Level.WARNING, "Fikk hverken Request eller Response: " + obj);
+        }
+    }
+
+    @Override
     public void received(Connection connection, Object obj) {
-        UserController userController = new UserController((ServerConnection) connection);
-        /**
-         * Klienten sender en melding nå og da for å ikke
-         * miste tilkoblingen.
-         */
         if (obj instanceof FrameworkMessage.KeepAlive)
             return;
 
-        // vi kan også få en response ?
-        Request req = (Request) obj;
-
-        if (req instanceof UserRequest){
-            switch(req.type){
-                case POST:
-                    userController.post(req);
-                    break;
-                case PUT:
-                    userController.put(req);
-                    break;
-                case GET:
-                    userController.get(req);
-                    break;
-            }
+        try {
+            ServerConnection con = (ServerConnection) connection;
+            received(con, obj);
+        } catch (Exception e){
+            logger.log(Level.WARNING, "Fikk en rar melding:");
+            logger.log(Level.WARNING, "Connection: " + connection);
+            logger.log(Level.WARNING, "Object: " + obj);
         }
     }
 }
