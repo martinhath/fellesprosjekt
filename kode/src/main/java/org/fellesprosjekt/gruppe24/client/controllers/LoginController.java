@@ -23,8 +23,6 @@ import java.util.ResourceBundle;
 
 public class LoginController extends ClientController {
 
-    private Client client;
-
     @FXML
     private TextField usernameField;
     @FXML
@@ -37,8 +35,10 @@ public class LoginController extends ClientController {
         String password = passwordField.getText();
         LoginInfo loginInfo = new LoginInfo(username, password);
 
+
         LoginRequest req = new LoginRequest(Request.Type.POST, loginInfo);
 
+        Client client = getClient();
         client.sendTCP(req);
 
         client.addListener(new Listener() {
@@ -61,11 +61,6 @@ public class LoginController extends ClientController {
                 client.removeListener(this);
             }
         });
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        client = CalendarClient.GetInstance().getClient();
     }
 
     public void handleLogin(){

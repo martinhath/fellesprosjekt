@@ -17,7 +17,7 @@ public class Meeting {
 	private Room room;
 	private LocalDateTime from;
 	private LocalDateTime to;
-	private List<User> participants;
+	private List<Entity> participants;
 	private User owner;
 	private Group group;
 	private String location;
@@ -28,7 +28,7 @@ public class Meeting {
 				   LocalDateTime from,
 				   LocalDateTime to,
 				   String location,
-				   List<User> participants,
+				   List<Entity> participants,
 				   User owner) {
 		this.name = name;
 		this.description = description;
@@ -48,7 +48,7 @@ public class Meeting {
 				   LocalDateTime from,
 				   LocalDateTime to,
 				   String location,
-				   List<User> participants,
+				   List<Entity> participants,
 				   User owner) {
 		this.id = id;
 		this.name = name;
@@ -111,11 +111,12 @@ public class Meeting {
 		this.to = to;
 	}
 
-	public List<User> getParticipants() {
+
+	public List<Entity> getParticipants() {
 		return participants;
 	}
 
-	public void setParticipants(List<User> participants) {
+	public void setParticipants(List<Entity> participants) {
 		this.participants = participants;
 	}
 

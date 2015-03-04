@@ -26,7 +26,7 @@ public class MeetingDatabaseHandlerTest extends TestCase {
                 LocalDateTime.now(),
                 LocalDateTime.now().plusHours(2),
                 "P15",
-                new ArrayList<User>(),
+                new ArrayList<>(),
                 new User());
         Meeting meeting2 = MeetingDatabaseHandler.getById(meeting.getId());
         //TestCase.assertEquals(meeting.toString(), meeting2.toString());

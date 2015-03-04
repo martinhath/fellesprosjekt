@@ -1,5 +1,6 @@
 package org.fellesprosjekt.gruppe24.database;
 
+import org.fellesprosjekt.gruppe24.common.models.Entity;
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
 import org.fellesprosjekt.gruppe24.common.models.Room;
 import org.fellesprosjekt.gruppe24.common.models.User;
@@ -65,7 +66,7 @@ public final class MeetingDatabaseHandler {
                 DatabaseManager.stringToDateTime(info.get("start_time")),
                 DatabaseManager.stringToDateTime(info.get("end_time")),
                 info.get("location"),
-                new ArrayList<User>(),
+                new ArrayList<Entity>(),
                 new User()
         );
         lgr.log(Level.INFO, "Meeting successfully generated");
