@@ -8,7 +8,7 @@ import org.fellesprosjekt.gruppe24.common.models.net.Response;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Listener extends com.esotericsoftware.kryonet.Listener{
+public class ServerListener extends com.esotericsoftware.kryonet.Listener{
     Logger logger = Logger.getLogger(getClass().getName());
 
     public void receivedRequest(ServerConnection conn, Request req) {
