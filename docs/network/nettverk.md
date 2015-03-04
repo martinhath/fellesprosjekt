@@ -19,7 +19,7 @@ f.eks. `LoginRequest`, eller `UserRequest`.
 | POST |
 | PUT |
 | GET |
-| LIST | 
+| LIST |
 
 | Response |
 |----------|
@@ -43,11 +43,9 @@ uten den antakelsen at det nødvendigvis skal bli lagret, eksempelvis ved innlog
 Dersom vi gir informasjon som _skal_ bli lagret, bruker vi `PUT`.
 For å få et bestemt objekt, bruker vi `GET`, og sender med en `id` som `payload`.
 
-Fordelen med dette designet over det gamle, er at subklassen `MeetingRequest` kan se slik ut:
-```java
-MeetingRequest req = new MeetingRequest();
-req.payload = meeting;
-```
+Den kanskje største endringen fra det forige APIet er at vi ikke lenger har et `Type` felt,
+men heller har en egen klasse. Dette _kan_ være bedre å jobbe med, fordi vi får muligheten
+til at enkelte klasser kan ha ekstra felt.
 
 
 # Eksempler:
@@ -158,7 +156,7 @@ res.type = Reponse.Type.OK;
 # Problemer
 
  - Hva skal en klient sende til serveren for å melde om deltakelse på et møte?
-  - det er rart å poste tilbake en notification, men det er også rart å poste 
+  - det er rart å poste tilbake en notification, men det er også rart å poste
   et helt event der man har lagt til seg selv under `participants`.
   - Det går an å bare markede den som lest når den er sendt.
 

@@ -25,39 +25,63 @@ public class UserController extends ServerController{
         System.out.println("GET User");
     }
 
-    public void post(Request req){
-        logger.log(Level.INFO, "POST User");
-
-        Response res = new Response();
-        if (connection.getUser() != null){
-            res = Response.GetFailResponse("You are already logged in");
-            connection.sendTCP(res);
-            return;
-        }
-        LoginInfo loginInfo = (LoginInfo) req.payload;
-        User user = login(loginInfo);
-        if (user == null) {
-            res = Response.GetFailResponse("Username or password was wrong.");
-            connection.sendTCP(res);
-            return;
-        }
-        res.type = Response.Type.OK;
-        res.payload = user;
-        connection.sendTCP(res);
-
-        connection.setUser(user);
+    @Override
+    public void list(Request req) {
+        System.out.println("LIST User");
     }
 
-    private User login(LoginInfo loginInfo){
-        /**
-         * Håndter login-logikk
-         * Returnerer om login er good.
-         */
+    public void post(Request req){
+        logger.log(Level.INFO, "POST User");
+        LoginInfo loginInfo = (LoginInfo) req.payload;
+
+        if (loginInfo == null) {
+            logout();
+        } else if (connection.getUser() != null) {
+            connection.sendTCP(
+                    Response.GetFailResponse("You are already logged in"));
+        } else {
+            login(loginInfo);
+        }
+    }
+
+    private boolean login(LoginInfo loginInfo){
+        Logger.getLogger(getClass().getName()).log(
+                Level.INFO, "User login: " + loginInfo);
+        Response res = new Response();
         User user = UserDatabaseHandler.authenticate(
                 loginInfo.getUsername(),
                 loginInfo.getPassword());
+        if (user == null) {
+            Logger.getLogger(getClass().getName()).log(
+                    Level.INFO, "Failed to log in.");
+            res = Response.GetFailResponse("Username or password was wrong.");
+            connection.sendTCP(res);
+            return false;
+        }
+        connection.setUser(user);
         Logger.getLogger(getClass().getName()).log(Level.INFO, "User: " + user);
-        return user;
+
+        res.type = Response.Type.OK;
+        res.payload = user;
+        connection.sendTCP(res);
+        Logger.getLogger(getClass().getName()).log(
+                Level.INFO, "Login success.");
+        return true;
+    }
+
+    private boolean logout() {
+        if (connection.getUser() == null ) {
+            connection.sendTCP(
+                    Response.GetFailResponse("You are already logged in"));
+            return false;
+        }
+        User user = connection.getUser();
+
+        // Trenger vi å ha med user payloaden?
+        Response res = new Response(Response.Type.OK, user);
+        connection.setUser(null);
+        connection.sendTCP(res);
+        return true;
     }
 
 }
