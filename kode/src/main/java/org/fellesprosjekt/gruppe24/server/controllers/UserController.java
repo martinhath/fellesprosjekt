@@ -17,10 +17,12 @@ public class UserController extends ServerController{
         super(conn);
     }
 
+    @Override
     public void put(Request req){
         System.out.println("PUT User");
     }
 
+    @Override
     public void get(Request req){
         System.out.println("GET User");
     }
@@ -30,6 +32,7 @@ public class UserController extends ServerController{
         System.out.println("LIST User");
     }
 
+    @Override
     public void post(Request req){
         logger.log(Level.INFO, "POST User");
         LoginInfo loginInfo = (LoginInfo) req.payload;
@@ -49,8 +52,7 @@ public class UserController extends ServerController{
                 Level.INFO, "User login: " + loginInfo);
         Response res = new Response();
         User user = UserDatabaseHandler.authenticate(
-                loginInfo.getUsername(),
-                loginInfo.getPassword());
+                loginInfo.getUsername(), loginInfo.getPassword());
         if (user == null) {
             Logger.getLogger(getClass().getName()).log(
                     Level.INFO, "Failed to log in.");
