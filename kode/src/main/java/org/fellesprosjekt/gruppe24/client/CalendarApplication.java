@@ -49,21 +49,8 @@ public class CalendarApplication extends Application{
 
         this.stage = primaryStage;
 
-        controller = setScene("/layout/Invitation.fxml");
-        InvitationController con = (InvitationController) controller;
-        User user = new User(52, "Herman", "Karlsen");
-        String message = "komsikomsi";
-        Room room = new Room(512, "P15", 12, true);
-        //LocalDate fradate = LocalDate.now();
-        //LocalTime fratime = LocalTime.now();
-        LocalDateTime fra = LocalDateTime.now();
-        LocalDateTime to = LocalDateTime.of(2015, 03, 05, 12, 10);
-        List<Entity> list = new ArrayList<>();
-        list.add(user);
-        Meeting meeting = new Meeting("Möte", "KRISEMÖTE", room, fra, to, "P15", list, user);
-        
-        MeetingNotification notification = new MeetingNotification(user, "detta är ett krisemöte", meeting);
-        con.setNotification(notification);
+        controller = setScene("/layout/Login.fxml");
+
     }
 
     public ClientController setScene(String path){
