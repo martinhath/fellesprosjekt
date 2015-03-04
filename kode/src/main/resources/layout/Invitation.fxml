@@ -68,7 +68,7 @@ prefHeight="461.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/8" xmlns:fx
                </font>
             </Label>
             <!-- beskrivning -->
-            <TextArea fx:id="decriptionField" disable="true" editable="false" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" />
+            <TextArea fx:id="descriptionField" disable="true" editable="false" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" />
             <!-- rum -->
             <TextField fx:id="roomField" disable="true" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <!-- starttid -->
@@ -79,20 +79,20 @@ prefHeight="461.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/8" xmlns:fx
             <TextField fx:id="leaderField" disable="true" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <!-- deltagare -->
             <ListView fx:id="participantField" disable="true" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <RadioButton mnemonicParsing="false" text="Aksepter" GridPane.columnIndex="1" GridPane.rowIndex="7">
+            <RadioButton fx:id="aksepter" mnemonicParsing="false" text="Aksepter" GridPane.columnIndex="1" GridPane.rowIndex="7">
                <font>
                   <Font size="14.0" />
                </font>
                <toggleGroup>
-                  <ToggleGroup fx:id="gruppe" />
+                  <ToggleGroup fx:id="group" />
                </toggleGroup>
             </RadioButton>
-            <RadioButton mnemonicParsing="false" text="Avvis" toggleGroup="$gruppe" GridPane.columnIndex="1" GridPane.rowIndex="8">
+            <RadioButton fx:id="avvis" mnemonicParsing="false" text="Avvis" toggleGroup="$group" GridPane.columnIndex="1" GridPane.rowIndex="8">
                <font>
                   <Font size="14.0" />
                </font>
             </RadioButton>
-            <RadioButton mnemonicParsing="false" text="Venter" toggleGroup="$gruppe" GridPane.columnIndex="1" GridPane.rowIndex="9">
+            <RadioButton fx:id="venter" mnemonicParsing="false" text="Venter" toggleGroup="$group" GridPane.columnIndex="1" GridPane.rowIndex="9">
                <font>
                   <Font size="14.0" />
                </font>
