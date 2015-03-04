@@ -7,6 +7,8 @@ public class InvitationRequest extends Request {
 	
 	private Answer ans;
 	
+	public InvitationRequest() {}
+	
 	public InvitationRequest(Type type, int id, Answer ans) {
 		super(type, id);
 		this.ans = ans;
