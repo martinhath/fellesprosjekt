@@ -2,11 +2,15 @@ package org.fellesprosjekt.gruppe24.client.controllers;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.FrameworkMessage.KeepAlive;
 import com.esotericsoftware.kryonet.Listener;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+
 import org.fellesprosjekt.gruppe24.client.CalendarClient;
 import org.fellesprosjekt.gruppe24.common.models.LoginInfo;
 import org.fellesprosjekt.gruppe24.common.models.User;
@@ -25,6 +29,8 @@ public class LoginController extends ClientController {
     private TextField usernameField;
     @FXML
     private TextField passwordField;
+    @FXML
+    private Label status_txt;
 
     public void loginClick(ActionEvent e){
         String username = usernameField.getText().trim();
@@ -38,6 +44,9 @@ public class LoginController extends ClientController {
         client.addListener(new Listener() {
             @Override
             public void received(Connection conn, Object obj) {
+            	System.out.println(obj instanceof KeepAlive);
+            	if(obj instanceof KeepAlive)
+                	return;
                 if (!(obj instanceof Response)) {
                     System.err.println("Response error: " + obj);
                     return;
@@ -47,8 +56,7 @@ public class LoginController extends ClientController {
                 if (res.type == Response.Type.OK) {
                     handleLogin();
                 } else {
-                    System.err.println(res.payload);
-                    handleRejectedLogin();
+                    handleRejectedLogin(res);
                 }
                 client.removeListener(this);
             }
@@ -65,8 +73,9 @@ public class LoginController extends ClientController {
         getApplication().setScene("/layout/Kalender.fxml");
     }
 
-    public void handleRejectedLogin(){
-        System.out.println("Vi er ikke logget inn :(");
+    public void handleRejectedLogin(Response res){
+    	System.err.println(res.payload);
+    	status_txt.setText((String) res.payload);
     }
 
 }
