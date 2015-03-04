@@ -2,6 +2,7 @@ package org.fellesprosjekt.gruppe24.common;
 
 import com.esotericsoftware.kryo.Kryo;
 import org.fellesprosjekt.gruppe24.common.models.*;
+import org.fellesprosjekt.gruppe24.common.models.net.LoginRequest;
 import org.fellesprosjekt.gruppe24.common.models.net.Request;
 import org.fellesprosjekt.gruppe24.common.models.net.Response;
 
@@ -29,6 +30,7 @@ public class KryoUtils {
      * @param k En Kryo instans. Fåes f.eks. ved server.getKryo().
      */
     public static void registerClasses(Kryo k){
+        // Models
         k.register(User.class);
         k.register(LinkedList.class);
         k.register(Group.class);
@@ -38,10 +40,12 @@ public class KryoUtils {
         k.register(Room.class);
         k.register(LocalDateTime.class);
 
-        k.register(Class.class);
-
+        // Requests
         k.register(Request.class);
         k.register(Request.Type.class);
+        k.register(LoginRequest.class);
+
+        // Response
         k.register(Response.class);
         k.register(Response.Type.class);
     }

@@ -10,6 +10,7 @@ import javafx.scene.control.TextField;
 import org.fellesprosjekt.gruppe24.client.CalendarClient;
 import org.fellesprosjekt.gruppe24.common.models.LoginInfo;
 import org.fellesprosjekt.gruppe24.common.models.User;
+import org.fellesprosjekt.gruppe24.common.models.net.LoginRequest;
 import org.fellesprosjekt.gruppe24.common.models.net.Request;
 import org.fellesprosjekt.gruppe24.common.models.net.Response;
 
@@ -30,7 +31,7 @@ public class LoginController extends ClientController {
         String password = passwordField.getText();
         LoginInfo loginInfo = new LoginInfo(username, password);
 
-        Request req = new Request(Request.Type.AUTH, User.class, loginInfo);
+        LoginRequest req = new LoginRequest(Request.Type.POST, loginInfo);
 
         client.sendTCP(req);
 
@@ -43,9 +44,10 @@ public class LoginController extends ClientController {
                 }
                 Response res = (Response) obj;
 
-                if (res.getType() == Response.Type.SUCCESS) {
+                if (res.type == Response.Type.OK) {
                     handleLogin();
                 } else {
+                    System.err.println(res.payload);
                     handleRejectedLogin();
                 }
                 client.removeListener(this);

@@ -6,6 +6,7 @@ import com.esotericsoftware.kryonet.Listener;
 import org.fellesprosjekt.gruppe24.common.models.net.Request;
 import org.fellesprosjekt.gruppe24.common.models.User;
 import org.fellesprosjekt.gruppe24.common.models.net.Response;
+import org.fellesprosjekt.gruppe24.common.models.net.UserRequest;
 import org.fellesprosjekt.gruppe24.server.controllers.UserController;
 
 public class ServerListener extends Listener{
@@ -19,27 +20,21 @@ public class ServerListener extends Listener{
         if (obj instanceof FrameworkMessage.KeepAlive)
             return;
 
+        // vi kan også få en response ?
         Request req = (Request) obj;
 
-        Class model = req.getModel();
-
-        if (model == User.class){
-            switch(req.getType()){
+        if (req instanceof UserRequest){
+            switch(req.type){
+                case POST:
+                    userController.post(req);
+                    break;
                 case PUT:
                     userController.put(req);
                     break;
                 case GET:
                     userController.get(req);
                     break;
-                case AUTH:
-                    userController.auth(req);
-                    break;
             }
-        } else {
-            System.err.println("Ukjent klasse: " + model.getCanonicalName());
-            Response res = new Response(Response.Type.FAILURE, String.class);
-            res.setPayload("Unknown class: "+model.getCanonicalName());
-            connection.sendTCP(res);
         }
     }
 }
