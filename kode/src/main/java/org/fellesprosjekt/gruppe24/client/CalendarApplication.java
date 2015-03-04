@@ -1,16 +1,29 @@
 package org.fellesprosjekt.gruppe24.client;
 
 import com.esotericsoftware.kryonet.Client;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
 import org.fellesprosjekt.gruppe24.client.controllers.ClientController;
+import org.fellesprosjekt.gruppe24.client.controllers.InvitationController;
 import org.fellesprosjekt.gruppe24.common.KryoUtils;
+import org.fellesprosjekt.gruppe24.common.models.Entity;
+import org.fellesprosjekt.gruppe24.common.models.Meeting;
+import org.fellesprosjekt.gruppe24.common.models.MeetingNotification;
+import org.fellesprosjekt.gruppe24.common.models.Room;
+import org.fellesprosjekt.gruppe24.common.models.User;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CalendarApplication extends Application{
 
@@ -36,7 +49,21 @@ public class CalendarApplication extends Application{
 
         this.stage = primaryStage;
 
-        controller = setScene("/layout/Login.fxml");
+        controller = setScene("/layout/Invitation.fxml");
+        InvitationController con = (InvitationController) controller;
+        User user = new User(52, "Herman", "Karlsen");
+        String message = "komsikomsi";
+        Room room = new Room(512, "P15", 12, true);
+        //LocalDate fradate = LocalDate.now();
+        //LocalTime fratime = LocalTime.now();
+        LocalDateTime fra = LocalDateTime.now();
+        LocalDateTime to = LocalDateTime.of(2015, 03, 05, 12, 10);
+        List<Entity> list = new ArrayList<>();
+        list.add(user);
+        Meeting meeting = new Meeting("Möte", "KRISEMÖTE", room, fra, to, "P15", list, user);
+        
+        MeetingNotification notification = new MeetingNotification(user, "detta är ett krisemöte", meeting);
+        con.setNotification(notification);
     }
 
     public ClientController setScene(String path){
