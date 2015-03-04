@@ -20,7 +20,7 @@
             <PasswordField fx:id="passwordField" layoutX="160.0" layoutY="108.0" />
             <Button layoutX="286.0" layoutY="147.0" mnemonicParsing="false" text="OK"
                     onAction="#loginClick" />
-            <Label layoutX="43.0" layoutY="113.0" prefHeight="16.0" prefWidth="112.0" text="" fx:id="status_txt" />
+            <Label layoutX="43.0" layoutY="147.0" prefHeight="16.0" textFill="#FF0000" prefWidth="200.0" text="" fx:id="status_txt" />
          </children>
       </Pane>
    </children>
