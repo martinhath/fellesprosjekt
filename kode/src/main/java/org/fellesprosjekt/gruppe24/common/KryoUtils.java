@@ -49,7 +49,6 @@ public class KryoUtils {
         k.register(InvitationRequest.Answer.class);
         k.register(AuthRequest.class);
         k.register(AuthRequest.Action.class);
-        k.register(AuthRequest.class);
 
         // Response
         k.register(Response.class);
