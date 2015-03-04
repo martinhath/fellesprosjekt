@@ -47,12 +47,7 @@
             <TextField layoutX="154.0" layoutY="28.0" prefHeight="108.0" prefWidth="261.0" />
             <ScrollBar layoutX="390.0" layoutY="31.0" orientation="VERTICAL" prefHeight="102.0" prefWidth="22.0" />
             <ColorPicker layoutX="154.0" layoutY="149.0" prefHeight="26.0" prefWidth="260.0" />
-            <SplitMenuButton layoutX="154.0" layoutY="322.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="265.0" text="SplitMenuButton">
-              <items>
-                <MenuItem mnemonicParsing="false" text="Action 1" />
-                <MenuItem mnemonicParsing="false" text="Action 2" />
-              </items>
-            </SplitMenuButton>
+            <ComboBox layoutX="154.0" layoutY="322.0" prefHeight="28.0" prefWidth="262.0" />
          </children></AnchorPane>
   </content>
 </TitledPane>

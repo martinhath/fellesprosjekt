@@ -12,55 +12,94 @@
    <children>
       <Pane prefHeight="536.0" prefWidth="870.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <GridPane gridLinesVisible="true" layoutX="79.0" layoutY="248.0" prefHeight="242.0" prefWidth="708.0" style="-fx-border-color: #000000;">
-              <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-            </GridPane>
-            <ScrollBar layoutX="787.0" layoutY="248.0" orientation="VERTICAL" prefHeight="242.0" prefWidth="14.0" />
-            <Text layoutX="79.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mandag" />
-            <Text layoutX="179.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tirsdag" />
-            <Text layoutX="280.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Onsdag" />
-            <Text layoutX="387.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Torsdag" />
-            <Text layoutX="486.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fredag" />
-            <Text layoutX="586.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lørdag" />
-            <Text layoutX="686.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Søndag" />
-            <Text layoutX="45.0" layoutY="256.0" strokeType="OUTSIDE" strokeWidth="0.0" text="08.00" />
-            <Text layoutX="45.0" layoutY="318.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10.00" />
-            <Text layoutX="344.0" layoutY="164.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Januar">
+            <Text layoutX="108.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mandag 07.01" />
+            <Text layoutX="206.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tirsdag 08.01" />
+            <Text layoutX="302.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Onsdag 09.01" />
+            <Text layoutX="406.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Torsdag 10.01" />
+            <Text layoutX="503.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fredag 11.01" />
+            <Text layoutX="602.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lørdag 12.01" />
+            <Text layoutX="697.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Søndag 13.01" />
+            <Text layoutX="358.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Januar">
                <font>
                   <Font size="36.0" />
                </font>
             </Text>
-            <Text layoutX="45.0" layoutY="382.0" strokeType="OUTSIDE" strokeWidth="0.0" text="12.00" />
-            <Text layoutX="45.0" layoutY="349.0" strokeType="OUTSIDE" strokeWidth="0.0" text="11.00" />
-            <Text layoutX="45.0" layoutY="287.0" strokeType="OUTSIDE" strokeWidth="0.0" text="09.00" />
-            <Text layoutX="45.0" layoutY="471.0" strokeType="OUTSIDE" strokeWidth="0.0" text="15.00" />
-            <Text layoutX="45.0" layoutY="439.0" strokeType="OUTSIDE" strokeWidth="0.0" text="14.00" />
-            <Text layoutX="45.0" layoutY="410.0" strokeType="OUTSIDE" strokeWidth="0.0" text="13.00" />
-            <Text layoutX="376.0" layoutY="209.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Uke 2">
+            <Text layoutX="390.0" layoutY="203.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Uke 2">
                <font>
                   <Font size="18.0" />
                </font>
             </Text>
-            <Button layoutX="194.0" layoutY="160.0" mnemonicParsing="false" text="Forrige" />
-            <Button layoutX="542.0" layoutY="160.0" mnemonicParsing="false" text="Neste" />
+            <Button layoutX="216.0" layoutY="160.0" mnemonicParsing="false" text="Forrige" />
+            <Button layoutX="555.0" layoutY="160.0" mnemonicParsing="false" text="Neste" />
+            <ScrollPane layoutX="59.0" layoutY="248.0" prefHeight="225.0" prefWidth="752.0">
+               <content>
+                  <GridPane gridLinesVisible="true" prefHeight="656.0" prefWidth="735.0" style="-fx-border-color: #000000;">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="84.0" minWidth="10.0" prefWidth="47.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="126.0" minWidth="10.0" prefWidth="102.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="102.0" minWidth="10.0" prefWidth="102.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="474.0" prefWidth="751.0" GridPane.columnIndex="2" GridPane.rowIndex="16" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="00.00" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="01.00" GridPane.rowIndex="1" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="02.00" GridPane.rowIndex="2" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="03.00" GridPane.rowIndex="3" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="04.00" GridPane.rowIndex="4" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="05.00" GridPane.rowIndex="5" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="06.00" GridPane.rowIndex="6" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="07.00" GridPane.rowIndex="7" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="08.00" GridPane.rowIndex="8" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="09.00" GridPane.rowIndex="9" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="10.00" GridPane.rowIndex="10" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="11.00" GridPane.rowIndex="11" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="12.00" GridPane.rowIndex="12" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="13.00" GridPane.rowIndex="13" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="14.00" GridPane.rowIndex="14" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="15.00" GridPane.rowIndex="15" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="16.00" GridPane.rowIndex="16" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="17.00" GridPane.rowIndex="17" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="18.00" GridPane.rowIndex="18" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="19.00" GridPane.rowIndex="19" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="20.00" GridPane.rowIndex="20" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="21.00" GridPane.rowIndex="21" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="22.00" GridPane.rowIndex="22" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="23.00" GridPane.rowIndex="23" />
+                     </children>
+                  </GridPane>
+               </content>
+            </ScrollPane>
          </children>
       </Pane>
    </children>
