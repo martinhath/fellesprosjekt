@@ -4,12 +4,15 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import org.fellesprosjekt.gruppe24.common.models.Entity;
-import org.fellesprosjekt.gruppe24.common.models.InvitationResponse;
 import org.fellesprosjekt.gruppe24.common.models.LoginInfo;
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
+import org.fellesprosjekt.gruppe24.common.models.MeetingNotification;
 import org.fellesprosjekt.gruppe24.common.models.Notification;
 import org.fellesprosjekt.gruppe24.common.models.User;
+import org.fellesprosjekt.gruppe24.common.models.net.InvitationRequest;
+import org.fellesprosjekt.gruppe24.common.models.net.InvitationRequest.Answer;
 import org.fellesprosjekt.gruppe24.common.models.net.Request;
+import org.fellesprosjekt.gruppe24.common.models.net.Request.Type;
 import org.fellesprosjekt.gruppe24.common.models.net.Response;
 
 import com.esotericsoftware.kryonet.Client;
@@ -31,6 +34,7 @@ import javafx.scene.control.ToggleGroup;
 public class InvitationController extends ClientController {
 	
 	private Meeting meeting;
+	private InvitationRequest inv;
 	
     @FXML
     private TextArea descriptionField;
@@ -56,7 +60,7 @@ public class InvitationController extends ClientController {
     @FXML
     private ToggleGroup group;
     
-    public void setNotification(Notification notification) {
+    public void setNotification(MeetingNotification notification) {
     	meeting = notification.getMeeting();
     	descriptionField.setText(meeting.getDescription());
     	roomField.setText(meeting.getRoom().toString());
@@ -74,6 +78,13 @@ public class InvitationController extends ClientController {
     	group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
     		public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
     			RadioButton ch = (RadioButton)new_toggle.getToggleGroup().getSelectedToggle();
+    			if (ch == aksepter) {
+    				inv.setAns(Answer.YES);
+    			} else if (ch == avvis) {
+    				inv.setAns(Answer.NO);
+    			} else if (ch == venter) {
+    				inv.setAns(Answer.MAYBE);	
+    			}
     		}
     	});
   
@@ -95,14 +106,10 @@ public class InvitationController extends ClientController {
     //sänd till server vilket val användaren tog 
     public void pressOkButton(ActionEvent e) {
     	
-    	
-    	
-        Request req = new Request(Request.Type.PUT, Meeting.class);
-        InvitationResponse inv = new InvitationResponse(meeting.getId(), InvitationResponse.Answer.YES);
-        req.setPayload(inv);
+    	inv = new InvitationRequest(Type.POST, meeting.getId(), inv.getAns());
         
         Client client = getClient();
-        client.sendTCP(req);
+        client.sendTCP(inv);
 
         client.addListener(new Listener() {
             @Override
@@ -113,7 +120,7 @@ public class InvitationController extends ClientController {
                 }
                 Response res = (Response) obj;
 
-                if (res.getType() == Response.Type.SUCCESS) {
+                if (res.type == Response.Type.OK) {
                     handleOK();
                 } else {
                     handleRejectedOK();
