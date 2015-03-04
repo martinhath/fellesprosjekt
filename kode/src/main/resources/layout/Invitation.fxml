@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane fx:controller="org.fellesprosjekt.gruppe24.client.controllers.InvitationController" 
-prefHeight="461.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.fellesprosjekt.gruppe24.client.controllers.InvitationController">
+prefHeight="461.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" >
    <children>
       <Label layoutX="23.0" layoutY="21.0" text="Møteinvitasjon" AnchorPane.leftAnchor="23.0">
          <font>
