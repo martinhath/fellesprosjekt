@@ -1,13 +1,17 @@
 package org.fellesprosjekt.gruppe24.common.models;
 
-public class Notification {
+public abstract class Notification {
 	
 	private User user;
-	private Meeting meeting;
+	private String message;
+	private boolean read;
+	private boolean confirmed;
 	
-	public Notification(User user, Meeting meeting) {
+	public Notification(User user, String message, boolean read, boolean confirmed) {
 		this.user = user;
-		this.meeting = meeting;
+		this.message = message;
+		this.read = read;
+		this.confirmed = confirmed;
 	}
 	
 	public Notification() {}
@@ -16,8 +20,28 @@ public class Notification {
 		return user;
 	}
 	
-	public Meeting getMeeting() {
-		return meeting;
+	public String getMessage() {
+		return message;
+	}
+	
+	public boolean isRead() {
+		return read;
+	}
+	
+	public boolean isConfirmed() {
+		return confirmed; 
+	}
+	
+	public void setMessage(String s) {
+		this.message = s;
+	}
+	
+	public void setRead(boolean r) {
+		this.read = r;
+	}
+	
+	public void setConfirmed(boolean c) {
+		this.confirmed = c;
 	}
 
 }
