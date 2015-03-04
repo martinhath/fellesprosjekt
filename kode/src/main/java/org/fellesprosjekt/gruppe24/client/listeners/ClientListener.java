@@ -1,4 +1,4 @@
-package org.fellesprosjekt.gruppe24.client;
+package org.fellesprosjekt.gruppe24.client.listeners;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.FrameworkMessage;
@@ -14,11 +14,11 @@ public class ClientListener extends Listener{
     Logger logger = Logger.getLogger(getClass().getName());
 
 
-    public void receivedRequest(Connection conn, Object obj) {
+    public void receivedRequest(Connection conn, Request req) {
 
     }
 
-    public void receivedResponse(Connection conn, Object obj) {
+    public void receivedResponse(Connection conn, Response res) {
 
     }
 

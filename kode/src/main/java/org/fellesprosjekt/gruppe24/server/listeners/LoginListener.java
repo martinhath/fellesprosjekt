@@ -1,7 +1,7 @@
 package org.fellesprosjekt.gruppe24.server.listeners;
 
+import org.fellesprosjekt.gruppe24.common.models.net.LoginRequest;
 import org.fellesprosjekt.gruppe24.common.models.net.Request;
-import org.fellesprosjekt.gruppe24.common.models.net.UserRequest;
 import org.fellesprosjekt.gruppe24.server.ServerListener;
 import org.fellesprosjekt.gruppe24.server.ServerConnection;
 import org.fellesprosjekt.gruppe24.server.controllers.ServerController;
@@ -11,7 +11,7 @@ public class LoginListener extends ServerListener {
 
     public void receivedRequest(ServerConnection conn, Request req) {
         ServerController controller;
-        if (req instanceof UserRequest){
+        if (req instanceof LoginRequest){
             controller = new UserController(conn);
             switch(req.type){
                 case POST:

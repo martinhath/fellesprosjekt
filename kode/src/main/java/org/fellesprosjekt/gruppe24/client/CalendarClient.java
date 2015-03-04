@@ -1,7 +1,7 @@
 package org.fellesprosjekt.gruppe24.client;
 
 import com.esotericsoftware.kryonet.Client;
-import org.fellesprosjekt.gruppe24.common.KryoUtils;
+import org.fellesprosjekt.gruppe24.client.listeners.ClientListener;
 
 import java.io.IOException;
 
