@@ -49,7 +49,9 @@ public class UserDatabaseHandler {
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getName());
             ps.setString(3, password);
-            return DatabaseManager.executePS(ps);
+            int id = DatabaseManager.executePS(ps);
+            user.setId(id);
+            return id;
         } catch (Exception ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
             return -1;

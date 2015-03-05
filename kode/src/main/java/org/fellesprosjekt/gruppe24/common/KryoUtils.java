@@ -42,6 +42,7 @@ public class KryoUtils {
 
         // Java klasser
         k.register(ArrayList.class);
+        k.register(Integer.class);
 
         // Requests
         k.register(Request.class);
