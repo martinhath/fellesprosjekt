@@ -1,7 +1,7 @@
 package org.fellesprosjekt.gruppe24.client;
 
 import com.esotericsoftware.kryonet.Client;
-
+import com.esotericsoftware.kryonet.Connection;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -10,23 +10,20 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import org.fellesprosjekt.gruppe24.client.controllers.ClientController;
-import org.fellesprosjekt.gruppe24.client.controllers.InvitationController;
+import org.fellesprosjekt.gruppe24.client.listeners.ClientListener;
 import org.fellesprosjekt.gruppe24.common.KryoUtils;
-import org.fellesprosjekt.gruppe24.common.models.Entity;
-import org.fellesprosjekt.gruppe24.common.models.Meeting;
-import org.fellesprosjekt.gruppe24.common.models.MeetingNotification;
-import org.fellesprosjekt.gruppe24.common.models.Room;
 import org.fellesprosjekt.gruppe24.common.models.User;
+import org.fellesprosjekt.gruppe24.common.models.net.Request;
+import org.fellesprosjekt.gruppe24.common.models.net.Response;
+import org.fellesprosjekt.gruppe24.common.models.net.UserRequest;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class CalendarApplication extends Application{
 
+    Logger logger = Logger.getLogger(getClass().getName());
     CalendarClient calendarClient;
     Stage stage;
     Scene scene;

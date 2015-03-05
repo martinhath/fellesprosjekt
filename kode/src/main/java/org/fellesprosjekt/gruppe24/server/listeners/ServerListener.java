@@ -37,7 +37,7 @@ public class ServerListener extends com.esotericsoftware.kryonet.Listener{
             ServerConnection con = (ServerConnection) connection;
             received(con, obj);
         } catch (Exception e){
-            logger.log(Level.WARNING, "Fikk en rar melding:");
+            e.printStackTrace();
             logger.log(Level.WARNING, "Connection: " + connection);
             logger.log(Level.WARNING, "Object: " + obj);
         }

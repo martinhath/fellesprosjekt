@@ -45,7 +45,7 @@ public abstract class Entity {
      * Used when creating new object without ID until it has been inserted in the database
      * @param id a correct database index
      */
-    protected void setId(int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
