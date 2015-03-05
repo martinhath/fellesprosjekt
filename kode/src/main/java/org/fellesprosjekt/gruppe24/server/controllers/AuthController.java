@@ -6,7 +6,6 @@ import org.fellesprosjekt.gruppe24.common.models.net.Request;
 import org.fellesprosjekt.gruppe24.common.models.net.Response;
 import org.fellesprosjekt.gruppe24.database.UserDatabaseHandler;
 import org.fellesprosjekt.gruppe24.server.ServerConnection;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,17 +35,17 @@ public class AuthController extends ServerController{
 
     @Override
     public void put(Request req) {
-        throw new NotImplementedException();
+        throw new RuntimeException("Ikke implmentert!");
     }
 
     @Override
     public void get(Request req) {
-        throw new NotImplementedException();
+        throw new RuntimeException("Ikke implmentert!");
     }
 
     @Override
     public void list(Request req) {
-        throw new NotImplementedException();
+        throw new RuntimeException("Ikke implmentert!");
     }
 
     private boolean login(LoginInfo loginInfo){

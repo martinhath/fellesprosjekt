@@ -3,7 +3,6 @@ package org.fellesprosjekt.gruppe24.server.controllers;
 import org.fellesprosjekt.gruppe24.common.models.net.Request;
 import org.fellesprosjekt.gruppe24.common.models.net.Response;
 import org.fellesprosjekt.gruppe24.server.ServerConnection;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class InvitationController extends ServerController {
 
@@ -22,19 +21,17 @@ public class InvitationController extends ServerController {
 
 	@Override
 	public void put(Request req) {
-		throw new NotImplementedException();
+		throw new RuntimeException("Ikke implmentert!");
 	}
 
 	@Override
 	public void get(Request req) {
-		throw new NotImplementedException();
+		throw new RuntimeException("Ikke implmentert!");
 	}
 
 	@Override
 	public void list(Request req) {
-		throw new NotImplementedException();
+		throw new RuntimeException("Ikke implmentert!");
 	}
-	
-	
 
 }
