@@ -24,7 +24,22 @@ public class UserController extends ServerController{
 
     @Override
     public void get(Request req){
-        throw new RuntimeException("Ikke implmentert!");
+        Response res = new Response();
+        if (req.payload instanceof Integer) {
+            // payload er Id
+            Integer id = (Integer) req.payload;
+            res.payload = UserDatabaseHandler.getById(id);
+            res.type = Response.Type.OK;
+        } else if (req.payload instanceof String) {
+            // payload er brukernavn
+            String username = (String) req.payload;
+            res.payload = UserDatabaseHandler.getUserFromUsername(username);
+            res.type = Response.Type.OK;
+        } else {
+            res.type = Response.Type.FAIL;
+            res.payload = "Unknown payload type.";
+        }
+        connection.sendTCP(res);
     }
 
     @Override
@@ -34,10 +49,17 @@ public class UserController extends ServerController{
         List<User> users = UserDatabaseHandler.getAllUsers();
         res.payload = users;
         connection.sendTCP(res);
+        logger.info("sendt");
     }
 
     @Override
     public void post(Request req) {
-        throw new RuntimeException("Ikke implmentert!");
+        if (!(req.payload instanceof User)) {
+            connection.sendTCP(new Response(Response.Type.FAIL,
+                    "Wrong payload: not User"));
+            return;
+        }
+        User user = (User) req.payload;
+        UserDatabaseHandler.addNewUser(user, "");
     }
 }
