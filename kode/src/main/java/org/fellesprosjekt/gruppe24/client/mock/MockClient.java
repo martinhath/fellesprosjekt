@@ -66,6 +66,27 @@ public class MockClient extends Client{
         Thread.sleep(100);
     }
 
+    public void testRegisterUser() throws InterruptedException {
+        User user = new User("martinht123123", "Martin H. Thoresen", "martinerkul");
+        user.setEmail("martin@er.kul");
+        Request req = new UserRequest();
+        req.type = Request.Type.POST;
+        req.payload = user;
+        sendTCP(req);
+
+        addListener(new ClientListener() {
+            @Override
+            public void receivedResponse(Connection con, Response res) {
+                if (res.type == Response.Type.FAIL)
+                    throw new RuntimeException((String) res.payload);
+                else
+                    logger.info("Test OK.");
+                removeListener(this);
+            }
+        });
+        Thread.sleep(100);
+    }
+
     public static void main(String[] args) {
         MockClient client = new MockClient();
         KryoUtils.registerClasses(client.getKryo());
@@ -75,6 +96,7 @@ public class MockClient extends Client{
 
             client.testGetAllUsers();
             client.testGetUser();
+            client.testRegisterUser();
         } catch (IOException | InterruptedException e){
             e.printStackTrace();
         }

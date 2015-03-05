@@ -59,7 +59,15 @@ public class UserController extends ServerController{
                     "Wrong payload: not User"));
             return;
         }
+        Response res = new Response();
         User user = (User) req.payload;
-        UserDatabaseHandler.addNewUser(user, "");
+        int ret = UserDatabaseHandler.addNewUser(user, user.getPassword());
+        if (ret == -1) {
+            res.type = Response.Type.FAIL;
+            res.payload = "Something went wrong.";
+        } else {
+            res.type = Response.Type.OK;
+        }
+        connection.sendTCP(res);
     }
 }
