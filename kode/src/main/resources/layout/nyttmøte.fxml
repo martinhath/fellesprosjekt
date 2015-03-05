@@ -5,13 +5,16 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<TitledPane animated="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="546.0" prefWidth="447.0" text="Nytt møte" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+<TitledPane animated="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="546.0" prefWidth="447.0" text="Nytt møte" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
   <content>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="408.0" prefWidth="474.0">
          <children>
             <ListView layoutX="-1.0" prefHeight="521.0" prefWidth="447.0" />
             <DatePicker layoutX="154.0" layoutY="190.0" prefHeight="26.0" prefWidth="260.0" />
-            <Button layoutX="383.0" layoutY="473.0" mnemonicParsing="false" text="OK" />
+            <Button layoutX="367.0" layoutY="411.0" mnemonicParsing="false" text="OK">
+               <font>
+                  <Font size="17.0" />
+               </font></Button>
             <TextField layoutX="154.0" layoutY="278.0" prefHeight="22.0" prefWidth="261.0" />
             <TextField layoutX="154.0" layoutY="234.0" prefHeight="22.0" prefWidth="261.0" />
             <Text layoutX="32.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Beskrivelse:" wrappingWidth="107.94512176513672">
@@ -44,10 +47,18 @@
                   <Font size="14.0" />
                </font>
             </Text>
-            <TextField layoutX="154.0" layoutY="28.0" prefHeight="108.0" prefWidth="261.0" />
-            <ScrollBar layoutX="390.0" layoutY="31.0" orientation="VERTICAL" prefHeight="102.0" prefWidth="22.0" />
-            <ColorPicker layoutX="154.0" layoutY="149.0" prefHeight="26.0" prefWidth="260.0" />
             <ComboBox layoutX="154.0" layoutY="322.0" prefHeight="28.0" prefWidth="262.0" />
+            <TextField layoutX="154.0" layoutY="149.0" prefHeight="26.0" prefWidth="260.0" />
+            <ScrollPane layoutX="195.0" layoutY="18.0" prefHeight="115.0" prefWidth="218.0">
+               <content>
+                  <TextArea prefHeight="200.0" prefWidth="200.0" />
+               </content>
+            </ScrollPane>
+            <Button layoutX="277.0" layoutY="411.0" mnemonicParsing="false" text="Avbryt">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Button>
          </children></AnchorPane>
   </content>
 </TitledPane>
