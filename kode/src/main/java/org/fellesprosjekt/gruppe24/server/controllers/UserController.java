@@ -7,7 +7,6 @@ import org.fellesprosjekt.gruppe24.database.UserDatabaseHandler;
 import org.fellesprosjekt.gruppe24.server.ServerConnection;
 
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class UserController extends ServerController{
@@ -19,7 +18,23 @@ public class UserController extends ServerController{
 
     @Override
     public void put(Request req){
-        throw new RuntimeException("Ikke implmentert!");
+        if (!(req.payload instanceof User)) {
+            connection.sendTCP(new Response(Response.Type.FAIL,
+                    "Wrong payload: not User"));
+            return;
+        }
+        Response res = new Response();
+        User user = (User) req.payload;
+        UserDatabaseHandler.updateUser(user);
+        user = UserDatabaseHandler.getUserFromUsername(user.getUsername());
+        if (user == null) {
+            res.type = Response.Type.FAIL;
+            res.payload = "Something went wrong.";
+        } else {
+            res.type = Response.Type.OK;
+            res.payload = user;
+        }
+        connection.sendTCP(res);
     }
 
     @Override
