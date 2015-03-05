@@ -1,7 +1,6 @@
 package org.fellesprosjekt.gruppe24.common.models;
 
 import org.fellesprosjekt.gruppe24.database.MeetingDatabaseHandler;
-
 import java.time.LocalDateTime;
 import java.util.List;
 

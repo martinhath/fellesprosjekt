@@ -1,18 +1,17 @@
 package org.fellesprosjekt.gruppe24.server.listeners;
 
-import org.fellesprosjekt.gruppe24.common.models.net.LoginRequest;
+import org.fellesprosjekt.gruppe24.common.models.net.AuthRequest;
 import org.fellesprosjekt.gruppe24.common.models.net.Request;
-import org.fellesprosjekt.gruppe24.server.ServerListener;
 import org.fellesprosjekt.gruppe24.server.ServerConnection;
+import org.fellesprosjekt.gruppe24.server.controllers.AuthController;
 import org.fellesprosjekt.gruppe24.server.controllers.ServerController;
-import org.fellesprosjekt.gruppe24.server.controllers.UserController;
 
 public class LoginListener extends ServerListener {
 
     public void receivedRequest(ServerConnection conn, Request req) {
         ServerController controller;
-        if (req instanceof LoginRequest){
-            controller = new UserController(conn);
+        if (req instanceof AuthRequest){
+            controller = new AuthController(conn);
             switch(req.type){
                 case POST:
                     controller.post(req);

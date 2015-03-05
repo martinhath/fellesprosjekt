@@ -21,19 +21,17 @@ public class InvitationController extends ServerController {
 
 	@Override
 	public void put(Request req) {
-		
+		throw new RuntimeException("Ikke implmentert!");
 	}
 
 	@Override
 	public void get(Request req) {
-		
+		throw new RuntimeException("Ikke implmentert!");
 	}
 
 	@Override
 	public void list(Request req) {
-		
+		throw new RuntimeException("Ikke implmentert!");
 	}
-	
-	
 
 }
