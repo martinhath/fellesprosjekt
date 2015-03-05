@@ -80,6 +80,11 @@ public final class DatabaseManager {
         return null;
     }
 
+    /**
+     * Executes the prepared statement.
+     * @param ps The PreparedStatement to be executed
+     * @return -1 on error
+     */
     public static int executePS(PreparedStatement ps) {
         try {
             ps.execute();
@@ -93,11 +98,12 @@ public final class DatabaseManager {
         } finally {
             try {
                 ps.getConnection().close();
+                return 0;
             } catch (Exception ex) {
                 lgr.log(Level.SEVERE, ex.getMessage(), ex);
+                return -1;
             }
         }
-        return -1;
     }
 
     public static Statement getStatement() {
