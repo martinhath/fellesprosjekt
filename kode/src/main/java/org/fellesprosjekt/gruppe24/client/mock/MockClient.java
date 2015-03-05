@@ -67,10 +67,31 @@ public class MockClient extends Client{
     }
 
     public void testRegisterUser() throws InterruptedException {
-        User user = new User("martinht123123", "Martin H. Thoresen", "martinerkul");
+        User user = new User("martinht321", "Martin H. Thoresen", "martinerkul");
         user.setEmail("martin@er.kul");
         Request req = new UserRequest();
         req.type = Request.Type.POST;
+        req.payload = user;
+        sendTCP(req);
+
+        addListener(new ClientListener() {
+            @Override
+            public void receivedResponse(Connection con, Response res) {
+                if (res.type == Response.Type.FAIL)
+                    throw new RuntimeException((String) res.payload);
+                else
+                    logger.info("Test OK.");
+                removeListener(this);
+            }
+        });
+        Thread.sleep(100);
+    }
+
+    public void testUpdateUser() throws InterruptedException {
+        User user = new User("martinhath", "Martin H. Thoresen", "martinerbest");
+        user.setEmail("martin@er.kul.no");
+        Request req = new UserRequest();
+        req.type = Request.Type.PUT;
         req.payload = user;
         sendTCP(req);
 
@@ -97,6 +118,7 @@ public class MockClient extends Client{
             client.testGetAllUsers();
             client.testGetUser();
             client.testRegisterUser();
+            client.testUpdateUser();
         } catch (IOException | InterruptedException e){
             e.printStackTrace();
         }

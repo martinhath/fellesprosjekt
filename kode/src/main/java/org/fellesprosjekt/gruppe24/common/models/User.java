@@ -23,7 +23,8 @@ public class User extends Entity {
     public User(String username, String name, String password) {
         super(name);
         this.username = username;
-        this.setId(UserDatabaseHandler.addNewUser(this, password));
+        this.password = password;
+        // this.setId(UserDatabaseHandler.addNewUser(this, password));
     }
 
     public User(int id, String username, String name) {
