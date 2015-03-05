@@ -25,36 +25,58 @@ public class MockClient extends Client{
 
     private Logger logger = Logger.getLogger(getClass().getName());
 
-    public void doStuff() {
+    public void testGetAllUsers() throws InterruptedException {
         Request req = new UserRequest();
         req.type = Request.Type.LIST;
-        logger.info("sender ting");
         sendTCP(req);
 
         addListener(new ClientListener() {
             @Override
             public void receivedResponse(Connection con, Response res) {
-                logger.info("får tilbake ting");
                 List<User> users = (List<User>) res.payload;
-                for (User user : users) {
-                    System.out.println(user);
-                }
+                if (users == null)
+                    throw new RuntimeException("users == null");
+                else
+                    logger.info("Test OK.");
                 removeListener(this);
             }
         });
+        // første test må vente litt lenger, fordi
+        // databasen bruker litt tid på første request.
+        Thread.sleep(1000);
     }
 
-    public static void main(String[] args) throws InterruptedException {
+    public void testGetUser() throws InterruptedException {
+        Request req = new UserRequest();
+        req.type = Request.Type.GET;
+        req.payload = "martinhath";
+        sendTCP(req);
+
+        addListener(new ClientListener() {
+            @Override
+            public void receivedResponse(Connection con, Response res) {
+                User user = (User) res.payload;
+                if (user == null)
+                    throw new RuntimeException("user == null");
+                else
+                    logger.info("Test OK.");
+                removeListener(this);
+            }
+        });
+        Thread.sleep(100);
+    }
+
+    public static void main(String[] args) {
         MockClient client = new MockClient();
         KryoUtils.registerClasses(client.getKryo());
         try {
             client.start();
             client.connect(5000, "127.0.0.1", 9001, 9002);
-        } catch (IOException e){
+
+            client.testGetAllUsers();
+            client.testGetUser();
+        } catch (IOException | InterruptedException e){
             e.printStackTrace();
         }
-
-        client.doStuff();
-        Thread.sleep(1000);
     }
 }

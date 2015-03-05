@@ -31,6 +31,11 @@ public class User extends Entity {
         this.username = username;
     }
 
+    @Override
+    public String toString(){
+        return String.format("User: %s, %s, %s", getName(), getUsername(), getEmail());
+    }
+
     public String getUsername() {
     	return username;
     }
