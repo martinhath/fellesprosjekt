@@ -16,7 +16,6 @@ public class InvitationController extends ServerController {
 		Response res = new Response();
         res.type = Response.Type.OK;
         connection.sendTCP(res);
-
 	}
 
 	@Override
