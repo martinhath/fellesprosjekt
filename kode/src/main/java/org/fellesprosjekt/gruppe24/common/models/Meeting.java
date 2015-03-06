@@ -21,6 +21,18 @@ public class Meeting {
 	private Group group;
 	private String location;
 
+	/**
+	 * Creates a Meeting without an ID. This object is only used as an intermediary before inserting it into the
+	 * database where you will get a full-fletched Meeting object with its own unique ID.
+	 * @param name
+	 * @param description
+	 * @param room
+	 * @param from
+	 * @param to
+	 * @param location
+	 * @param participants
+	 * @param owner
+	 */
 	public Meeting(String name,
 				   String description,
 				   Room room,
@@ -37,9 +49,11 @@ public class Meeting {
 		this.location = location;
 		this.participants = participants;
 		this.owner = owner;
-
-		this.id = MeetingDatabaseHandler.insertMeeting(this);
 	}
+
+	/**
+	 * To create a Meeting object with an ID. Will only be called from the database handler of Meetings.
+	 */
 	public Meeting(int id,
 				   String name,
 				   String description,

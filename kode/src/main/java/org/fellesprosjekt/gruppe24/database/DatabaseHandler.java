@@ -3,7 +3,6 @@ package org.fellesprosjekt.gruppe24.database;
 import java.util.List;
 
 public abstract class DatabaseHandler<T> {
-
     /**
      * Lagrer et objekt i databasen. Id-en _skal_ være unik.
      *
