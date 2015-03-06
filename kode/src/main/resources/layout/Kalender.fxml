@@ -5,8 +5,11 @@
 <?import javafx.scene.control.*?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="664.0" prefWidth="1027.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-        fx:controller="org.fellesprosjekt.gruppe24.client.controllers.CalendarController">
+        fx:controller="org.fellesprosjekt.gruppe24.client.controllers.CalendarController" stylesheets="style.css">
+
    <children>
+   
+   
       <Pane prefHeight="536.0" prefWidth="870.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Button fx:id="buttonPrev" layoutX="252.0" layoutY="87.0" mnemonicParsing="false" text="Forrige"
@@ -91,7 +94,7 @@
             <Label fx:id="labelSun" layoutX="721.0" layoutY="177.0" text="Søndag" />
             <Label fx:id="labelMonth" layoutX="371.0" layoutY="28.0" text="Januar">
                <font>
-                  <Font size="41.0" />
+                  <Font size="24.0" />
                </font>
             </Label>
             <Label fx:id="labelWeek" layoutX="411.0" layoutY="89.0" text="Uke 2">
@@ -99,23 +102,35 @@
                   <Font size="18.0" />
                </font>
             </Label>
+
             <Button layoutX="865.0" layoutY="82.0" mnemonicParsing="false" text="Nytt møte"
                     fx:id="meetingButton" onAction="#newMeeting" >
                <font>
                   <Font size="18.0" />
                </font>
             </Button>
+
             <Button layoutX="860.0" layoutY="595.0" mnemonicParsing="false" text="Logge ut"
                     fx:id="logoutButton" onAction="#logout">
                <font>
                   <Font size="18.0" />
                </font>
             </Button>
-            <Button layoutX="801.0" layoutY="35.0" mnemonicParsing="false" text="Nye meldinger (3)">
+            <Button layoutX="794.0" layoutY="35.0" mnemonicParsing="false" style="-fx-font-size: 18;" stylesheets="@button.css" text="Nye meldinger (3)">
                <font>
                   <Font size="18.0" />
                </font>
             </Button>
+            <ImageView fitHeight="50.0" fitWidth="47.0" layoutX="965.0" layoutY="27.0">
+               <image>
+                  <Image url="@nytt-meddelande_318-10231.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="39.0" fitWidth="42.0" layoutX="968.0" layoutY="80.0">
+               <image>
+                  <Image url="@53.png" />
+               </image>
+            </ImageView>
          </children>
       </Pane>
    </children>
