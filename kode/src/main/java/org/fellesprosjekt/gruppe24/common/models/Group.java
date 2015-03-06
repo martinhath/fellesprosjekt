@@ -6,14 +6,21 @@ import java.util.List;
 public class Group extends Entity{
 
     private List<Entity> members;
-
+    private int ownerId;
 
     @SuppressWarnings("unused")
     public Group(){}
 
-    public Group(int id, String name) {
+    public Group(int id, String name, int ownerId) {
         super(id, name);
         members = new LinkedList<>();
+        this.ownerId = ownerId;
+    }
+    
+    public Group(String name, int ownerId) {
+    	super(name);
+    	members = new LinkedList<>();
+    	this.ownerId = ownerId;
     }
 
     public void addMember(Entity e){
@@ -33,5 +40,9 @@ public class Group extends Entity{
             else
                 System.out.println(e.getName());
         }
+    }
+    
+    public int getOwnerId() {
+    	return ownerId;
     }
 }

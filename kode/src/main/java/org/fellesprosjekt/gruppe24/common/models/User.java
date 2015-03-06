@@ -19,11 +19,15 @@ public class User extends Entity {
      */
     @SuppressWarnings("unused")
     public User(){}
-
-    public User(String username, String name, String password) {
+    
+    public User(String username, String name, String password, String email) {
         super(name);
         this.username = username;
-        this.setId(UserDatabaseHandler.addNewUser(this, password));
+    }
+
+    public User(int id, String username, String name, String password, String email) {
+        super(id, name);
+        this.username = username;
     }
 
     public User(int id, String username, String name) {
@@ -33,6 +37,10 @@ public class User extends Entity {
 
     public String getUsername() {
     	return username;
+    }
+    
+    public String getPassword() {
+    	return password;
     }
     
     public String getEmail() {

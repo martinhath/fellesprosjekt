@@ -5,13 +5,6 @@ import java.util.List;
 public abstract class DatabaseHandler<T> {
 
     /**
-     * Singleton-pattern.
-     * Les på wikipedia, eller se `CalendarClient.java`
-     * @return Objektet.
-     */
-    public abstract DatabaseHandler<T> GetInstance();
-
-    /**
      * Lagrer et objekt i databasen. Id-en _skal_ være unik.
      *
      * I stedet for å returnere Id-en i funksjonen, kan vi heller
@@ -43,5 +36,12 @@ public abstract class DatabaseHandler<T> {
      * @return `true` hvis det ble slettet, `false` hvis ikke.
      */
     public abstract boolean delete(T t);
+    
+    /**
+     * Oppdaterer verdiene for det gitte objektet i databasen
+     * @param t Objektet som skal oppdateres
+     * @return <b>true</b> hvis oppdateringen var vellykket. <b>false</b> dersom en feil oppstod.
+     */
+    public abstract boolean update(T t);
 
 }

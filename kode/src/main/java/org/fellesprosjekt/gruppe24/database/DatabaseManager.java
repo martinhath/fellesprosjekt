@@ -249,10 +249,10 @@ public final class DatabaseManager {
     }
 
     // TODO virker ikke, gir bare 0 nå
-    public static int getAutoIncrement(String table) {
+    public static int getLastId(String table) {
         try {
             ResultSet rs = readQuery(String.format(
-                    "SELECT last_insert_id() AS last_id " +
+                    "SELECT LAST_INSERT_ID() AS last_id " +
                             "FROM %s;", table));
             if (rs.next()) {
                 lgr.log(Level.INFO, String.format("Next increment id for %s is %d", table, rs.getInt("last_id")));
