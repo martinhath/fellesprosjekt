@@ -28,7 +28,7 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
      *
      * @return Objektet.
      */
-    public MeetingDatabaseHandler GetInstance() {
+    public static MeetingDatabaseHandler GetInstance() {
         if (instance == null) return new MeetingDatabaseHandler();
         else return instance;
     }
@@ -92,13 +92,12 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
                 newId,
                 name,
                 description,
-                RoomDatabaseHandler.getById(roomId),
+                RoomDatabaseHandler.GetInstance().get(roomId),
                 from,
                 to,
                 location,
                 new ArrayList<Entity>(),
-                UserDatabaseHandler.get(ownerId));
-        Logger lgr = Logger.getLogger(DatabaseManager.class.getName());
+                UserDatabaseHandler.GetInstance().get(ownerId));
     }
 
     private Meeting generateMeeting(HashMap<String, String> info) {
@@ -108,12 +107,12 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
                     Integer.parseInt(info.get("meetingid")),
                     info.get("name"),
                     info.get("description"),
-                    RoomDatabaseHandler.getById(Integer.parseInt(info.get("Room_roomid"))),
+                    RoomDatabaseHandler.GetInstance().get(Integer.parseInt(info.get("Room_roomid"))),
                     DatabaseManager.stringToDateTime(info.get("start_time")),
                     DatabaseManager.stringToDateTime(info.get("end_time")),
                     info.get("location"),
                     new ArrayList<Entity>(),
-                    UserDatabaseHandler.get(Integer.parseInt(info.get("User_userid")))
+                    UserDatabaseHandler.GetInstance().get(Integer.parseInt(info.get("owner_id")))
             );
             lgr.log(Level.INFO, "Meeting successfully generated");
             return meeting;
@@ -151,6 +150,11 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
         }
     }
 
+    public boolean update(Meeting meeting) {
+        // TODO
+        return true;
+    }
+
     public void addUserToMeeting(Meeting meeting, User user) {
         try {
             lgr.log(Level.INFO, String.format("Trying to add User %s to Meeting %s", user.getUsername(), meeting.getName()));
@@ -176,7 +180,7 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
         List<User> result = new ArrayList<>();
         try {
             for (int userid : selectUserIDsOfMeeting(meeting.getId())) {
-                result.add(UserDatabaseHandler.getById(userid));
+                result.add(UserDatabaseHandler.GetInstance().get(userid));
             }
             return result;
         } catch (SQLException ex) {

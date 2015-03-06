@@ -16,10 +16,4 @@ public class DatabaseTest extends TestCase {
         TestCase.assertNotNull(DatabaseManager.getStatement());
     }
 
-
-    public void testGetAutoIncrement() {
-        int result = DatabaseManager.getAutoIncrement("Room");
-        TestCase.assertTrue(result > -1);
-    }
-
 }

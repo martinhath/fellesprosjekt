@@ -20,8 +20,9 @@ public class ServerLoginTest extends TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        User martin = new User("martinhath", "Martin Thoresen", "");
-        UserDatabaseHandler.addNewUser(martin, "martinerkul");
+        User martin = new User("martinhath", "Martin Thoresen", "", "");
+        UserDatabaseHandler.GetInstance().delete(martin);
+        UserDatabaseHandler.GetInstance().addNewUser(martin, "martinerkul");
 
         int tcp = 6788;
         int udp = 6789;

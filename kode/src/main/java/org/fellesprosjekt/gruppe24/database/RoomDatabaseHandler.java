@@ -108,5 +108,10 @@ public final class RoomDatabaseHandler extends DatabaseHandler<Room> {
         }
     }
 
+    public boolean update(Room room) {
+        // TODO
+        return true;
+    }
+
 
 }

@@ -92,6 +92,7 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
 	@Override
 	public User insert(User user) {
 		try {
+		lgr.log(Level.INFO, String.format("Inserting user %s", user));
 			String query =
 				"INSERT INTO User " +
 	            "(username, name, password, email, create_time) " +
@@ -148,11 +149,11 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
 		DatabaseManager.updateQuery(query);
 		return true;
 	}
-    public static List<Meeting> getMeetingsOfUser(User user) {
+    public List<Meeting> getMeetingsOfUser(User user) {
         List<Meeting> result = new ArrayList<>();
         try {
             for (int meetingid : selectMeetingIDsOfUser(user.getId())) {
-                result.add(MeetingDatabaseHandler.getById(meetingid));
+                result.add(MeetingDatabaseHandler.GetInstance().get(meetingid));
             }
             return result;
         } catch (SQLException ex) {
@@ -161,7 +162,7 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
         }
     }
 
-    private static List<Integer> selectMeetingIDsOfUser(int userid) throws SQLException {
+    private List<Integer> selectMeetingIDsOfUser(int userid) throws SQLException {
         List<Integer> result = new ArrayList<>();
         String query = String.format("SELECT Meeting_meetingid FROM User_invited_to_meeting WHERE User_userid=%d", userid);
         ArrayList<HashMap<String, String>> resultSet = DatabaseManager.getList(query);
@@ -171,7 +172,7 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
         return result;
     }
 
-    public static void confirmMeeting(User user, Meeting meeting) {
+    public void confirmMeeting(User user, Meeting meeting) {
         try {
             lgr.log(Level.INFO, String.format("Confirming User %s coming to Meeting %s", user.getUsername(), meeting.getName()));
             DatabaseManager.updateField(

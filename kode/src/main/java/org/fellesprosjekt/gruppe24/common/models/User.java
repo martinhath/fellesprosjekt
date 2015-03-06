@@ -23,6 +23,8 @@ public class User extends Entity {
     public User(String username, String name, String password, String email) {
         super(name);
         this.username = username;
+        this.password = password;
+        this.email = email;
     }
 
     public User(int id, String username, String name, String password, String email) {
@@ -57,5 +59,6 @@ public class User extends Entity {
     
     public String toString() {
     	return String.format("[User] username: %s Id: %s", getUsername(), getId());
+
     }
 }

@@ -12,34 +12,34 @@ public class RoomDatabaseHandlerTest extends TestCase {
     }
 
     public void testCanGetRoomById() {
-        Room room = RoomDatabaseHandler.getById(1);
+        Room room = RoomDatabaseHandler.GetInstance().get(1);
         TestCase.assertNotNull(room);
         TestCase.assertNotNull(room.getName());
     }
     @Test(expected = java.sql.SQLException.class)
     public void testCanInsertAndDeleteRoom() {
         Room room = new Room("nytt_rom_fra_test", 4, true);
-        Room room2 = RoomDatabaseHandler.getById(room.getId());
+        Room room2 = RoomDatabaseHandler.GetInstance().get(room.getId());
         TestCase.assertTrue(room.equals(room2));
-        RoomDatabaseHandler.deleteById(room.getId());
-        Room room3 = RoomDatabaseHandler.getById(room.getId());
+        RoomDatabaseHandler.GetInstance().delete(room);
+        Room room3 = RoomDatabaseHandler.GetInstance().get(room.getId());
     }
     public void testCanNotInsertCorruptRoom() {
         // valideringa tas av når man lager objektet, tror jeg
     }
 
     public void testCanGetAllRooms() {
-        List allRooms = RoomDatabaseHandler.getAllRooms();
+        List allRooms = RoomDatabaseHandler.GetInstance().getAll();
         TestCase.assertNotNull(allRooms);
     }
 
     public void testCanUpdateRoom() {
-        Room room = RoomDatabaseHandler.getById(1);
+        Room room = RoomDatabaseHandler.GetInstance().get(1);
         TestCase.assertTrue(DatabaseManager.updateField(1, "room_num", "Room", "Nytt_romnavn"));
-        Room room2 = RoomDatabaseHandler.getById(1);
+        Room room2 = RoomDatabaseHandler.GetInstance().get(1);
         TestCase.assertTrue(room2.getName().equals("Nytt_romnavn"));
         TestCase.assertTrue(DatabaseManager.updateField(1, "room_num", "Room", "Enda nyere romnavn"));
-        room2 = RoomDatabaseHandler.getById(1);
+        room2 = RoomDatabaseHandler.GetInstance().get(1);
         TestCase.assertTrue(room2.getName().equals("Enda nyere romnavn"));
     }
 }

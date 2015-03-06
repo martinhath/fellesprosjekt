@@ -14,14 +14,14 @@ import java.util.List;
 
 public class MeetingDatabaseHandlerTest extends TestCase {
     public void setUp() {
-        User user = UserDatabaseHandler.getAllUsers().get(0);
-        Meeting meeting = MeetingDatabaseHandler.getAllMeetings().get(0);
-        MeetingDatabaseHandler.addUserToMeeting(meeting, user);
+        User user = UserDatabaseHandler.GetInstance().getAll().get(0);
+        Meeting meeting = MeetingDatabaseHandler.GetInstance().getAll().get(0);
+        MeetingDatabaseHandler.GetInstance().addUserToMeeting(meeting, user);
     }
     public void tearDown() {
-        User user = UserDatabaseHandler.getAllUsers().get(0);
-        Meeting meeting = MeetingDatabaseHandler.getAllMeetings().get(0);
-        MeetingDatabaseHandler.removeUserFromMeeting(meeting, user);
+        User user = UserDatabaseHandler.GetInstance().getAll().get(0);
+        Meeting meeting = MeetingDatabaseHandler.GetInstance().getAll().get(0);
+        MeetingDatabaseHandler.GetInstance().removeUserFromMeeting(meeting, user);
     }
     
     @Test(expected = java.sql.SQLException.class)
@@ -29,22 +29,22 @@ public class MeetingDatabaseHandlerTest extends TestCase {
         Meeting meeting = new Meeting(
                 "pressekonferanse",
                 "",
-                RoomDatabaseHandler.getById(1),
+                RoomDatabaseHandler.GetInstance().get(1),
                 LocalDateTime.now(),
                 LocalDateTime.now().plusHours(2),
                 "P15",
                 new ArrayList<>(),
                 new User());
-        Meeting meeting2 = MeetingDatabaseHandler.getById(meeting.getId());
+        Meeting meeting2 = MeetingDatabaseHandler.GetInstance().get(meeting.getId());
         //TestCase.assertEquals(meeting.toString(), meeting2.toString());
         TestCase.assertEquals(meeting.getId(), meeting2.getId());
 
-        MeetingDatabaseHandler.deleteById(meeting.getId());
-        MeetingDatabaseHandler.deleteById(meeting.getId());
+        MeetingDatabaseHandler.GetInstance().delete(meeting);
+        MeetingDatabaseHandler.GetInstance().delete(meeting);
     }
 
     public void testCanRetrieveMeetingFromDB() {
-        List<Meeting> meetingList = MeetingDatabaseHandler.getAllMeetings();
+        List<Meeting> meetingList = MeetingDatabaseHandler.GetInstance().getAll();
         Meeting meeting = meetingList.get(0);
         TestCase.assertNotNull(meeting);
         TestCase.assertNotNull(meeting.getOwner());
@@ -52,20 +52,20 @@ public class MeetingDatabaseHandlerTest extends TestCase {
     }
 
     public void testCanAddAndRemoveUserToMeeting() {
-        User user = UserDatabaseHandler.getAllUsers().get(1);
-        Meeting meeting = MeetingDatabaseHandler.getAllMeetings().get(0);
-        int sizeBefore = MeetingDatabaseHandler.getUsersOfMeeting(meeting).size();
+        User user = UserDatabaseHandler.GetInstance().getAll().get(1);
+        Meeting meeting = MeetingDatabaseHandler.GetInstance().getAll().get(0);
+        int sizeBefore = MeetingDatabaseHandler.GetInstance().getUsersOfMeeting(meeting).size();
 
-        MeetingDatabaseHandler.addUserToMeeting(meeting, user);
-        TestCase.assertTrue(MeetingDatabaseHandler.getUsersOfMeeting(meeting).size() > sizeBefore);
+        MeetingDatabaseHandler.GetInstance().addUserToMeeting(meeting, user);
+        TestCase.assertTrue(MeetingDatabaseHandler.GetInstance().getUsersOfMeeting(meeting).size() > sizeBefore);
 
-        MeetingDatabaseHandler.removeUserFromMeeting(meeting, user);
-        TestCase.assertEquals(sizeBefore, MeetingDatabaseHandler.getUsersOfMeeting(meeting).size());
+        MeetingDatabaseHandler.GetInstance().removeUserFromMeeting(meeting, user);
+        TestCase.assertEquals(sizeBefore, MeetingDatabaseHandler.GetInstance().getUsersOfMeeting(meeting).size());
     }
 
     public void testCanGetUsersOfMeeting() {
-        Meeting meeting = MeetingDatabaseHandler.getAllMeetings().get(0);
-        List<User> users = MeetingDatabaseHandler.getUsersOfMeeting(meeting);
+        Meeting meeting = MeetingDatabaseHandler.GetInstance().getAll().get(0);
+        List<User> users = MeetingDatabaseHandler.GetInstance().getUsersOfMeeting(meeting);
         TestCase.assertNotNull(users);
         TestCase.assertNotNull(users.get(0).getUsername());
     }
