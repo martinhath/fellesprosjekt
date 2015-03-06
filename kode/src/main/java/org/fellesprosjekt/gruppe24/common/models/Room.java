@@ -25,7 +25,7 @@ public class Room implements Comparable<Room> {
 	}
 
 	/**
-	 * Creates an object and automatically creates a database entry from where it gets its ID
+	 * Creates an object without an ID which should only be used to create a database entry
 	 * @param name
 	 * @param capacity
 	 * @param accessible
@@ -34,7 +34,6 @@ public class Room implements Comparable<Room> {
 		this.name = name;
 		this.capacity = capacity;
 		this.accessible = accessible;
-		this.id = RoomDatabaseHandler.insertRoom(this); // gets id from the database handler
 	}
 
 	public Room() {}

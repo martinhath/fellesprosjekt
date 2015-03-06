@@ -13,10 +13,22 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public final class RoomDatabaseHandler {
+public final class RoomDatabaseHandler extends DatabaseHandler<Room> {
     private static Logger lgr = Logger.getLogger(RoomDatabaseHandler.class.getName());
+    private static RoomDatabaseHandler instance;
 
-    public static ArrayList<Room> getAllRooms() {
+    /**
+     * Singleton-pattern.
+     * Les på wikipedia, eller se `CalendarClient.java`
+     *
+     * @return Objektet.
+     */
+    public static RoomDatabaseHandler GetInstance() {
+        if (instance == null) return new RoomDatabaseHandler();
+        else return instance;
+    }
+
+    public ArrayList<Room> getAll() {
         ArrayList<Room> allRooms = new ArrayList<Room>();
         String query = "SELECT * FROM Room;";
         ArrayList<HashMap<String, String>> result = DatabaseManager.getList(query);
@@ -33,7 +45,7 @@ public final class RoomDatabaseHandler {
      *
      * return int The database id the new room gets
      */
-    public static int insertRoom(Room room) {
+    public Room insert(Room room) {
         try {
             String query =
                             "INSERT INTO Room " +
@@ -44,15 +56,16 @@ public final class RoomDatabaseHandler {
             ps.setInt(2, room.getCapacity());
             //ps.setBoolean(3, room.isAccessible());
             // gikk ikke an å sette boolean-field ...
-            return DatabaseManager.executePS(ps);
+            int newId = DatabaseManager.executePS(ps);
+            return new Room(newId, room.getName(), room.getCapacity(), room.isAccessible());
         } catch (SQLException ex) {
             Logger lgr = Logger.getLogger(DatabaseManager.class.getName());
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
-            return -1;
+            return null;
         }
     }
 
-    private static Room generateRoom(HashMap<String, String> info) {
+    private Room generateRoom(HashMap<String, String> info) {
         try {
             lgr.log(Level.INFO, "Generating room object based on: " + info.toString());
             Room room = new Room(
@@ -69,11 +82,11 @@ public final class RoomDatabaseHandler {
         }
     }
 
-    public static int getNextId() {
+    public int getNextId() {
         return 1; // TODO actually ask the database for next id
     }
 
-    public static Room getById(int id) {
+    public Room get(int id) {
         try {
             lgr.log(Level.INFO, "Trying to get room by id: " + id);
             HashMap<String, String> info = DatabaseManager.getRow(String.format("SELECT * FROM Room WHERE roomid=%d", id));
@@ -84,10 +97,10 @@ public final class RoomDatabaseHandler {
             return null;
         }
     }
-    public static boolean deleteById(int id) {
+    public boolean delete(Room room) {
         try {
-            lgr.log(Level.INFO, "Trying to delete room by id: " + id);
-            DatabaseManager.updateQuery(String.format("DELETE FROM Room WHERE roomid=%d", id));
+            lgr.log(Level.INFO, "Trying to delete room by id: " + room.getId());
+            DatabaseManager.updateQuery(String.format("DELETE FROM Room WHERE roomid=%d", room.getId()));
             return true;
         } catch (Exception ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
