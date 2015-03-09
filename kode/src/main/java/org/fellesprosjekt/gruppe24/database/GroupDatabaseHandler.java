@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 
 import org.fellesprosjekt.gruppe24.common.models.Group;
 import org.fellesprosjekt.gruppe24.common.models.GroupNotification;
+import org.fellesprosjekt.gruppe24.common.models.Meeting;
 import org.fellesprosjekt.gruppe24.common.models.User;
 
 public class GroupDatabaseHandler extends DatabaseHandler<Group> {
@@ -37,13 +38,17 @@ public class GroupDatabaseHandler extends DatabaseHandler<Group> {
 		return getAllGroups(query);
 	}
 	
-	private Group generateGroup(HashMap<String, String> info) {
+	public Group generateGroup(HashMap<String, String> info) {
 		Group group = new Group(Integer.parseInt(info.get("groupid")), info.get("name"), Integer.parseInt(info.get("owner_id")));
 		return group;
 	}
 	
-	public static void main(String[] args) {
-		//GroupDatabaseHandler.getAllGroupsForUser(new User(1, "Herman", "email"));
+	public GroupNotification generateGroupNotification(User user, HashMap<String, String> info) {
+		boolean read = info.get("notification_read").equals("1") ? true : false;
+		boolean confirmed = info.get("confirmed").equals("1") ? true : false;
+		GroupNotification gn = new GroupNotification(user, info.get("notification_message"), 
+				read, confirmed, generateGroup(info));
+		return gn;
 	}
 	
 	public List<User> getAllUsersInGroup(Group group) {
@@ -54,13 +59,53 @@ public class GroupDatabaseHandler extends DatabaseHandler<Group> {
 	
 	public List<GroupNotification> getAllGroupInvites(User user) {
 		List<GroupNotification> invites = new ArrayList<GroupNotification>();
-		String query = String.format("SELECT ughu.*, ug.name, ug.owner_id FROM User_group_has_User AS ughu JOIN User_group AS ug "
+		String query = String.format("SELECT ughu.*, ug.groupid, ug.name, ug.owner_id FROM User_group_has_User AS ughu JOIN User_group AS ug "
 				+ "ON ug.groupid = ughu.User_group_groupid WHERE ughu.User_userid = %s;", user.getId());
 		ArrayList<HashMap<String, String>> result = DatabaseManager.getList(query);
-		for(HashMap<String, String> hm : result) {
-			System.out.println(hm.get("notification_message"));
+		for(HashMap<String, String> row : result) {
+			invites.add(generateGroupNotification(user, row));
 		}
 		return invites;
+	}
+	
+	public void setInviteConfirmation(int userid, int groupid, boolean confirmed) {
+		int b = confirmed ? 1 : 0;
+		String query = String.format("UPDATE User_group_has_User SET confirmed = %s WHERE User_userid = %s AND "
+				+ "User_group_groupid = %s", b, userid, groupid);
+		DatabaseManager.updateQuery(query);
+	}
+	
+	public void addUserToGroup(User user, Group group, String message) {
+		try {
+			lgr.log(Level.INFO, String.format("Trying to add User (userid: %s) to User_group (groupid: %s)", 
+					user.getId(), group.getId())); 
+			String query = "INSERT INTO User_group_has_User (User_userid, User_group_groupid, notification_message)"
+					+ " VALUES (?, ?, ?);";
+			PreparedStatement ps = DatabaseManager.getPreparedStatement(query);
+			if(message == null || message.equalsIgnoreCase(""))
+				message = String.format("Du har blitt invitert til gruppen '%s'", group.getName());
+			ps.setInt(1, user.getId());
+			ps.setInt(2, group.getId());
+			ps.setString(3, message);
+			DatabaseManager.executePS(ps);
+		} catch (Exception ex) {
+			lgr.log(Level.SEVERE, ex.getMessage(), ex);
+		}
+	}
+	
+	public void removeUserFromGroup(int userid, int groupid) {
+		String query = String.format("DELETE FROM User_group_has_user WHERE User_userid = %s AND User_group_groupid = %s;");
+		DatabaseManager.updateQuery(query);
+	}
+	
+	public List<Meeting> getAllMeetingsForGroup(int groupid) {
+		List<Meeting> meetings = new ArrayList<Meeting>();
+		String query = "SELECT * FROM Meeting WHERE Group_groupid = " + groupid + ";";
+		ArrayList<HashMap<String, String>> result =	DatabaseManager.getList(query);
+		for (HashMap<String, String> row : result) {
+			// TODO: MeetingDatabaseHandler.generateMeeting(row);
+		}
+		return meetings;
 	}
 
 	@Override

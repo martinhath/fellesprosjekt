@@ -13,4 +13,8 @@ public class GroupNotification extends Notification {
 		return group;
 	}
 	
+	public String toString() {
+		return String.format("[GroupNotification] userid: %s groupid: %s read: %s confirmed: %s", getUser().getId(),
+				getGroup().getId(), isRead(), isConfirmed());
+	}
 }

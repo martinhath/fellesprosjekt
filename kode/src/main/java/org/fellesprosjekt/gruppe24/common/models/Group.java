@@ -45,4 +45,8 @@ public class Group extends Entity{
     public int getOwnerId() {
     	return ownerId;
     }
+    
+    public String toString() {
+    	return String.format("[Group] name: %s id: %s ownerId: %s", getName(), getId(), getOwnerId());
+    }
 }

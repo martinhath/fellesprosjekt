@@ -23,7 +23,7 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
 		return instance;
 	}
 
-    private User generateUser(HashMap<String, String> info) {
+    public User generateUser(HashMap<String, String> info) {
         try {
             User user = new User(Integer.parseInt(info.get("userid")), info.get("username"), info.get("name"),
             		info.get("password"), info.get("email"));
