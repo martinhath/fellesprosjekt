@@ -56,13 +56,13 @@ public class AuthController extends ServerController{
         Response res = new Response();
         User user = UserDatabaseHandler.GetInstance().authenticate(
                 loginInfo.getUsername(), loginInfo.getPassword());
-        if (user == null) {
-            Logger.getLogger(getClass().getName()).log(
-                    Level.INFO, "Failed to log in.");
-            res = Response.GetFailResponse("Username or password was wrong.");
-            connection.sendTCP(res);
-            return false;
-        }
+        //if (user == null) {
+        //    Logger.getLogger(getClass().getName()).log(
+        //            Level.INFO, "Failed to log in.");
+        //    res = Response.GetFailResponse("Username or password was wrong.");
+        //    connection.sendTCP(res);
+        //    return false;
+        //}
         connection.setUser(user);
         Logger.getLogger(getClass().getName()).log(Level.INFO, "User: " + user);
 
