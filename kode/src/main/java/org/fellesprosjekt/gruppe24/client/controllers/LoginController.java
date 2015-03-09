@@ -54,7 +54,8 @@ public class LoginController extends ClientController {
 
     public void handleLogin(){
         System.out.println("Vi er nå logget inn");
-        getApplication().setScene("/layout/Kalender.fxml");
+        ClientController controller = getApplication()
+                .setScene(getStage(), "/layout/Kalender.fxml");
     }
 
     public void handleRejectedLogin(Response res){

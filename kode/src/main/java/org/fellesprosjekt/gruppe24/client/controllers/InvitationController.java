@@ -69,8 +69,7 @@ public class InvitationController extends ClientController {
     	participantField.getItems().addAll(meeting.getParticipants());
     	
     }
-    
-    
+
     public boolean buttonIsNotEmpty() {
     	if (group == null) {
     		System.out.println("ingen knapp har blivit vald");
@@ -80,11 +79,7 @@ public class InvitationController extends ClientController {
     	}
     }
     
-    
-
-    
-    
-    //sänd till server vilket val användaren tog 
+    //sänd till server vilket val användaren tog
     public void pressOkButton(ActionEvent e) {
     	Toggle selected = group.getSelectedToggle();
     	Answer ans = Answer.NO;
@@ -121,7 +116,7 @@ public class InvitationController extends ClientController {
     
     public void handleOK(){
         System.out.println("Svaret har sparats");
-        getApplication().setScene("/layout/Kalender.fxml");
+        getApplication().setScene(getStage(), "/layout/Kalender.fxml");
     }
     
     public void handleRejectedOK(){
@@ -131,7 +126,7 @@ public class InvitationController extends ClientController {
     
     //avbryt och gå tillbaka till kalenderview
     public void pressAvbrytButton(ActionEvent e) {
-        getApplication().setScene("/layout/Kalender.fxml");
+        getApplication().setScene(getStage(), "/layout/Kalender.fxml");
     }
     
     //skjul invitationen från notification?

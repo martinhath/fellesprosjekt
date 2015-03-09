@@ -10,30 +10,27 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import org.fellesprosjekt.gruppe24.client.controllers.ClientController;
-import org.fellesprosjekt.gruppe24.client.controllers.InvitationController;
 import org.fellesprosjekt.gruppe24.common.KryoUtils;
-import org.fellesprosjekt.gruppe24.common.models.Entity;
-import org.fellesprosjekt.gruppe24.common.models.Meeting;
-import org.fellesprosjekt.gruppe24.common.models.MeetingNotification;
-import org.fellesprosjekt.gruppe24.common.models.Room;
-import org.fellesprosjekt.gruppe24.common.models.User;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class CalendarApplication extends Application{
 
-    CalendarClient calendarClient;
-    Stage stage;
-    Scene scene;
-    ClientController controller;
+    private Logger logger = Logger.getLogger(getClass().getName());
+
+    private CalendarClient calendarClient;
+    private List<Stage> stages;
+    private Stage primaryStage;
+    private Scene scene;
+    private ClientController controller;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        stages = new LinkedList<>();
+        this.primaryStage = primaryStage;
 
         calendarClient = CalendarClient.GetInstance();
         calendarClient.setConnectionInfo("127.0.0.1", 9001, 9002);
@@ -47,13 +44,43 @@ public class CalendarApplication extends Application{
             e.printStackTrace();
         }
 
-        this.stage = primaryStage;
+        String loginpath = "/layout/Login.fxml";
 
-        controller = setScene("/layout/Login.fxml");
-
+        controller = setScene(primaryStage, loginpath);
+        controller.setApplication(this);
     }
 
-    public ClientController setScene(String path){
+    public Stage newStage() {
+        Stage stage = new Stage();
+        stages.add(stage);
+        return stage;
+    }
+
+    public void removeStage(Stage stage) {
+        stages.remove(stage);
+        stage.close();
+    }
+
+    /**
+     * Denne funksjonen lager ett nytt vindu, med FXMLen som befinner seg
+     * på stien `path`. Kontrolleren som funksjonen returnerer er kontrolleren
+     * som styrer vinduet. Denne har tilgang på den nye Stagen.
+     * @param path Stien til FXMLen
+     * @return Kontrolleren som styrer viewet
+     */
+    public ClientController newScene(String path) {
+        Stage stage = newStage();
+        return setScene(stage, path);
+    }
+
+    /**
+     * Funksjonen endrer viewet som vises i stagen man gir. Blir f.eks. brukt
+     * når man logger inn.
+     * @param stage Stagen som vi skal endre
+     * @param path Stien til FXMLen
+     * @return Kontrolleren som styrer viewet
+     */
+    public ClientController setScene(final Stage stage, String path){
         FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
         try {
             final Parent root = loader.load();
@@ -63,6 +90,10 @@ public class CalendarApplication extends Application{
              */
             Platform.runLater(() -> {
                 scene = new Scene(root, 800, 600);
+                if (stage == null){
+                    logger.severe("stage was null: " + path);
+                    return;
+                }
                 stage.setScene(scene);
                 stage.show();
             });
@@ -77,6 +108,7 @@ public class CalendarApplication extends Application{
             return null;
         }
         controller.setApplication(this);
+        controller.setStage(stage);
         this.controller = controller;
         return controller;
     }
