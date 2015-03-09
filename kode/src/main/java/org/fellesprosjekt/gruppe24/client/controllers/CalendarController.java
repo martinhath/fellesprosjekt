@@ -22,7 +22,7 @@ public class CalendarController extends ClientController {
 
     @FXML
     public void newMeeting(ActionEvent a) {
-        String path = "/layout/nyttmøte.fxml";
+        String path = Layout.NewMeeting;
         getApplication().newScene(path);
     }
 

@@ -44,7 +44,7 @@ public class CalendarApplication extends Application{
             e.printStackTrace();
         }
 
-        String loginpath = "/layout/Login.fxml";
+        String loginpath = Layout.Login;
 
         controller = setScene(primaryStage, loginpath);
         controller.setApplication(this);

@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
+import org.fellesprosjekt.gruppe24.client.Layout;
 import org.fellesprosjekt.gruppe24.client.listeners.ClientListener;
 import org.fellesprosjekt.gruppe24.common.models.LoginInfo;
 import org.fellesprosjekt.gruppe24.common.models.net.AuthRequest;
@@ -55,7 +56,7 @@ public class LoginController extends ClientController {
     public void handleLogin(){
         System.out.println("Vi er nå logget inn");
         ClientController controller = getApplication()
-                .setScene(getStage(), "/layout/Kalender.fxml");
+                .setScene(getStage(), Layout.Calendar);
     }
 
     public void handleRejectedLogin(Response res){

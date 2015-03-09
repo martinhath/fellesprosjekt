@@ -68,9 +68,10 @@ public class AuthController extends ServerController{
 
         res.type = Response.Type.OK;
         res.payload = user;
+
+        logger.info("User " + connection.getUser() + " logged in.");
+
         connection.sendTCP(res);
-        Logger.getLogger(getClass().getName()).log(
-                Level.INFO, "Login success.");
         return true;
     }
 
@@ -84,6 +85,7 @@ public class AuthController extends ServerController{
 
         // Trenger vi å ha med user payloaden?
         Response res = new Response(Response.Type.OK, user);
+        logger.info("User " + connection.getUser() + " logged out.");
         connection.setUser(null);
         connection.sendTCP(res);
         return true;

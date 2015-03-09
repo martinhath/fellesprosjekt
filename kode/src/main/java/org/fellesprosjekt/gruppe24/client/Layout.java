@@ -8,4 +8,9 @@ public class Layout {
 
     public static final String Login = "/layout/Login.fxml";
 
+    public static final String Calendar = "/layout/Kalender.fxml";
+
+    public static final String NewMeeting = "/layout/nyttmøte.fxml";
+
+
 }

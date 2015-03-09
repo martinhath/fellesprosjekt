@@ -3,6 +3,7 @@ package org.fellesprosjekt.gruppe24.client.controllers;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import org.fellesprosjekt.gruppe24.client.Layout;
 import org.fellesprosjekt.gruppe24.common.models.Entity;
 import org.fellesprosjekt.gruppe24.common.models.LoginInfo;
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
@@ -116,26 +117,20 @@ public class InvitationController extends ClientController {
     
     public void handleOK(){
         System.out.println("Svaret har sparats");
-        getApplication().setScene(getStage(), "/layout/Kalender.fxml");
+        getApplication().setScene(getStage(), Layout.Calendar);
     }
     
     public void handleRejectedOK(){
         System.out.println("Välj en knapp");
     }
-    
-    
+
     //avbryt och gå tillbaka till kalenderview
     public void pressAvbrytButton(ActionEvent e) {
-        getApplication().setScene(getStage(), "/layout/Kalender.fxml");
+        getApplication().setScene(getStage(), Layout.Calendar);
     }
-    
+
     //skjul invitationen från notification?
     public void pressSkjulButton(ActionEvent e) {
     	
     }
-    
-    
-    
-    
-
 }
