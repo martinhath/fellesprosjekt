@@ -80,6 +80,10 @@ public final class DatabaseManager {
         return null;
     }
 
+    /**
+     * @param ps the PreparedStatement to execute
+     * @return an integer representing the key added to the database row if inserted
+     */
     public static int executePS(PreparedStatement ps) {
         try {
             ps.execute();
@@ -183,7 +187,8 @@ public final class DatabaseManager {
      * @param query
      * @return a HashMap<String, String> with the column labels as keys.
      */
-    public static HashMap<String, String> getRow(String query) {
+    /*
+    public static HashMap<String, String> getRow(String query) throws SQLException {
         HashMap<String, String> result = new HashMap<String, String>();
         ResultSet rs = readQuery(query);
         try {
@@ -195,6 +200,7 @@ public final class DatabaseManager {
             }
         } catch (SQLException ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
+            throw ex;
         } finally {
             try {
                 rs.getStatement().getConnection().close();
@@ -203,6 +209,24 @@ public final class DatabaseManager {
             }
         }
         return result;
+    }
+    */
+    public static HashMap<String, String> getRow(String query) throws SQLException {
+        HashMap<String, String> result = new HashMap<String, String>();
+        ResultSet rs = readQuery(query);
+        if (rs.next()) {
+            ResultSetMetaData rsmd = rs.getMetaData();
+            for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+                result.put(rsmd.getColumnLabel(i), rs.getString(i));
+            }
+        }
+        try {
+            rs.getStatement().getConnection().close();
+        } catch (Exception ex) {
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+        }
+        return result;
+        //blir connection lukket nå?
     }
 
     /**
@@ -227,6 +251,12 @@ public final class DatabaseManager {
             }
         } catch (SQLException ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
+        } finally {
+            try {
+                rs.getStatement().getConnection().close();
+            } catch (Exception ex) {
+                lgr.log(Level.SEVERE, ex.getMessage(), ex);
+            }
         }
         return result;
     }
@@ -238,6 +268,7 @@ public final class DatabaseManager {
      * @param timestamp string of a timestamp like SQL DateTime
      * @return LocalDateTime object
      */
+
     public static LocalDateTime stringToDateTime(String timestamp) {
         try {
             return java.sql.Timestamp.valueOf(timestamp).toLocalDateTime();
@@ -250,10 +281,9 @@ public final class DatabaseManager {
 
     // TODO virker ikke, gir bare 0 nå
     public static int getAutoIncrement(String table) {
+        ResultSet rs = readQuery(String.format("SELECT last_insert_id() AS last_id " +
+                "FROM %s;", table));
         try {
-            ResultSet rs = readQuery(String.format(
-                    "SELECT last_insert_id() AS last_id " +
-                            "FROM %s;", table));
             if (rs.next()) {
                 lgr.log(Level.INFO, String.format("Next increment id for %s is %d", table, rs.getInt("last_id")));
                 return rs.getInt("last_id");
@@ -263,14 +293,28 @@ public final class DatabaseManager {
         } catch (Exception ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
             return -1;
+        } finally {
+            try {
+                rs.getStatement().getConnection().close();
+            } catch (Exception ex) {
+                lgr.log(Level.SEVERE, ex.getMessage(), ex);
+            }
         }
     }
 
+    /**
+     * Updates one field in a table that can be represented by a String
+     *
+     * @param id
+     * @param field
+     * @param table
+     * @param newValue
+     * @return
+     */
     public static boolean updateField(int id, String field, String table, String newValue) {
         try {
-
             PreparedStatement ps = getPreparedStatement(String.format(
-                            "UPDATE %s " +
+                    "UPDATE %s " +
                             "SET %s = ? " +
                             "WHERE %sid=?", table, field, table));
             ps.setString(1, newValue);
@@ -283,4 +327,92 @@ public final class DatabaseManager {
         }
 
     }
+
+    /**
+     * Updates one field in a table that can be represented by an Integer
+     *
+     * @param id
+     * @param field
+     * @param table
+     * @param newValue
+     * @return
+     */
+    public static boolean updateField(int id, String field, String table, int newValue) {
+        try {
+            PreparedStatement ps = getPreparedStatement(String.format(
+                    "UPDATE %s " +
+                            "SET %s = ? " +
+                            "WHERE %sid=?", table, field, table));
+            ps.setInt(1, newValue);
+            ps.setInt(2, id);
+            executePS(ps);
+            return true;
+        } catch (Exception ex) {
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+            return false;
+        }
+    }
+
+    /**
+     * Updates one field in a table that can be represented by a LocalDateTime
+     *
+     * @param id
+     * @param field
+     * @param table
+     * @param newValue
+     * @return
+     */
+    public static boolean updateField(int id, String field, String table, LocalDateTime newValue) {
+        try {
+            PreparedStatement ps = getPreparedStatement(String.format(
+                    "UPDATE %s " +
+                            "SET %s = ? " +
+                            "WHERE %sid=?", table, field, table));
+            ps.setTimestamp(1, java.sql.Timestamp.valueOf(newValue));
+            ps.setInt(2, id);
+            executePS(ps);
+            return true;
+        } catch (Exception ex) {
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+            return false;
+        }
+    }
+
+    public static boolean updateField(
+            int pk1, int pk2, String table, String field, String foreignTable1, String foreignTable2, boolean newValue)
+            throws SQLException {
+        try {
+            PreparedStatement ps = getPreparedStatement(String.format(
+                    "UPDATE %s " +
+                            "SET %s = ? " +
+                            "WHERE %s_%sid=? " +
+                            "AND %s_%sid=?", table, field, foreignTable1, foreignTable1, foreignTable2, foreignTable2));
+            ps.setBoolean(1, newValue);
+            ps.setInt(2, pk1);
+            ps.setInt(3, pk2);
+            executePS(ps);
+            return true;
+        } catch (Exception ex) {
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+            return false;
+        }
+    }
+
+    public static void deleteRow(String table, int id) throws SQLException {
+        String query = String.format("DELETE FROM %s WHERE %sid=?", table, table);
+        PreparedStatement ps = getPreparedStatement(query);
+        ps.setInt(1, id);
+        executePS(ps);
+    }
+
+    public static void deleteRow(
+            String table, String foreignTable1, String foreignTable2, int fk1, int fk2) throws SQLException {
+        String query = String.format("DELETE FROM %s WHERE %s_%sid=? AND %s_%sid=?",
+                table, foreignTable1, foreignTable1, foreignTable2, foreignTable2);
+        PreparedStatement ps = getPreparedStatement(query);
+        ps.setInt(1, fk1);
+        ps.setInt(2, fk2);
+        executePS(ps);
+    }
+
 }
