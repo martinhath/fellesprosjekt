@@ -5,10 +5,13 @@ import com.esotericsoftware.kryonet.Connection;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import org.fellesprosjekt.gruppe24.client.Layout;
 import org.fellesprosjekt.gruppe24.client.listeners.ClientListener;
 import org.fellesprosjekt.gruppe24.common.models.LoginInfo;
@@ -26,6 +29,12 @@ public class LoginController extends ClientController {
     private Label status_txt;
 
     @FXML
+    public void keyPressed(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER)
+            loginClick(null);
+    }
+
+    @FXML
     public void loginClick(ActionEvent e){
         String username = usernameField.getText().trim();
         String password = passwordField.getText();
@@ -41,13 +50,13 @@ public class LoginController extends ClientController {
         client.addListener(new ClientListener() {
             @Override
             public void receivedResponse(Connection conn, Response res) {
-            	Platform.runLater(() -> {
-            		if (res.type == Response.Type.OK) {
-            			handleLogin();
-            		} else {
-            			handleRejectedLogin(res);
-            		}
-            	});
+                Platform.runLater(() -> {
+                    if (res.type == Response.Type.OK) {
+                        handleLogin();
+                    } else {
+                        handleRejectedLogin(res);
+                    }
+                });
                 client.removeListener(this);
             }
         });
@@ -64,5 +73,4 @@ public class LoginController extends ClientController {
     	System.err.println(res.payload);
         status_txt.setText((String) res.payload);
     }
-
 }

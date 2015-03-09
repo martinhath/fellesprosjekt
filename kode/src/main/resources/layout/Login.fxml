@@ -9,7 +9,7 @@
    <children>
       <Pane prefHeight="200.0" prefWidth="353.0">
          <children>
-            <TextField fx:id="usernameField" layoutX="160.0" layoutY="76.0" />
+            <TextField onKeyPressed="#keyPressed" fx:id="usernameField" layoutX="160.0" layoutY="76.0" />
             <Label layoutX="43.0" layoutY="76.0" prefHeight="26.0" prefWidth="92.0" text="Brukernavn:" />
             <Label layoutX="43.0" layoutY="113.0" prefHeight="16.0" prefWidth="112.0" text="Passord:" />
             <Label layoutX="154.0" layoutY="31.0" text="Login">
@@ -17,10 +17,10 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <PasswordField fx:id="passwordField" layoutX="160.0" layoutY="108.0" />
+            <PasswordField onKeyPressed="#keyPressed" fx:id="passwordField" layoutX="160.0" layoutY="108.0" />
             <Button layoutX="286.0" layoutY="147.0" mnemonicParsing="false" text="OK"
                     onAction="#loginClick" />
-            <Label layoutX="43.0" layoutY="147.0" prefHeight="16.0" textFill="#FF0000" prefWidth="200.0" text="" fx:id="status_txt" />
+            <Label layoutX="43.0" layoutY="147.0" prefHeight="16.0" textFill="#CC0000" prefWidth="200.0" text="" fx:id="status_txt" />
          </children>
       </Pane>
    </children>
