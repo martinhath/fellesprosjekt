@@ -248,7 +248,7 @@ public final class DatabaseManager {
         }
     }
 
-    // TODO virker ikke, gir bare 0 nå
+    @Deprecated
     public static int getLastId(String table) {
         try {
             ResultSet rs = readQuery(String.format(
