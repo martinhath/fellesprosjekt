@@ -100,7 +100,7 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
                 UserDatabaseHandler.GetInstance().get(ownerId));
     }
 
-    private Meeting generateMeeting(HashMap<String, String> info) {
+    public Meeting generateMeeting(HashMap<String, String> info) {
         try {
             lgr.log(Level.INFO, "Generating meeting object based on: " + info.toString());
             Meeting meeting = new Meeting(
@@ -120,10 +120,6 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
             return null;
         }
-    }
-
-    public int getNextId() {
-        return 1; // TODO actually ask the database for next id
     }
 
     public Meeting get(int id) {

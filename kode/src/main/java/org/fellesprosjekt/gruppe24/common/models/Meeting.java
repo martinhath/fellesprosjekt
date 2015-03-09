@@ -153,35 +153,10 @@ public class Meeting {
 		return "Meeting{" +
 				"id=" + id +
 				", name='" + name + '\'' +
-				", description='" + description + '\'' +
-				", room=" + room +
 				", from=" + from +
 				", to=" + to +
-				", participants=" + participants +
 				", owner=" + owner +
 				", group=" + group +
-				", location='" + location + '\'' +
 				'}';
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-
-		Meeting meeting = (Meeting) o;
-
-		if (id != meeting.id) return false;
-		if (description != null ? !description.equals(meeting.description) : meeting.description != null) return false;
-		if (!from.equals(meeting.from)) return false;
-		if (group != null ? !group.equals(meeting.group) : meeting.group != null) return false;
-		if (location != null ? !location.equals(meeting.location) : meeting.location != null) return false;
-		if (!name.equals(meeting.name)) return false;
-		if (!owner.equals(meeting.owner)) return false;
-		if (!participants.equals(meeting.participants)) return false;
-		if (room != null ? !room.equals(meeting.room) : meeting.room != null) return false;
-		if (!to.equals(meeting.to)) return false;
-
-		return true;
 	}
 }

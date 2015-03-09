@@ -38,5 +38,13 @@ public class MeetingNotification extends Notification {
 	public void setAlarmTime(LocalTime at) {
 		this.alarmTime = at;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "MeetingNotification{" +
+				"hide=" + hide +
+				", alarmTime=" + alarmTime +
+				", meeting=" + meeting +
+				'}';
+	}
 }
