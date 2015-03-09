@@ -72,6 +72,6 @@ public class UserDatabaseHandlerTest extends TestCase {
         User user = UserDatabaseHandler.GetInstance().getAll().get(0);
         Meeting meeting = MeetingDatabaseHandler.GetInstance().getAll().get(0);
 
-        UserDatabaseHandler.GetInstance().confirmMeeting(user, meeting);
+        UserDatabaseHandler.GetInstance().setMeetingConfirmation(user, meeting, true);
     }
 }

@@ -161,7 +161,6 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
             return result;
         }
     }
-
     private List<Integer> selectMeetingIDsOfUser(int userid) throws SQLException {
         List<Integer> result = new ArrayList<>();
         String query = String.format("SELECT Meeting_meetingid FROM User_invited_to_meeting WHERE User_userid=%d", userid);
@@ -172,11 +171,11 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
         return result;
     }
 
-    public void confirmMeeting(User user, Meeting meeting) {
+    public void setMeetingConfirmation(User user, Meeting meeting, boolean confirm) {
         try {
             lgr.log(Level.INFO, String.format("Confirming User %s coming to Meeting %s", user.getUsername(), meeting.getName()));
             DatabaseManager.updateField(
-                    user.getId(), meeting.getId(), "User_invited_to_meeting", "confirmed", "user", "meeting", true);
+                    user.getId(), meeting.getId(), "User_invited_to_meeting", "confirmed", "user", "meeting", confirm);
         } catch (SQLException ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
         }

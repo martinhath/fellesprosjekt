@@ -1,6 +1,7 @@
 package org.fellesprosjekt.gruppe24.database;
 
 import junit.framework.TestCase;
+import org.fellesprosjekt.gruppe24.common.models.Entity;
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
 import org.fellesprosjekt.gruppe24.common.models.Room;
 import org.fellesprosjekt.gruppe24.common.models.User;
@@ -13,39 +14,53 @@ import java.util.List;
 
 
 public class MeetingDatabaseHandlerTest extends TestCase {
+    User user;
+    Room room;
     public void setUp() {
-        User user = UserDatabaseHandler.GetInstance().getAll().get(0);
-        Meeting meeting = MeetingDatabaseHandler.GetInstance().getAll().get(0);
+        user = UserDatabaseHandler.GetInstance().getAll().get(0);
+        Meeting meeting = MeetingDatabaseHandler.GetInstance().insert(new Meeting(
+                "Fredagspils",
+                "Som vanlig ses vi på fredag.",
+                null,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusHours(2),
+                "Freddy`s bar",
+                new ArrayList<Entity>(),
+                user));
         MeetingDatabaseHandler.GetInstance().addUserToMeeting(meeting, user);
+        room = RoomDatabaseHandler.GetInstance().insert(new Room("Mororommet", 8, true));
     }
     public void tearDown() {
         User user = UserDatabaseHandler.GetInstance().getAll().get(0);
         Meeting meeting = MeetingDatabaseHandler.GetInstance().getAll().get(0);
         MeetingDatabaseHandler.GetInstance().removeUserFromMeeting(meeting, user);
+        MeetingDatabaseHandler.GetInstance().delete(meeting);
     }
     
     @Test(expected = java.sql.SQLException.class)
     public void testCanInsertAndDeleteMeeting() {
-        Meeting meeting = new Meeting(
+        Meeting meeting = MeetingDatabaseHandler.GetInstance().insert(
+                new Meeting(
                 "pressekonferanse",
                 "",
-                RoomDatabaseHandler.GetInstance().get(1),
+                room,
                 LocalDateTime.now(),
                 LocalDateTime.now().plusHours(2),
                 "P15",
                 new ArrayList<>(),
-                new User());
+                user));
         Meeting meeting2 = MeetingDatabaseHandler.GetInstance().get(meeting.getId());
-        //TestCase.assertEquals(meeting.toString(), meeting2.toString());
         TestCase.assertEquals(meeting.getId(), meeting2.getId());
 
         MeetingDatabaseHandler.GetInstance().delete(meeting);
+        TestCase.assertNull(MeetingDatabaseHandler.GetInstance().get(meeting.getId()));
         MeetingDatabaseHandler.GetInstance().delete(meeting);
     }
 
     public void testCanRetrieveMeetingFromDB() {
         List<Meeting> meetingList = MeetingDatabaseHandler.GetInstance().getAll();
         Meeting meeting = meetingList.get(0);
+        System.out.println("Found meeting: " + meeting);
         TestCase.assertNotNull(meeting);
         TestCase.assertNotNull(meeting.getOwner());
         TestCase.assertNotNull(meeting.getName());

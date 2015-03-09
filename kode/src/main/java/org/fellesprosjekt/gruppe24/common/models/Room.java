@@ -54,6 +54,10 @@ public class Room implements Comparable<Room> {
 		return accessible;
 	}
 
+	public void setAccessible(boolean accessible) {
+		this.accessible = accessible;
+	}
+
 	public boolean equals(Room other) {
 		return (
 				this.getId() == other.getId() &&

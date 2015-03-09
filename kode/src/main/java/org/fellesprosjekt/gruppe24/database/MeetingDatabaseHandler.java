@@ -6,10 +6,7 @@ import org.fellesprosjekt.gruppe24.common.models.Room;
 import org.fellesprosjekt.gruppe24.common.models.User;
 
 import javax.xml.crypto.Data;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,14 +47,20 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
      */
     public Meeting insert(Meeting meeting) {
         try {
+            int roomId;
+            if (meeting.getRoom() == null) roomId = 0;
+            else roomId = meeting.getRoom().getId();
+            int groupId;
+            if (meeting.getGroup() == null) groupId = 0;
+            else groupId = meeting.getGroup().getId();
             return insert(
                     meeting.getName(),
                     meeting.getDescription(),
                     meeting.getFrom(),
                     meeting.getTo(),
-                    meeting.getRoom().getId(),
+                    roomId,
                     meeting.getOwner().getId(),
-                    meeting.getGroup().getId(),
+                    groupId,
                     meeting.getLocation());
         } catch (SQLException ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
@@ -82,9 +85,11 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
         ps.setString(2, description);
         ps.setTimestamp(3, java.sql.Timestamp.valueOf(from));
         ps.setTimestamp(4, java.sql.Timestamp.valueOf(to));
-        ps.setInt(5, roomId);
+        if (roomId == 0) ps.setNull(5, roomId);
+        else ps.setInt(5, roomId);
         ps.setInt(6, ownerId);
-        ps.setInt(7, groupId);
+        if (groupId == 0) ps.setNull(7, groupId);
+        else ps.setInt(7, groupId);
         ps.setString(8, location);
 
         int newId = DatabaseManager.executePS(ps);
@@ -103,11 +108,14 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
     public Meeting generateMeeting(HashMap<String, String> info) {
         try {
             lgr.log(Level.INFO, "Generating meeting object based on: " + info.toString());
+            lgr.log(Level.INFO, "Room in this meeting: " + info.get("Room_roomid") + info.get("Room_roomid"));
+            Room room = info.get("Room_roomid") == null ?
+                    null : RoomDatabaseHandler.GetInstance().get(Integer.parseInt(info.get("Room_roomid")));
             Meeting meeting = new Meeting(
                     Integer.parseInt(info.get("meetingid")),
                     info.get("name"),
                     info.get("description"),
-                    RoomDatabaseHandler.GetInstance().get(Integer.parseInt(info.get("Room_roomid"))),
+                    room,
                     DatabaseManager.stringToDateTime(info.get("start_time")),
                     DatabaseManager.stringToDateTime(info.get("end_time")),
                     info.get("location"),
@@ -117,7 +125,7 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
             lgr.log(Level.INFO, "Meeting successfully generated");
             return meeting;
         } catch (Exception ex) {
-            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+            lgr.log(Level.INFO, ex.getMessage(), ex);
             return null;
         }
     }

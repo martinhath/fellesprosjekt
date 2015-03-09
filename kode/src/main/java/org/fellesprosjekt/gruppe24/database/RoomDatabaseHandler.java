@@ -76,8 +76,8 @@ public final class RoomDatabaseHandler extends DatabaseHandler<Room> {
             );
             lgr.log(Level.INFO, "Room successfully generated");
             return room;
-        } catch (Exception ex) {
-            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+        } catch (NumberFormatException ex) {
+            lgr.log(Level.INFO, "Could not generate room. Probably is null.");
             return null;
         }
     }
@@ -92,7 +92,7 @@ public final class RoomDatabaseHandler extends DatabaseHandler<Room> {
             HashMap<String, String> info = DatabaseManager.getRow(String.format("SELECT * FROM Room WHERE roomid=%d", id));
             lgr.log(Level.INFO, "Trying to generate room from: " + info.toString());
             return generateRoom(info);
-        } catch (Exception ex) {
+        } catch (NumberFormatException|SQLException ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
             return null;
         }
@@ -109,8 +109,22 @@ public final class RoomDatabaseHandler extends DatabaseHandler<Room> {
     }
 
     public boolean update(Room room) {
-        // TODO
-        return true;
+        String query = String.format(
+                "UPDATE Room (capacity, room_num, accessible) VALUES (?, ?, ?) WHERE roomid=?;");
+                //room.isAccessible() ? 1 : 0);
+        PreparedStatement ps = DatabaseManager.getPreparedStatement(query);
+        lgr.log(Level.INFO, String.format("Updating %s", room));
+        try {
+            ps.setInt(1, room.getCapacity());
+            ps.setString(2, room.getName());
+            ps.setBoolean(3, room.isAccessible()); // TODO Her går det ikke å sette boolean ...
+            ps.setInt(4, room.getId());
+            DatabaseManager.executePS(ps);
+            return true;
+        } catch (SQLException ex) {
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+            return false;
+        }
     }
 
 
