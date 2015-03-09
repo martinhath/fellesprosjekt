@@ -1,4 +1,4 @@
 package org.fellesprosjekt.gruppe24.common.models.net;
 
-public class MeetingRequest {
+public class MeetingRequest extends Request{
 }
