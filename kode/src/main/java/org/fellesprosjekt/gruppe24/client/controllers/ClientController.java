@@ -5,14 +5,19 @@ import java.util.ResourceBundle;
 
 import javafx.fxml.Initializable;
 
+import javafx.stage.Stage;
 import org.fellesprosjekt.gruppe24.client.CalendarApplication;
 import org.fellesprosjekt.gruppe24.client.CalendarClient;
 
 import com.esotericsoftware.kryonet.Client;
 
 public abstract class ClientController implements Initializable{
+
+    private String path;
     private CalendarApplication application;
     private Client client;
+
+    private Stage stage;
     
     @Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -22,6 +27,23 @@ public abstract class ClientController implements Initializable{
     public Client getClient(){
     	return client;
     }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public Stage getStage() {
+        return stage;
+    }
+
+    public void setStage(Stage s) {
+        stage = s;
+    }
+
 
 	public void setApplication(CalendarApplication application){
         this.application = application;

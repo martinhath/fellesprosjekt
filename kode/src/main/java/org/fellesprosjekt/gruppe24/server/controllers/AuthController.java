@@ -2,6 +2,7 @@ package org.fellesprosjekt.gruppe24.server.controllers;
 
 import org.fellesprosjekt.gruppe24.common.models.LoginInfo;
 import org.fellesprosjekt.gruppe24.common.models.User;
+import org.fellesprosjekt.gruppe24.common.models.net.AuthRequest;
 import org.fellesprosjekt.gruppe24.common.models.net.Request;
 import org.fellesprosjekt.gruppe24.common.models.net.Response;
 import org.fellesprosjekt.gruppe24.database.UserDatabaseHandler;
@@ -19,17 +20,15 @@ public class AuthController extends ServerController{
     }
 
     @Override
-    public void post(Request req) {
+    public void post(Request r) {
+        AuthRequest req = (AuthRequest) r;
         logger.log(Level.INFO, "POST User");
         LoginInfo loginInfo = (LoginInfo) req.payload;
 
-        if (loginInfo == null) {
-            logout();
-        } else if (connection.getUser() != null) {
-            connection.sendTCP(
-                    Response.GetFailResponse("You are already logged in"));
-        } else {
+        if (req.action == AuthRequest.Action.LOGIN) {
             login(loginInfo);
+        } else if (req.action == AuthRequest.Action.LOGOUT) {
+            logout();
         }
     }
 
@@ -51,6 +50,9 @@ public class AuthController extends ServerController{
     private boolean login(LoginInfo loginInfo){
         Logger.getLogger(getClass().getName()).log(
                 Level.INFO, "User login: " + loginInfo);
+        if (connection.getUser() != null) {
+            connection.sendTCP(Response.GetFailResponse("You are already logged in"));
+        }
         Response res = new Response();
         User user = UserDatabaseHandler.authenticate(
                 loginInfo.getUsername(), loginInfo.getPassword());
@@ -66,22 +68,24 @@ public class AuthController extends ServerController{
 
         res.type = Response.Type.OK;
         res.payload = user;
+
+        logger.info("User " + connection.getUser() + " logged in.");
+
         connection.sendTCP(res);
-        Logger.getLogger(getClass().getName()).log(
-                Level.INFO, "Login success.");
         return true;
     }
 
     private boolean logout() {
         if (connection.getUser() == null ) {
             connection.sendTCP(
-                    Response.GetFailResponse("You are already logged in"));
+                    Response.GetFailResponse("You are not logged in"));
             return false;
         }
         User user = connection.getUser();
 
         // Trenger vi å ha med user payloaden?
         Response res = new Response(Response.Type.OK, user);
+        logger.info("User " + connection.getUser() + " logged out.");
         connection.setUser(null);
         connection.sendTCP(res);
         return true;
