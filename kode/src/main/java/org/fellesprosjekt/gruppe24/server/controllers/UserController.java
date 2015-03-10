@@ -23,10 +23,11 @@ public class UserController extends ServerController{
                     "Wrong payload: not User"));
             return;
         }
+        UserDatabaseHandler handler = UserDatabaseHandler.GetInstance();
         Response res = new Response();
         User user = (User) req.payload;
-        UserDatabaseHandler.updateUser(user);
-        user = UserDatabaseHandler.getUserFromUsername(user.getUsername());
+        handler.insert(user);
+        user = handler.getUserFromUsername(user.getUsername());
         if (user == null) {
             res.type = Response.Type.FAIL;
             res.payload = "Something went wrong.";
@@ -39,16 +40,17 @@ public class UserController extends ServerController{
 
     @Override
     public void get(Request req){
+        UserDatabaseHandler handler = UserDatabaseHandler.GetInstance();
         Response res = new Response();
         if (req.payload instanceof Integer) {
             // payload er Id
             Integer id = (Integer) req.payload;
-            res.payload = UserDatabaseHandler.getById(id);
+            res.payload = handler.get(id);
             res.type = Response.Type.OK;
         } else if (req.payload instanceof String) {
             // payload er brukernavn
             String username = (String) req.payload;
-            res.payload = UserDatabaseHandler.getUserFromUsername(username);
+            res.payload = handler.getUserFromUsername(username);
             res.type = Response.Type.OK;
         } else {
             res.type = Response.Type.FAIL;
@@ -59,9 +61,10 @@ public class UserController extends ServerController{
 
     @Override
     public void list(Request req) {
+        UserDatabaseHandler handler = UserDatabaseHandler.GetInstance();
         Response res = new Response();
         res.type = Response.Type.OK;
-        List<User> users = UserDatabaseHandler.getAllUsers();
+        List<User> users = handler.getAll();
         res.payload = users;
         connection.sendTCP(res);
         logger.info("sendt");
