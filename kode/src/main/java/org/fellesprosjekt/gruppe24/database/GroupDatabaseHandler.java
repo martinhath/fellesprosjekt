@@ -15,7 +15,7 @@ import org.fellesprosjekt.gruppe24.common.models.User;
 
 public class GroupDatabaseHandler extends DatabaseHandler<Group> {
 
-    private static Logger lgr = Logger.getLogger(MeetingDatabaseHandler.class.getName());
+    private static Logger lgr = Logger.getLogger(GroupDatabaseHandler.class.getName());
     private static GroupDatabaseHandler instance;
 
     public static GroupDatabaseHandler GetInstance() {
@@ -64,7 +64,7 @@ public class GroupDatabaseHandler extends DatabaseHandler<Group> {
 
     public List<GroupNotification> getAllGroupInvites(User user) {
         List<GroupNotification> invites = new ArrayList<GroupNotification>();
-        String query = String.format("SELECT ughu.*, ug.name, ug.owner_id FROM User_group_has_User AS ughu JOIN User_group AS ug "
+        String query = String.format("SELECT ughu.*, ug.groupid, ug.name, ug.owner_id FROM User_group_has_User AS ughu JOIN User_group AS ug "
                 + "ON ug.groupid = ughu.User_group_groupid WHERE ughu.User_userid = %s;", user.getId());
         ArrayList<HashMap<String, String>> result = DatabaseManager.getList(query);
         for(HashMap<String, String> row : result) {
@@ -80,22 +80,35 @@ public class GroupDatabaseHandler extends DatabaseHandler<Group> {
 		DatabaseManager.updateQuery(query);
 	}
 	
-	public void addUserToGroup(User user, Group group, String message) {
+	public void addUserToGroup(User user, Group group, String message, boolean owner) {
 		try {
 			lgr.log(Level.INFO, String.format("Trying to add User (userid: %s) to User_group (groupid: %s)", 
 					user.getId(), group.getId())); 
-			String query = "INSERT INTO User_group_has_User (User_userid, User_group_groupid, notification_message)"
-					+ " VALUES (?, ?, ?);";
+			String query = "INSERT INTO User_group_has_User (User_userid, User_group_groupid, "
+					+ "notification_message, notification_read, confirmed)"
+					+ " VALUES (?, ?, ?, ?, ?);";
 			PreparedStatement ps = DatabaseManager.getPreparedStatement(query);
-			if(message == null || message.equalsIgnoreCase(""))
-				message = String.format("Du har blitt invitert til gruppen '%s'", group.getName());
 			ps.setInt(1, user.getId());
 			ps.setInt(2, group.getId());
+			if(owner) {
+				ps.setBoolean(4, true);
+				ps.setBoolean(5, true);
+				message = "Du lagde denne gruppen.";
+			} else {
+				ps.setBoolean(4, false);
+				ps.setBoolean(5, false);
+				if(message == null || message.equalsIgnoreCase(""))
+					message = String.format("Du har blitt invitert til gruppen '%s'.", group.getName());
+			}
 			ps.setString(3, message);
 			DatabaseManager.executePS(ps);
 		} catch (Exception ex) {
 			lgr.log(Level.SEVERE, ex.getMessage(), ex);
 		}
+	}
+	
+	public void addUserToGroup(User user, Group group, String message) {
+		addUserToGroup(user, group, message, false);
 	}
 	
 	public void removeUserFromGroup(int userid, int groupid) {
