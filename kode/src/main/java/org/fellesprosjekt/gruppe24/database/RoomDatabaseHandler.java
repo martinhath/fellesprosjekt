@@ -72,7 +72,7 @@ public final class RoomDatabaseHandler extends DatabaseHandler<Room> {
                     Integer.parseInt(info.get("roomid")),
                     info.get("room_num"),
                     Integer.parseInt(info.get("capacity")),
-                    Integer.parseInt(info.get("accessible")) == 1
+                    Integer.parseInt(info.get("available")) == 1
             );
             lgr.log(Level.INFO, "Room successfully generated");
             return room;
@@ -110,16 +110,19 @@ public final class RoomDatabaseHandler extends DatabaseHandler<Room> {
 
     public boolean update(Room room) {
         String query = String.format(
-                "UPDATE Room (capacity, room_num, accessible) VALUES (?, ?, ?) WHERE roomid=?;");
-                //room.isAccessible() ? 1 : 0);
+                "UPDATE Room SET capacity = ?, room_num = ?, available = ? WHERE roomid=?;");
         PreparedStatement ps = DatabaseManager.getPreparedStatement(query);
         lgr.log(Level.INFO, String.format("Updating %s", room));
+        int accessible = room.isAccessible() ? 1 : 0;
         try {
             ps.setInt(1, room.getCapacity());
             ps.setString(2, room.getName());
-            ps.setBoolean(3, room.isAccessible()); // TODO Her går det ikke å sette boolean ...
+            ps.setBoolean(3, room.isAccessible());
             ps.setInt(4, room.getId());
             DatabaseManager.executePS(ps);
+            System.out.println(accessible);
+            //DatabaseManager.updateQuery(
+            //        String.format("UPDATE Room SET accessible = 0 WHERE roomid = %s;", room.getId()));
             return true;
         } catch (SQLException ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
