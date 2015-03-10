@@ -21,6 +21,8 @@ public class Meeting {
 	private Group group;
 	private String location;
 
+	public Meeting() {}
+
 	/**
 	 * Creates a Meeting without an ID. This object is only used as an intermediary before inserting it into the
 	 * database where you will get a full-fletched Meeting object with its own unique ID.
