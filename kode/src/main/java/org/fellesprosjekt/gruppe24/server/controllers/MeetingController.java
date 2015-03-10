@@ -29,8 +29,7 @@ public class MeetingController extends ServerController {
         }
 
         MeetingDatabaseHandler handler = MeetingDatabaseHandler.GetInstance();
-        handler.insert(meeting);
-        // Håndtere invitasjoner mm.
+        Meeting resMeeting = handler.insert(meeting);
         for (Entity participant : meeting.getParticipants()) {
             if (participant.getClass() == Group.class) {
                 // TODO add group to meeting
@@ -44,6 +43,7 @@ public class MeetingController extends ServerController {
         }
         Response res = new Response();
         res.type = Response.Type.OK;
+        res.payload = resMeeting;
         connection.sendTCP(res);
     }
 
