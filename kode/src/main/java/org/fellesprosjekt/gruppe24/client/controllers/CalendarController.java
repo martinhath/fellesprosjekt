@@ -13,10 +13,8 @@ import org.fellesprosjekt.gruppe24.common.models.net.Request;
 import org.fellesprosjekt.gruppe24.common.models.net.Response;
 
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
@@ -45,12 +43,7 @@ public class CalendarController extends ClientController {
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
         date = LocalDateTime.now();
-        init();
-    }
-
-    private void init() {
-        int i = date.getDayOfWeek().getValue();
-        setCalendarLabels(date.minusDays(i-1));
+        setCalendarLabels(date);
     }
 
     /**
@@ -58,6 +51,8 @@ public class CalendarController extends ClientController {
      * @param date Datoen som uken begynner på.
      */
     private void setCalendarLabels(LocalDateTime date) {
+        int i = date.getDayOfWeek().getValue();
+        date = date.minusDays(i-1);
         labelMon.setText(date.plusDays(0).format(dayformat));
         labelTue.setText(date.plusDays(1).format(dayformat));
         labelWed.setText(date.plusDays(2).format(dayformat));
@@ -98,9 +93,9 @@ public class CalendarController extends ClientController {
             @Override
             public void receivedResponse(Connection conn, Response res) {
                 if (res.type == Response.Type.OK){
-                    Platform.runLater(() -> {
-                        getApplication().setScene(getStage(), Layout.Login);
-                    });
+                    Platform.runLater(() ->
+                        getApplication().setScene(getStage(), Layout.Login)
+                    );
                 } else {
                     logger.warning((String) res.payload);
                 }
