@@ -6,6 +6,7 @@ import com.esotericsoftware.kryonet.Server;
 import org.fellesprosjekt.gruppe24.common.KryoUtils;
 import org.fellesprosjekt.gruppe24.server.listeners.InvitationListener;
 import org.fellesprosjekt.gruppe24.server.listeners.AuthListener;
+import org.fellesprosjekt.gruppe24.server.listeners.MeetingListener;
 
 import java.io.IOException;
 
@@ -30,6 +31,7 @@ public class CalendarServer {
     public void init(){
         server.addListener(new AuthListener());
         server.addListener(new InvitationListener());
+        server.addListener(new MeetingListener());
     }
 
     public void start() throws IOException {

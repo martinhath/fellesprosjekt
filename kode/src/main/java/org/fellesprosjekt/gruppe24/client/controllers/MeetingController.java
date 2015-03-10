@@ -59,6 +59,8 @@ public class MeetingController extends ClientController {
                 (FocusChangeListener) -> validateFromTime());
         fieldToTime.focusedProperty().addListener(
                 (FocusChangeListener) -> validateToTime());
+
+        meeting = new Meeting();
     }
 
 
@@ -115,6 +117,7 @@ public class MeetingController extends ClientController {
                     return;
                 }
                 getApplication().removeStage(getStage());
+                getClient().removeListener(this);
             }
         });
     }

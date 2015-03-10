@@ -59,6 +59,14 @@ public class CalendarApplication extends Application{
     public void removeStage(Stage stage) {
         stages.remove(stage);
         stage.close();
+        if (stages.size() == 0){
+            calendarClient.stop();
+            try{
+                stop();
+            } catch (Exception e){
+
+            }
+        }
     }
 
     /**
