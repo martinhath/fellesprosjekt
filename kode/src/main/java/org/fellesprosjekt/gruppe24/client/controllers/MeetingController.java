@@ -104,9 +104,7 @@ public class MeetingController extends ClientController {
         if (!validateFields())
             return;
 
-        Request req = new MeetingRequest();
-        req.type = Request.Type.POST;
-        req.payload = meeting;
+        Request req = new MeetingRequest(Request.Type.POST, meeting);
         getClient().sendTCP(req);
         getClient().addListener(new ClientListener() {
             @Override
