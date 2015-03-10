@@ -89,12 +89,13 @@ public class CalendarApplication extends Application{
              * annen tråd enn UI-tråden, må vi ha denne.
              */
             Platform.runLater(() -> {
-                scene = new Scene(root, 800, 600);
+                scene = new Scene(root);
                 if (stage == null){
                     logger.severe("stage was null: " + path);
                     return;
                 }
                 stage.setScene(scene);
+                stage.sizeToScene();
                 stage.show();
             });
         } catch (IOException e) {

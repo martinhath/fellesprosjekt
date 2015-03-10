@@ -9,8 +9,10 @@
    <children>
       <Pane prefHeight="536.0" prefWidth="870.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Button layoutX="252.0" layoutY="87.0" mnemonicParsing="false" text="Forrige" />
-            <Button layoutX="562.0" layoutY="88.0" mnemonicParsing="false" text="Neste" />
+            <Button fx:id="buttonPrev" layoutX="252.0" layoutY="87.0" mnemonicParsing="false" text="Forrige"
+                    onAction="#clickPrevWeek" />
+            <Button fx:id="buttonNext" layoutX="562.0" layoutY="88.0" mnemonicParsing="false" text="Neste"
+                    onAction="#clickNextWeek" />
             <ScrollPane layoutX="59.0" layoutY="193.0" prefHeight="370.0" prefWidth="752.0">
                <content>
                   <GridPane gridLinesVisible="true" prefHeight="656.0" prefWidth="735.0" style="-fx-border-color: #000000;">
@@ -80,19 +82,19 @@
                   </GridPane>
                </content>
             </ScrollPane>
-            <Label layoutX="128.0" layoutY="177.0" text="Mandag" />
-            <Label layoutX="230.0" layoutY="177.0" text="Tirsdag" />
-            <Label layoutX="328.0" layoutY="177.0" text="Onsdag" />
-            <Label layoutX="428.0" layoutY="177.0" text="Torsdag" />
-            <Label layoutX="529.0" layoutY="177.0" text="Fredag" />
-            <Label layoutX="626.0" layoutY="177.0" text="Lørdag" />
-            <Label layoutX="721.0" layoutY="177.0" text="Søndag" />
-            <Label layoutX="371.0" layoutY="28.0" text="Januar">
+            <Label fx:id="labelMon" layoutX="128.0" layoutY="177.0" text="Mandag" />
+            <Label fx:id="labelTue" layoutX="230.0" layoutY="177.0" text="Tirsdag" />
+            <Label fx:id="labelWed" layoutX="328.0" layoutY="177.0" text="Onsdag" />
+            <Label fx:id="labelThu" layoutX="428.0" layoutY="177.0" text="Torsdag" />
+            <Label fx:id="labelFri" layoutX="529.0" layoutY="177.0" text="Fredag" />
+            <Label fx:id="labelSat" layoutX="626.0" layoutY="177.0" text="Lørdag" />
+            <Label fx:id="labelSun" layoutX="721.0" layoutY="177.0" text="Søndag" />
+            <Label fx:id="labelMonth" layoutX="371.0" layoutY="28.0" text="Januar">
                <font>
                   <Font size="41.0" />
                </font>
             </Label>
-            <Label layoutX="411.0" layoutY="89.0" text="Uke 2">
+            <Label fx:id="labelWeek" layoutX="411.0" layoutY="89.0" text="Uke 2">
                <font>
                   <Font size="18.0" />
                </font>
