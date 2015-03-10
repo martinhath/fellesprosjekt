@@ -80,7 +80,7 @@ public class GroupDatabaseHandler extends DatabaseHandler<Group> {
 		DatabaseManager.updateQuery(query);
 	}
 	
-	public void addUserToGroup(User user, Group group, String message, boolean owner) {
+	public void addUserToGroup(User user, Group group, String message) {
 		try {
 			lgr.log(Level.INFO, String.format("Trying to add User (userid: %s) to User_group (groupid: %s)", 
 					user.getId(), group.getId())); 
@@ -90,7 +90,7 @@ public class GroupDatabaseHandler extends DatabaseHandler<Group> {
 			PreparedStatement ps = DatabaseManager.getPreparedStatement(query);
 			ps.setInt(1, user.getId());
 			ps.setInt(2, group.getId());
-			if(owner) {
+			if(user.getId() == group.getOwnerId()) {
 				ps.setBoolean(4, true);
 				ps.setBoolean(5, true);
 				message = "Du lagde denne gruppen.";
@@ -105,10 +105,6 @@ public class GroupDatabaseHandler extends DatabaseHandler<Group> {
 		} catch (Exception ex) {
 			lgr.log(Level.SEVERE, ex.getMessage(), ex);
 		}
-	}
-	
-	public void addUserToGroup(User user, Group group, String message) {
-		addUserToGroup(user, group, message, false);
 	}
 	
 	public void removeUserFromGroup(int userid, int groupid) {
