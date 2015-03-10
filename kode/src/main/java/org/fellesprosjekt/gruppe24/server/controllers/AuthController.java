@@ -54,7 +54,7 @@ public class AuthController extends ServerController{
             connection.sendTCP(Response.GetFailResponse("You are already logged in"));
         }
         Response res = new Response();
-        User user = UserDatabaseHandler.authenticate(
+        User user = UserDatabaseHandler.GetInstance().authenticate(
                 loginInfo.getUsername(), loginInfo.getPassword());
         if (user == null) {
             Logger.getLogger(getClass().getName()).log(
