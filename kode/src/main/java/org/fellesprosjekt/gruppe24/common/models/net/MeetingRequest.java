@@ -1,4 +1,5 @@
 package org.fellesprosjekt.gruppe24.common.models.net;
 
-public class MeetingRequest extends Request{
+public class MeetingRequest extends Request {
+    public enum Entity {USER, GROUP};
 }
