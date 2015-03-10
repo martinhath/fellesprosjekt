@@ -1,37 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.web.*?>
 <?import javafx.scene.text.*?>
-<?import javafx.geometry.*?>
 <?import javafx.scene.layout.*?>
-<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="536.0" prefWidth="870.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="664.0" prefWidth="1027.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="org.fellesprosjekt.gruppe24.client.controllers.CalendarController">
    <children>
       <Pane prefHeight="536.0" prefWidth="870.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Text layoutX="108.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mandag 07.01" />
-            <Text layoutX="206.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tirsdag 08.01" />
-            <Text layoutX="302.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Onsdag 09.01" />
-            <Text layoutX="406.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Torsdag 10.01" />
-            <Text layoutX="503.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fredag 11.01" />
-            <Text layoutX="602.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lørdag 12.01" />
-            <Text layoutX="697.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Søndag 13.01" />
-            <Text layoutX="358.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Januar">
-               <font>
-                  <Font size="36.0" />
-               </font>
-            </Text>
-            <Text layoutX="390.0" layoutY="203.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Uke 2">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Text>
-            <Button layoutX="216.0" layoutY="160.0" mnemonicParsing="false" text="Forrige" />
-            <Button layoutX="555.0" layoutY="160.0" mnemonicParsing="false" text="Neste" />
-            <ScrollPane layoutX="59.0" layoutY="248.0" prefHeight="225.0" prefWidth="752.0">
+            <Button layoutX="252.0" layoutY="87.0" mnemonicParsing="false" text="Forrige" />
+            <Button layoutX="562.0" layoutY="88.0" mnemonicParsing="false" text="Neste" />
+            <ScrollPane layoutX="59.0" layoutY="193.0" prefHeight="370.0" prefWidth="752.0">
                <content>
                   <GridPane gridLinesVisible="true" prefHeight="656.0" prefWidth="735.0" style="-fx-border-color: #000000;">
                     <columnConstraints>
@@ -72,34 +52,68 @@
                     </rowConstraints>
                      <children>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="474.0" prefWidth="751.0" GridPane.columnIndex="2" GridPane.rowIndex="16" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="00.00" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="01.00" GridPane.rowIndex="1" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="02.00" GridPane.rowIndex="2" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="03.00" GridPane.rowIndex="3" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="04.00" GridPane.rowIndex="4" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="05.00" GridPane.rowIndex="5" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="06.00" GridPane.rowIndex="6" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="07.00" GridPane.rowIndex="7" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="08.00" GridPane.rowIndex="8" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="09.00" GridPane.rowIndex="9" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="10.00" GridPane.rowIndex="10" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="11.00" GridPane.rowIndex="11" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="12.00" GridPane.rowIndex="12" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="13.00" GridPane.rowIndex="13" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="14.00" GridPane.rowIndex="14" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="15.00" GridPane.rowIndex="15" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="16.00" GridPane.rowIndex="16" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="17.00" GridPane.rowIndex="17" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="18.00" GridPane.rowIndex="18" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="19.00" GridPane.rowIndex="19" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="20.00" GridPane.rowIndex="20" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="21.00" GridPane.rowIndex="21" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="22.00" GridPane.rowIndex="22" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="23.00" GridPane.rowIndex="23" />
+                        <Label text="00:00" />
+                        <Label text="01:00" GridPane.rowIndex="1" />
+                        <Label text="02:00" GridPane.rowIndex="2" />
+                        <Label text="03:00" GridPane.rowIndex="3" />
+                        <Label text="04:00" GridPane.rowIndex="4" />
+                        <Label text="05:00" GridPane.rowIndex="5" />
+                        <Label text="06:00" GridPane.rowIndex="6" />
+                        <Label text="07:00" GridPane.rowIndex="7" />
+                        <Label text="08:00" GridPane.rowIndex="8" />
+                        <Label text="09:00" GridPane.rowIndex="9" />
+                        <Label text="10:00" GridPane.rowIndex="10" />
+                        <Label text="11:00" GridPane.rowIndex="11" />
+                        <Label text="12:00" GridPane.rowIndex="12" />
+                        <Label text="13:00" GridPane.rowIndex="13" />
+                        <Label text="14:00" GridPane.rowIndex="14" />
+                        <Label text="15:00" GridPane.rowIndex="15" />
+                        <Label text="16:00" GridPane.rowIndex="16" />
+                        <Label text="17:00" GridPane.rowIndex="17" />
+                        <Label text="18:00" GridPane.rowIndex="18" />
+                        <Label text="19:00" GridPane.rowIndex="19" />
+                        <Label text="20:00" GridPane.rowIndex="20" />
+                        <Label text="21:00" GridPane.rowIndex="21" />
+                        <Label text="22:00" GridPane.rowIndex="22" />
+                        <Label text="23:00" GridPane.rowIndex="23" />
                      </children>
                   </GridPane>
                </content>
             </ScrollPane>
+            <Label layoutX="128.0" layoutY="177.0" text="Mandag" />
+            <Label layoutX="230.0" layoutY="177.0" text="Tirsdag" />
+            <Label layoutX="328.0" layoutY="177.0" text="Onsdag" />
+            <Label layoutX="428.0" layoutY="177.0" text="Torsdag" />
+            <Label layoutX="529.0" layoutY="177.0" text="Fredag" />
+            <Label layoutX="626.0" layoutY="177.0" text="Lørdag" />
+            <Label layoutX="721.0" layoutY="177.0" text="Søndag" />
+            <Label layoutX="371.0" layoutY="28.0" text="Januar">
+               <font>
+                  <Font size="41.0" />
+               </font>
+            </Label>
+            <Label layoutX="411.0" layoutY="89.0" text="Uke 2">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Button layoutX="865.0" layoutY="82.0" mnemonicParsing="false" text="Nytt møte"
+                    fx:id="meetingButton" onAction="#newMeeting" >
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Button layoutX="860.0" layoutY="595.0" mnemonicParsing="false" text="Logge ut"
+                    fx:id="logoutButton" onAction="#logout">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Button layoutX="801.0" layoutY="35.0" mnemonicParsing="false" text="Nye meldinger (3)">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
          </children>
       </Pane>
    </children>

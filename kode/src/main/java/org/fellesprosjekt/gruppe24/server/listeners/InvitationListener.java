@@ -2,9 +2,7 @@ package org.fellesprosjekt.gruppe24.server.listeners;
 
 import org.fellesprosjekt.gruppe24.common.models.net.InvitationRequest;
 import org.fellesprosjekt.gruppe24.common.models.net.Request;
-import org.fellesprosjekt.gruppe24.common.models.net.UserRequest;
 import org.fellesprosjekt.gruppe24.server.ServerConnection;
-import org.fellesprosjekt.gruppe24.server.ServerListener;
 import org.fellesprosjekt.gruppe24.server.controllers.InvitationController;
 import org.fellesprosjekt.gruppe24.server.controllers.ServerController;
 
