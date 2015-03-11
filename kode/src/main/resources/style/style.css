@@ -9,3 +9,12 @@
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 );
     -fx-font-family: "Helvetica";
 }
+
+.anchorpane {
+    -fx-background-color: black;
+        
+}
+
+.label {
+	-fx-font-family: "Helvetica";
+}
