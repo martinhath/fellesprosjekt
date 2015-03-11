@@ -3,7 +3,7 @@ package org.fellesprosjekt.gruppe24.server;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import junit.framework.TestCase;
+
 import org.fellesprosjekt.gruppe24.common.KryoUtils;
 import org.fellesprosjekt.gruppe24.common.models.LoginInfo;
 import org.fellesprosjekt.gruppe24.common.models.User;
@@ -12,26 +12,33 @@ import org.fellesprosjekt.gruppe24.common.models.net.Request;
 import org.fellesprosjekt.gruppe24.common.models.net.Response;
 import org.fellesprosjekt.gruppe24.database.UserDatabaseHandler;
 
-public class ServerLoginTest extends TestCase {
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+public class ServerLoginTest {
 
     static CalendarServer server;
     static Client client;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        User martin = new User("martinhath", "Martin Thoresen", "", "");
-        UserDatabaseHandler.GetInstance().delete(martin);
-        UserDatabaseHandler.GetInstance().addNewUser(martin, "martinerkul");
+    UserDatabaseHandler uhandler;
+
+    User user;
+
+    @Before
+    public void before() throws Exception {
+        uhandler = UserDatabaseHandler.GetInstance();
+        user = new User("martinhath_9123904", "passord7");
+        user.setName("Martin Thoresen");
+        uhandler.insert(user);
 
         int tcp = 6788;
         int udp = 6789;
-
         if (server == null) {
             server = new CalendarServer(tcp, udp);
             server.start();
         }
-
         if (client == null) {
             client = new Client();
             client.start();
@@ -41,7 +48,16 @@ public class ServerLoginTest extends TestCase {
         }
     }
 
+    @After
+    public void after() {
+        if (!uhandler.delete(user)){
+            System.err.println("Failed to delete user " + user);
+        }
+    }
+
+    @Test
     public void testLoginWithUser() throws Exception {
+        System.out.println("halla");
         LoginInfo loginInfo = new LoginInfo(
                 "martinhath", "marinerkul");
         Request req = new AuthRequest(Request.Type.POST,
@@ -66,7 +82,9 @@ public class ServerLoginTest extends TestCase {
         });
     }
 
+    @Test
     public void testLoginWithoutUser() throws Exception {
+        System.out.println("haklsdasldkj");
         LoginInfo loginInfo = new LoginInfo(
                 "jegfinnesikke", "martinerkul");
         Request req = new AuthRequest(Request.Type.POST,

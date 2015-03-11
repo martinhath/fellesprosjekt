@@ -129,8 +129,10 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
 	@Override
 	public boolean delete(User user) {
 		try {
-			DatabaseManager.updateQuery(String.format("DELETE FROM User WHERE userid=%d", user.getId()));
-			return true;
+			if (user.getId() < 0) // id er satt
+				return DatabaseManager.updateQuery(String.format("DELETE FROM User WHERE username='%s'", user.getUsername()));
+			else
+				return DatabaseManager.updateQuery(String.format("DELETE FROM User WHERE userid=%d", user.getId()));
 		} catch (Exception ex) {
 			lgr.log(Level.SEVERE, ex.getMessage(), ex);
 			return false;

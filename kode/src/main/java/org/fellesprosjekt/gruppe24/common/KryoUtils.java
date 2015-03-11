@@ -40,6 +40,7 @@ public class KryoUtils {
 
         // Java ting
         k.register(LocalDateTime.class);
+        k.register(String.class);
 
         // Requests
         k.register(Request.class);
