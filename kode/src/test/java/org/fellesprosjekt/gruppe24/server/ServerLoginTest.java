@@ -13,9 +13,13 @@ import org.fellesprosjekt.gruppe24.common.models.net.Response;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.logging.Logger;
+
 import static org.junit.Assert.*;
 
 public class ServerLoginTest {
+    Logger logger = Logger.getLogger(getClass().getName());
 
     static CalendarServer server;
     static Client client;

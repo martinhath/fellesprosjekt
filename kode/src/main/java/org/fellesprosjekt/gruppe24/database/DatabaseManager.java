@@ -4,6 +4,7 @@ import org.fellesprosjekt.gruppe24.common.models.Room;
 import org.fellesprosjekt.gruppe24.server.CalendarServer;
 
 import java.beans.PropertyVetoException;
+import java.nio.file.Paths;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ import com.mchange.v2.c3p0.*;
 
 public final class DatabaseManager {
 
-    private static Logger lgr;
+    private static Logger lgr = Logger.getLogger(CalendarServer.class.getName());
 
     private static ComboPooledDataSource cpds;
 
@@ -27,8 +28,6 @@ public final class DatabaseManager {
      * @param password user's password to the database
      */
     public static void init(String url, String database, String user, String password) {
-        lgr = Logger.getLogger(CalendarServer.class.getName());
-
         // Connection Pooling
         cpds = new ComboPooledDataSource();
         try {
@@ -48,12 +47,32 @@ public final class DatabaseManager {
         cpds.setMaxIdleTime(1);
     }
 
+    public static void init_test() {
+        cpds = new ComboPooledDataSource();
+        try {
+            cpds.setDriverClass("com.mysql.jdbc.Driver");
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
+        }
+        //loads the jdbc driver
+
+        // the settings below are optional -- c3p0 can work with defaults
+        cpds.setMinPoolSize(5);
+        cpds.setAcquireIncrement(5);
+        cpds.setMaxPoolSize(20); // klikka under tester da den bare var 20
+        cpds.setMaxIdleTime(1);
+
+        cpds.setJdbcUrl("jdbc:h2:mem:test;MODE=MySQL;INIT=runscript from " +
+                "'../docs/database_script.sql'");
+    }
+
     /**
      * Initializes a default database
      *
      */
     static {
-        init("mysql.stud.ntnu.no", "hermanmk_calDB", "hermanmk_cal", "cal123");
+        //init("mysql.stud.ntnu.no", "hermanmk_calDB", "hermanmk_cal", "cal123");
+        init_test();
     }
 
     public static Connection createConnection() {
@@ -151,6 +170,10 @@ public final class DatabaseManager {
      */
     public static ResultSet readQuery(String query) {
         Statement st = getStatement();
+        if (st == null)  {
+            lgr.severe("huehuehueh");
+            return null;
+        }
         try {
             ResultSet rs = st.executeQuery(query);
             return rs;
