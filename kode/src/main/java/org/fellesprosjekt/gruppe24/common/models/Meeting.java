@@ -4,7 +4,7 @@ import org.fellesprosjekt.gruppe24.database.MeetingDatabaseHandler;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class Meeting {
+public class Meeting implements Comparable<Meeting> {
 
 
 
@@ -160,5 +160,17 @@ public class Meeting {
 				", owner=" + owner +
 				", group=" + group +
 				'}';
+	}
+
+	@Override
+	public int compareTo(Meeting o) {
+		return this.getFrom().compareTo(o.getFrom());
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == null || !(o instanceof Meeting)) return false;
+		Meeting rhs = (Meeting) o;
+		return rhs.getId() == this.getId();
 	}
 }

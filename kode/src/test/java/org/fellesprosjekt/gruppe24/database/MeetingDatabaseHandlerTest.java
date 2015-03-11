@@ -27,7 +27,7 @@ public class MeetingDatabaseHandlerTest extends TestCase {
                 "Freddy`s bar",
                 new ArrayList<Entity>(),
                 user));
-        MeetingDatabaseHandler.GetInstance().addUserToMeeting(meeting, user);
+        MeetingDatabaseHandler.GetInstance().addUserToMeeting(meeting, user, "");
         room = RoomDatabaseHandler.GetInstance().insert(new Room("Mororommet", 8, true));
     }
     public void tearDown() {
@@ -71,7 +71,7 @@ public class MeetingDatabaseHandlerTest extends TestCase {
         Meeting meeting = MeetingDatabaseHandler.GetInstance().getAll().get(0);
         int sizeBefore = MeetingDatabaseHandler.GetInstance().getUsersOfMeeting(meeting).size();
 
-        MeetingDatabaseHandler.GetInstance().addUserToMeeting(meeting, user);
+        MeetingDatabaseHandler.GetInstance().addUserToMeeting(meeting, user, "");
         TestCase.assertTrue(MeetingDatabaseHandler.GetInstance().getUsersOfMeeting(meeting).size() > sizeBefore);
 
         MeetingDatabaseHandler.GetInstance().removeUserFromMeeting(meeting, user);

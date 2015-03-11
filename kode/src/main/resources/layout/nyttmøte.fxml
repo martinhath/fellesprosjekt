@@ -14,8 +14,8 @@
                <font>
                   <Font size="17.0" />
                </font></Button>
-            <TextField fx:id="fieldToTime" layoutX="154.0" layoutY="278.0" prefHeight="22.0" prefWidth="261.0" />
             <TextField fx:id="fieldFromTime" layoutX="154.0" layoutY="234.0" prefHeight="22.0" prefWidth="261.0" />
+            <TextField fx:id="fieldToTime" layoutX="154.0" layoutY="278.0" prefHeight="22.0" prefWidth="261.0" />
             <Text layoutX="32.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Beskrivelse:" wrappingWidth="107.94512176513672">
                <font>
                   <Font size="14.0" />

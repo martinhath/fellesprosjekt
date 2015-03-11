@@ -58,8 +58,8 @@ public class UserDatabaseHandlerTest extends TestCase {
         Meeting meeting = allMeetings.get(0);
         Meeting meeting2 = allMeetings.get(1);
 
-        MeetingDatabaseHandler.GetInstance().addUserToMeeting(meeting, user);
-        MeetingDatabaseHandler.GetInstance().addUserToMeeting(meeting2, user);
+        MeetingDatabaseHandler.GetInstance().addUserToMeeting(meeting, user, "");
+        MeetingDatabaseHandler.GetInstance().addUserToMeeting(meeting2, user, "");
 
         List<Meeting> userMeetings = UserDatabaseHandler.GetInstance().getMeetingsOfUser(user);
 
