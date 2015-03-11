@@ -10,7 +10,7 @@
    <children>
    
    
-      <Pane prefHeight="536.0" prefWidth="870.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <Pane prefHeight="536.0" prefWidth="870.0" stylesheets="@background.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Button fx:id="buttonPrev" layoutX="252.0" layoutY="87.0" mnemonicParsing="false" text="Forrige"
                     onAction="#clickPrevWeek" />
@@ -121,14 +121,14 @@
                   <Font size="18.0" />
                </font>
             </Button>
-            <ImageView fitHeight="50.0" fitWidth="47.0" layoutX="965.0" layoutY="27.0">
-               <image>
-                  <Image url="@nytt-meddelande_318-10231.jpg" />
-               </image>
-            </ImageView>
             <ImageView fitHeight="39.0" fitWidth="42.0" layoutX="968.0" layoutY="80.0">
                <image>
                   <Image url="@53.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="33.0" fitWidth="29.0" layoutX="974.0" layoutY="35.0">
+               <image>
+                  <Image url="@Mail.png" />
                </image>
             </ImageView>
          </children>
