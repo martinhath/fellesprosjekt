@@ -28,6 +28,9 @@ public class MeetingController extends ServerController {
             return;
         }
 
+        System.out.println("Nytt møte:");
+        System.out.println(meeting);
+
         MeetingDatabaseHandler handler = MeetingDatabaseHandler.GetInstance();
         Meeting resMeeting = handler.insert(meeting);
         for (Entity participant : meeting.getParticipants()) {
