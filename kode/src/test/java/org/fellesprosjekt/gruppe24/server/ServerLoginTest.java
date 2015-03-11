@@ -37,6 +37,7 @@ public class ServerLoginTest {
         int udp = 6789;
         if (server == null) {
             server = new CalendarServer(tcp, udp);
+            KryoUtils.registerClasses(server.getServer().getKryo());
             server.start();
         }
         if (client == null) {
@@ -57,7 +58,6 @@ public class ServerLoginTest {
 
     @Test
     public void testLoginWithUser() throws Exception {
-        System.out.println("halla");
         LoginInfo loginInfo = new LoginInfo(
                 "martinhath", "marinerkul");
         Request req = new AuthRequest(Request.Type.POST,
@@ -84,7 +84,6 @@ public class ServerLoginTest {
 
     @Test
     public void testLoginWithoutUser() throws Exception {
-        System.out.println("haklsdasldkj");
         LoginInfo loginInfo = new LoginInfo(
                 "jegfinnesikke", "martinerkul");
         Request req = new AuthRequest(Request.Type.POST,
