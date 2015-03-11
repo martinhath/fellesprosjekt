@@ -7,7 +7,7 @@ public abstract class Entity {
 
     private String name;
     private Calendar calendar;
-    private int id;
+    private int id = -1;
 
 
     public Entity(){}
@@ -32,7 +32,11 @@ public abstract class Entity {
     public String getName() {
         return name;
     }
-   
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public Calendar getCalendar() {
     	return calendar;
     }

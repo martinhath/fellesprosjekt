@@ -3,27 +3,43 @@ package org.fellesprosjekt.gruppe24.database;
 import junit.framework.TestCase;
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
 import org.fellesprosjekt.gruppe24.common.models.User;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
 
-public class UserDatabaseHandlerTest extends TestCase {
+public class UserDatabaseHandlerTest {
+
     private UserDatabaseHandler uhandler;
     private MeetingDatabaseHandler mhandler;
 
+    User user;
+
     @Before
-    public void setUp() {
+    public void before() {
         uhandler = UserDatabaseHandler.GetInstance();
         mhandler = MeetingDatabaseHandler.GetInstance();
+
+        user = new User("Viktor_123", "viktor1");
+        user.setName("Viktor Andersen");
+        uhandler.insert(user);
     }
 
+    @After
+    public void after() {
+        if (!uhandler.delete(user)){
+            System.err.println("Failed to delete " + user);
+        }
+    }
+
+    @Test
     public void testCanGetAllUsers() {
         List<User> userList = uhandler.getAll();
         TestCase.assertNotNull(userList);
     }
 
-    @Test(expected = java.sql.SQLException.class)
+    @Test
     public void testCanInsertAndDeleteUser() {
         String username = "gopet";
         String name = "Geir Ove Pettersen";
