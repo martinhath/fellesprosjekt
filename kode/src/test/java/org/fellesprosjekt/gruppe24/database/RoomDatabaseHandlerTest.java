@@ -2,40 +2,51 @@ package org.fellesprosjekt.gruppe24.database;
 
 import junit.framework.TestCase;
 import org.fellesprosjekt.gruppe24.common.models.Room;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
 
-public class RoomDatabaseHandlerTest extends TestCase {
-    Room room;
+public class RoomDatabaseHandlerTest {
+
+    private Room room;
+
+    private RoomDatabaseHandler rhandler;
+
+    @Before
     public void setUp() {
-        room = RoomDatabaseHandler.GetInstance().insert(new Room("Mororommet", 8, true));
+        rhandler = RoomDatabaseHandler.GetInstance();
+        room = rhandler.insert(new Room("Mororommet", 8, true));
     }
 
+    @Test
     public void testCanGetRoomById() {
-        Room room2 = RoomDatabaseHandler.GetInstance().get(room.getId());
+        Room room2 = rhandler.get(room.getId());
         TestCase.assertNotNull(room);
         TestCase.assertNotNull(room.getName());
         TestCase.assertEquals(room.getId(), room2.getId());
     }
-    @Test(expected = java.sql.SQLException.class)
+    @Test
     public void testCanInsertAndDeleteRoom() {
-        Room room2 = RoomDatabaseHandler.GetInstance().insert(new Room("nytt_rom_fra_test", 4, true));
-        Room room3 = RoomDatabaseHandler.GetInstance().get(room2.getId());
+        Room room2 = rhandler.insert(new Room("nytt_rom_fra_test", 4, true));
+        Room room3 = rhandler.get(room2.getId());
         TestCase.assertEquals(room2.getId(), room3.getId());
-        RoomDatabaseHandler.GetInstance().delete(room2);
-        Room room4 = RoomDatabaseHandler.GetInstance().get(room2.getId());
+        rhandler.delete(room2);
+
+        rhandler.get(room2.getId());
     }
 
+    @Test
     public void testCanGetAllRooms() {
-        List allRooms = RoomDatabaseHandler.GetInstance().getAll();
+        List allRooms = rhandler.getAll();
         TestCase.assertNotNull(allRooms);
     }
 
+    @Test
     public void testCanUpdateRoom() {
         boolean originalAccessible = room.isAccessible();
         room.setAccessible(!originalAccessible);
-        RoomDatabaseHandler.GetInstance().update(room);
-        TestCase.assertEquals(!originalAccessible, RoomDatabaseHandler.GetInstance().get(room.getId()).isAccessible());
+        rhandler.update(room);
+        TestCase.assertEquals(!originalAccessible, rhandler.get(room.getId()).isAccessible());
     }
 }
