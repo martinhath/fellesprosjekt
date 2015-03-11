@@ -71,7 +71,7 @@ public class AuthController extends ServerController{
 
         logger.info("User " + connection.getUser() + " logged in.");
 
-        connection.sendTCP(res);
+        // connection.sendTCP(res);
         return true;
     }
 
