@@ -1,4 +1,4 @@
-package org.fellesprosjekt.gruppe24.common;
+package org.fellesprosjekt.gruppe24.common.Kryo;
 
 import com.esotericsoftware.kryo.Kryo;
 
@@ -46,6 +46,7 @@ public class KryoUtils {
         k.register(LocalDate.class);
         k.register(LocalTime.class);
         k.register(ArrayList.class);
+        k.register(LocalDateTime.class, new LocalDateTimeSerializer());
 
         // Requests
         k.register(Request.class);

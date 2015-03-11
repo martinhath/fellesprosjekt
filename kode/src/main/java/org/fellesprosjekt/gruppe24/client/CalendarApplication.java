@@ -10,7 +10,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import org.fellesprosjekt.gruppe24.client.controllers.ClientController;
-import org.fellesprosjekt.gruppe24.common.KryoUtils;
+import org.fellesprosjekt.gruppe24.common.Kryo.KryoUtils;
 
 import java.io.IOException;
 import java.util.LinkedList;
