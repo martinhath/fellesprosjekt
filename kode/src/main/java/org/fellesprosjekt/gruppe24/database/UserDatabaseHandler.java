@@ -1,7 +1,6 @@
 package org.fellesprosjekt.gruppe24.database;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,8 +10,6 @@ import java.util.logging.Logger;
 
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
 import org.fellesprosjekt.gruppe24.common.models.User;
-
-import javax.xml.crypto.Data;
 
 public class UserDatabaseHandler extends DatabaseHandler<User> {
 
@@ -27,12 +24,10 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
 
     private User generateUser(HashMap<String, String> info) {
 		try {
-			lgr.log(Level.INFO, "Generating user based on: " + info);
 			User user = new User(Integer.parseInt(info.get("userid")), info.get("username"), info.get("name"),
 					info.get("password"), info.get("email"));
 			return user;
 		} catch (Exception ex) {
-			lgr.log(Level.SEVERE, ex.getMessage(), ex);
 			return null;
 		}
 	}
@@ -54,7 +49,6 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
             ps.setString(3, password);
             return DatabaseManager.executePS(ps);
         } catch (Exception ex) {
-            lgr.log(Level.SEVERE, ex.getMessage(), ex);
             return -1;
         }
     }
@@ -64,7 +58,6 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
         try{
             return generateUser(DatabaseManager.getRow(query));
         } catch (SQLException ex) {
-            lgr.log(Level.SEVERE, ex.getMessage(), ex);
             return null;
         }
     }
@@ -92,7 +85,6 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
 	@Override
 	public User insert(User user) {
 		try {
-		lgr.log(Level.INFO, String.format("Inserting user %s", user));
 			String query =
 				"INSERT INTO User " +
 	            "(username, name, password, email, create_time) " +
@@ -114,9 +106,7 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
 	@Override
 	public User get(int id) {
 		try {
-            lgr.log(Level.INFO, "Trying to get user by id: " + id);
             HashMap<String, String> info = DatabaseManager.getRow(String.format("SELECT * FROM User WHERE userid=%d", id));
-            lgr.log(Level.INFO, "Trying to generate user from: " + info.toString());
             return generateUser(info);
         } catch (Exception ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
@@ -133,7 +123,6 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
 	@Override
 	public boolean delete(User user) {
 		try {
-			lgr.log(Level.INFO, "Trying to delete user by id: " + user.getId());
 			DatabaseManager.updateQuery(String.format("DELETE FROM User WHERE userid=%d", user.getId()));
 			return true;
 		} catch (Exception ex) {
@@ -173,7 +162,6 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
 
     public void setMeetingConfirmation(User user, Meeting meeting, boolean confirm) {
         try {
-            lgr.log(Level.INFO, String.format("Confirming User %s coming to Meeting %s", user.getUsername(), meeting.getName()));
             DatabaseManager.updateField(
                     user.getId(), meeting.getId(), "User_invited_to_meeting", "confirmed", "user", "meeting", confirm);
         } catch (SQLException ex) {

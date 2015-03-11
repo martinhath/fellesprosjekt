@@ -125,7 +125,6 @@ public class GroupDatabaseHandler extends DatabaseHandler<Group> {
     @Override
     public Group insert(Group group) {
         try {
-            lgr.log(Level.INFO, "Trying to insert new Group: " + group.toString());
             String query = "INSERT INTO User_group (name, owner_id, create_time) VALUES "
                     + "(?, ?, NOW());";
             PreparedStatement ps = DatabaseManager.getPreparedStatement(query);
@@ -142,11 +141,9 @@ public class GroupDatabaseHandler extends DatabaseHandler<Group> {
 
     @Override
     public Group get(int id) {
-        lgr.log(Level.INFO, "Trying to get Group by id: " + id);
         String query = "SELECT * FROM User_group WHERE groupid = " + id + ";";
         try {
             HashMap<String, String> row = DatabaseManager.getRow(query);
-            lgr.log(Level.INFO, "Trying to generate Group from: " + row.toString());
             return generateGroup(row);
         } catch (SQLException ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);

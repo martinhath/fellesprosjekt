@@ -62,7 +62,6 @@ public class LoginController extends ClientController {
     }
 
     public void handleLogin(){
-        System.out.println("Vi er nå logget inn");
         ClientController controller = getApplication()
                 .newScene(Layout.Calendar);
         getApplication().removeStage(getStage());
