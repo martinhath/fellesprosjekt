@@ -167,46 +167,17 @@ public final class DatabaseManager {
      * @param query
      * @throws SQLException
      */
-    public static void updateQuery(String query) {
+    public static boolean updateQuery(String query) {
         Statement st = getStatement();
         try {
             st.executeUpdate(query);
+            return true;
         } catch (SQLException ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
+            return false;
         }
     }
 
-    /**
-     * Executes a SQL query, and returns a HashMap with the columns specified in the query.
-     * Should also work when using the 'AS' keyword because it gets the labels and not names.
-     *
-     * @param query
-     * @return a HashMap<String, String> with the column labels as keys.
-     */
-    /*
-    public static HashMap<String, String> getRow(String query) throws SQLException {
-        HashMap<String, String> result = new HashMap<String, String>();
-        ResultSet rs = readQuery(query);
-        try {
-            if (rs.next()) {
-                ResultSetMetaData rsmd = rs.getMetaData();
-                for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-                    result.put(rsmd.getColumnLabel(i), rs.getString(i));
-                }
-            }
-        } catch (SQLException ex) {
-            lgr.log(Level.SEVERE, ex.getMessage(), ex);
-            throw ex;
-        } finally {
-            try {
-                rs.getStatement().getConnection().close();
-            } catch (Exception ex) {
-                lgr.log(Level.SEVERE, ex.getMessage(), ex);
-            }
-        }
-        return result;
-    }
-    */
     public static HashMap<String, String> getRow(String query) throws SQLException {
         HashMap<String, String> result = new HashMap<String, String>();
         ResultSet rs = readQuery(query);

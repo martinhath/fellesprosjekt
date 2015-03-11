@@ -16,7 +16,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `User` (
   `userid` INT NOT NULL AUTO_INCREMENT,
-  `username` VARCHAR(20) NOT NULL,
+  `username` VARCHAR(40) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
   `email` VARCHAR(255) NULL,
   `password` VARCHAR(255) NOT NULL,
