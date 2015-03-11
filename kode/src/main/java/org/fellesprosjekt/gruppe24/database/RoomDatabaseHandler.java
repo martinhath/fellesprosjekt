@@ -67,17 +67,14 @@ public final class RoomDatabaseHandler extends DatabaseHandler<Room> {
 
     private Room generateRoom(HashMap<String, String> info) {
         try {
-            lgr.log(Level.INFO, "Generating room object based on: " + info.toString());
             Room room = new Room(
                     Integer.parseInt(info.get("roomid")),
                     info.get("room_num"),
                     Integer.parseInt(info.get("capacity")),
                     Integer.parseInt(info.get("available")) == 1
             );
-            lgr.log(Level.INFO, "Room successfully generated");
             return room;
         } catch (NumberFormatException ex) {
-            lgr.log(Level.INFO, "Could not generate room. Probably is null.");
             return null;
         }
     }
@@ -88,9 +85,7 @@ public final class RoomDatabaseHandler extends DatabaseHandler<Room> {
 
     public Room get(int id) {
         try {
-            lgr.log(Level.INFO, "Trying to get room by id: " + id);
             HashMap<String, String> info = DatabaseManager.getRow(String.format("SELECT * FROM Room WHERE roomid=%d", id));
-            lgr.log(Level.INFO, "Trying to generate room from: " + info.toString());
             return generateRoom(info);
         } catch (NumberFormatException|SQLException ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
@@ -99,7 +94,6 @@ public final class RoomDatabaseHandler extends DatabaseHandler<Room> {
     }
     public boolean delete(Room room) {
         try {
-            lgr.log(Level.INFO, "Trying to delete room by id: " + room.getId());
             DatabaseManager.updateQuery(String.format("DELETE FROM Room WHERE roomid=%d", room.getId()));
             return true;
         } catch (Exception ex) {
@@ -112,7 +106,6 @@ public final class RoomDatabaseHandler extends DatabaseHandler<Room> {
         String query = String.format(
                 "UPDATE Room SET capacity = ?, room_num = ?, available = ? WHERE roomid=?;");
         PreparedStatement ps = DatabaseManager.getPreparedStatement(query);
-        lgr.log(Level.INFO, String.format("Updating %s", room));
         int accessible = room.isAccessible() ? 1 : 0;
         try {
             ps.setInt(1, room.getCapacity());
@@ -120,9 +113,6 @@ public final class RoomDatabaseHandler extends DatabaseHandler<Room> {
             ps.setBoolean(3, room.isAccessible());
             ps.setInt(4, room.getId());
             DatabaseManager.executePS(ps);
-            System.out.println(accessible);
-            //DatabaseManager.updateQuery(
-            //        String.format("UPDATE Room SET accessible = 0 WHERE roomid = %s;", room.getId()));
             return true;
         } catch (SQLException ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);

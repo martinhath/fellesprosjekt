@@ -60,7 +60,6 @@ public class MeetingDatabaseHandlerTest extends TestCase {
     public void testCanRetrieveMeetingFromDB() {
         List<Meeting> meetingList = MeetingDatabaseHandler.GetInstance().getAll();
         Meeting meeting = meetingList.get(0);
-        System.out.println("Found meeting: " + meeting);
         TestCase.assertNotNull(meeting);
         TestCase.assertNotNull(meeting.getOwner());
         TestCase.assertNotNull(meeting.getName());
