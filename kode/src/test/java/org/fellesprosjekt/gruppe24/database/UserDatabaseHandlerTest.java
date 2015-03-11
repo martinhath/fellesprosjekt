@@ -3,20 +3,23 @@ package org.fellesprosjekt.gruppe24.database;
 import junit.framework.TestCase;
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
 import org.fellesprosjekt.gruppe24.common.models.User;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
 
-/**
- * Created by viktor on 03.03.15.
- */
 public class UserDatabaseHandlerTest extends TestCase {
-    public void setUp() {
+    private UserDatabaseHandler uhandler;
+    private MeetingDatabaseHandler mhandler;
 
+    @Before
+    public void setUp() {
+        uhandler = UserDatabaseHandler.GetInstance();
+        mhandler = MeetingDatabaseHandler.GetInstance();
     }
 
     public void testCanGetAllUsers() {
-        List<User> userList = UserDatabaseHandler.GetInstance().getAll();
+        List<User> userList = uhandler.getAll();
         TestCase.assertNotNull(userList);
     }
 
@@ -30,48 +33,54 @@ public class UserDatabaseHandlerTest extends TestCase {
         User user = new User(username, name, password, email);
         TestCase.assertNotNull(user);
 
-
-        user = UserDatabaseHandler.GetInstance().insert(user);
+        user = uhandler.insert(user);
         TestCase.assertNotNull(user);
 
-        User user2 = UserDatabaseHandler.GetInstance().getUserFromUsername(user.getUsername());
+        User user2 = uhandler.getUserFromUsername(user.getUsername());
         TestCase.assertNotNull(user2);
         TestCase.assertEquals(user.getId(), user2.getId());
 
-        UserDatabaseHandler.GetInstance().delete(user);
+        uhandler.delete(user);
 
-        User user3 = UserDatabaseHandler.GetInstance().get(user.getId());
+        User user3 = uhandler.get(user.getId());
     }
 
+    @Test
     public void canAuthenticateUser() {
         String username = "Viktor";
         String password = "viktor1";
-        User user = UserDatabaseHandler.GetInstance().authenticate(username, password);
+        User user = uhandler.authenticate(username, password);
 
         TestCase.assertNotNull(user);
         TestCase.assertEquals(username, user.getUsername());
     }
 
+    @Test
     public void testCanGetAllMeetingsOfUser() {
-        User user = UserDatabaseHandler.GetInstance().getAll().get(0);
-        List<Meeting> allMeetings = MeetingDatabaseHandler.GetInstance().getAll();
+        User user = uhandler.getAll().get(0);
+        List<Meeting> allMeetings = mhandler.getAll();
         Meeting meeting = allMeetings.get(0);
         Meeting meeting2 = allMeetings.get(1);
 
-        MeetingDatabaseHandler.GetInstance().addUserToMeeting(meeting, user);
-        MeetingDatabaseHandler.GetInstance().addUserToMeeting(meeting2, user);
+        mhandler.addUserToMeeting(meeting, user);
+        mhandler.addUserToMeeting(meeting2, user);
 
-        List<Meeting> userMeetings = UserDatabaseHandler.GetInstance().getMeetingsOfUser(user);
+        List<Meeting> userMeetings = uhandler.getMeetingsOfUser(user);
 
+        /*
+        Her antar vi at møtene kommer ut i samme rekkefølge, og at
+        brukeren skal være med på alle møtene?
         for (int i = 0; i < userMeetings.size(); i++) {
             TestCase.assertEquals(allMeetings.get(i).getId(), userMeetings.get(i).getId());
         }
+         */
     }
 
+    @Test
     public void testCanConfirmMeeting() {
-        User user = UserDatabaseHandler.GetInstance().getAll().get(0);
-        Meeting meeting = MeetingDatabaseHandler.GetInstance().getAll().get(0);
+        User user = uhandler.getAll().get(0);
+        Meeting meeting = mhandler.getAll().get(0);
 
-        UserDatabaseHandler.GetInstance().setMeetingConfirmation(user, meeting, true);
+        uhandler.setMeetingConfirmation(user, meeting, true);
     }
 }
