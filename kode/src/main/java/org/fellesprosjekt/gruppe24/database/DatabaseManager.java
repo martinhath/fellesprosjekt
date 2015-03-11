@@ -59,7 +59,6 @@ public final class DatabaseManager {
     public static Connection createConnection() {
         try {
             Connection con = cpds.getConnection();
-            lgr.log(Level.INFO, con.toString());
             return con;
             //con = DriverManager.getConnection(url, user, password);
         } catch (SQLException ex) {
@@ -125,7 +124,6 @@ public final class DatabaseManager {
         Statement st = getStatement();
         try {
             String query = String.format("SELECT * FROM %s;", from);
-            lgr.log(Level.INFO, "Executing query: " + query);
             ResultSet rs = st.executeQuery(query);
 
             if (rs.next()) {
@@ -154,7 +152,6 @@ public final class DatabaseManager {
     public static ResultSet readQuery(String query) {
         Statement st = getStatement();
         try {
-            lgr.log(Level.INFO, "Executing query: " + query);
             ResultSet rs = st.executeQuery(query);
             return rs;
         } catch (SQLException ex) {
@@ -173,7 +170,6 @@ public final class DatabaseManager {
     public static void updateQuery(String query) {
         Statement st = getStatement();
         try {
-            lgr.log(Level.INFO, "Executing query: " + query);
             st.executeUpdate(query);
         } catch (SQLException ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
@@ -286,7 +282,6 @@ public final class DatabaseManager {
                             "FROM %s;", table));
         try {
             if (rs.next()) {
-                lgr.log(Level.INFO, String.format("Next increment id for %s is %d", table, rs.getInt("last_id")));
                 return rs.getInt("last_id");
             } else {
                 return -1;
