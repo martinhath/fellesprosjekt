@@ -15,9 +15,13 @@ import org.fellesprosjekt.gruppe24.database.UserDatabaseHandler;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.logging.Logger;
+
 import static org.junit.Assert.*;
 
 public class ServerLoginTest {
+    Logger logger = Logger.getLogger(getClass().getName());
 
     static CalendarServer server;
     static Client client;
@@ -31,7 +35,11 @@ public class ServerLoginTest {
         uhandler = UserDatabaseHandler.GetInstance();
         user = new User("martinhath_9123904", "passord7");
         user.setName("Martin Thoresen");
-        uhandler.insert(user);
+        user = uhandler.insert(user);
+        if (user == null) {
+            logger.severe("Failed to insert user.");
+            fail();
+        }
 
         int tcp = 6788;
         int udp = 6789;
