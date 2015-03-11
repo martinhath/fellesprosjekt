@@ -4,7 +4,7 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import junit.framework.TestCase;
-import org.fellesprosjekt.gruppe24.common.KryoUtils;
+import org.fellesprosjekt.gruppe24.common.Kryo.KryoUtils;
 import org.fellesprosjekt.gruppe24.common.models.Entity;
 import org.fellesprosjekt.gruppe24.common.models.LoginInfo;
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
@@ -47,16 +47,20 @@ public class ServerMeetingTest extends TestCase {
             ingrid = new User("ingridvold", "Ingrid Vold", "", "");
             ingrid = UserDatabaseHandler.GetInstance().insert(ingrid);
         }
-        meeting1 = new Meeting(
-                "Videokonferanse",
-                "er fra test",
-                null,
-                LocalDateTime.now(),
-                LocalDateTime.now().plusHours(2),
-                "",
-                new ArrayList<Entity>(),
-                martin);
-        MeetingDatabaseHandler.GetInstance().insert(meeting1);
+        meeting1 = MeetingDatabaseHandler.GetInstance().getAll().get(0);
+
+        if (meeting1 == null) {
+            meeting1 = new Meeting(
+                    "Videokonferanse",
+                    "er fra test",
+                    null,
+                    LocalDateTime.now(),
+                    LocalDateTime.now().plusHours(2),
+                    "",
+                    new ArrayList<Entity>(),
+                    martin);
+            MeetingDatabaseHandler.GetInstance().insert(meeting1);
+        }
 
         int tcp = 6788;
         int udp = 6789;
