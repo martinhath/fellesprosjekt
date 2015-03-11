@@ -21,7 +21,7 @@ public class UserDatabaseHandlerTest {
         uhandler = UserDatabaseHandler.GetInstance();
         mhandler = MeetingDatabaseHandler.GetInstance();
 
-        user = new User("Viktor_123", "viktor1");
+        user = new User("Viktor_124", "viktor1");
         user.setName("Viktor Andersen");
         uhandler.insert(user);
     }
