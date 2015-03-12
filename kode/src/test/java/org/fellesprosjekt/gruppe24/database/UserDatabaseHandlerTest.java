@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
 import org.fellesprosjekt.gruppe24.common.models.User;
 import org.junit.After;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,7 +37,7 @@ public class UserDatabaseHandlerTest {
     @Test
     public void testCanGetAllUsers() {
         List<User> userList = uhandler.getAll();
-        TestCase.assertNotNull(userList);
+        assertNotNull(userList);
     }
 
     @Test
@@ -58,7 +59,7 @@ public class UserDatabaseHandlerTest {
 
         uhandler.delete(user);
 
-        User user3 = uhandler.get(user.getId());
+        assertNull(uhandler.get(user.getId()));
     }
 
     @Test
@@ -67,8 +68,8 @@ public class UserDatabaseHandlerTest {
         String password = "viktor1";
         User user = uhandler.authenticate(username, password);
 
-        TestCase.assertNotNull(user);
-        TestCase.assertEquals(username, user.getUsername());
+        assertNotNull(user);
+        assertEquals(username, user.getUsername());
     }
 
     @Test
