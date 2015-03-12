@@ -42,3 +42,13 @@
 
 	-fx-opacity: 0.4;
 }
+
+.month-label {
+	-fx-font-family: "Helvetica";
+	-fx-font-size: 40;
+}
+
+.week-label {
+	-fx-font-family: "Helvetica";
+	-fx-font-size: 20;
+}
