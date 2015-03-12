@@ -1,11 +1,14 @@
-package org.fellesprosjekt.gruppe24.common;
+package org.fellesprosjekt.gruppe24.common.Kryo;
 
 import com.esotericsoftware.kryo.Kryo;
 
 import org.fellesprosjekt.gruppe24.common.models.*;
 import org.fellesprosjekt.gruppe24.common.models.net.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class KryoUtils {
@@ -40,6 +43,10 @@ public class KryoUtils {
 
         // Java ting
         k.register(LocalDateTime.class);
+        k.register(LocalDate.class);
+        k.register(LocalTime.class);
+        k.register(ArrayList.class);
+        k.register(LocalDateTime.class, new LocalDateTimeSerializer());
 
         // Requests
         k.register(Request.class);
@@ -49,6 +56,7 @@ public class KryoUtils {
         k.register(InvitationRequest.class);
         k.register(InvitationRequest.Answer.class);
         k.register(MeetingRequest.class);
+        k.register(MeetingRequest.Handler.class);
 
         // Response
         k.register(Response.class);
