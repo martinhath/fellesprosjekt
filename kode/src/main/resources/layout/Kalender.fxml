@@ -50,33 +50,33 @@
               </rowConstraints>
                <children>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="474.0" prefWidth="751.0" GridPane.columnIndex="2" GridPane.rowIndex="16" />
-                  <Label styleClass="time-label" text="00:00" />
-                  <Label styleClass="time-label" text="01:00" GridPane.rowIndex="1" />
-                  <Label styleClass="time-label" text="02:00" GridPane.rowIndex="2" />
-                  <Label styleClass="time-label" text="03:00" GridPane.rowIndex="3" />
-                  <Label styleClass="time-label" text="04:00" GridPane.rowIndex="4" />
-                  <Label styleClass="time-label" text="05:00" GridPane.rowIndex="5" />
-                  <Label styleClass="time-label" text="06:00" GridPane.rowIndex="6" />
-                  <Label styleClass="time-label" text="07:00" GridPane.rowIndex="7" />
-                  <Label styleClass="time-label" text="08:00" GridPane.rowIndex="8" />
-                  <Label styleClass="time-label" text="09:00" GridPane.rowIndex="9" />
-                  <Label styleClass="time-label" text="10:00" GridPane.rowIndex="10" />
-                  <Label styleClass="time-label" text="11:00" GridPane.rowIndex="11" />
-                  <Label styleClass="time-label" text="12:00" GridPane.rowIndex="12" />
-                  <Label styleClass="time-label" text="13:00" GridPane.rowIndex="13" />
-                  <Label styleClass="time-label" text="14:00" GridPane.rowIndex="14" />
-                  <Label styleClass="time-label" text="15:00" GridPane.rowIndex="15" />
-                  <Label styleClass="time-label" text="16:00" GridPane.rowIndex="16" />
-                  <Label styleClass="time-label" text="17:00" GridPane.rowIndex="17" />
-                  <Label styleClass="time-label" text="18:00" GridPane.rowIndex="18" />
-                  <Label styleClass="time-label" text="19:00" GridPane.rowIndex="19" />
-                  <Label styleClass="time-label" text="20:00" GridPane.rowIndex="20" />
-                  <Label styleClass="time-label" text="21:00" GridPane.rowIndex="21" />
-                  <Label styleClass="time-label" text="22:00" GridPane.rowIndex="22" />
-                  <Label styleClass="time-label" text="23:00" GridPane.rowIndex="23" />
+                  <Label styleClass="time-label" text=" 00:00" />
+                  <Label styleClass="time-label" text=" 01:00" GridPane.rowIndex="1" />
+                  <Label styleClass="time-label" text=" 02:00" GridPane.rowIndex="2" />
+                  <Label styleClass="time-label" text=" 03:00" GridPane.rowIndex="3" />
+                  <Label styleClass="time-label" text=" 04:00" GridPane.rowIndex="4" />
+                  <Label styleClass="time-label" text=" 05:00" GridPane.rowIndex="5" />
+                  <Label styleClass="time-label" text=" 06:00" GridPane.rowIndex="6" />
+                  <Label styleClass="time-label" text=" 07:00" GridPane.rowIndex="7" />
+                  <Label styleClass="time-label" text=" 08:00" GridPane.rowIndex="8" />
+                  <Label styleClass="time-label" text=" 09:00" GridPane.rowIndex="9" />
+                  <Label styleClass="time-label" text=" 10:00" GridPane.rowIndex="10" />
+                  <Label styleClass="time-label" text=" 11:00" GridPane.rowIndex="11" />
+                  <Label styleClass="time-label" text=" 12:00" GridPane.rowIndex="12" />
+                  <Label styleClass="time-label" text=" 13:00" GridPane.rowIndex="13" />
+                  <Label styleClass="time-label" text=" 14:00" GridPane.rowIndex="14" />
+                  <Label styleClass="time-label" text=" 15:00" GridPane.rowIndex="15" />
+                  <Label styleClass="time-label" text=" 16:00" GridPane.rowIndex="16" />
+                  <Label styleClass="time-label" text=" 17:00" GridPane.rowIndex="17" />
+                  <Label styleClass="time-label" text=" 18:00" GridPane.rowIndex="18" />
+                  <Label styleClass="time-label" text=" 19:00" GridPane.rowIndex="19" />
+                  <Label styleClass="time-label" text=" 20:00" GridPane.rowIndex="20" />
+                  <Label styleClass="time-label" text=" 21:00" GridPane.rowIndex="21" />
+                  <Label styleClass="time-label" text=" 22:00" GridPane.rowIndex="22" />
+                  <Label styleClass="time-label" text=" 23:00" GridPane.rowIndex="23" />
                </children>
                <effect>
-                  <Bloom />
+                  <Glow level="0.82" />
                </effect>
             </GridPane>
          </content>
