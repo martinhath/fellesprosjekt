@@ -1,8 +1,10 @@
 package org.fellesprosjekt.gruppe24.server.controllers;
 
 import org.fellesprosjekt.gruppe24.common.models.LoginInfo;
+import org.fellesprosjekt.gruppe24.common.models.Notification;
 import org.fellesprosjekt.gruppe24.common.models.User;
 import org.fellesprosjekt.gruppe24.common.models.net.AuthRequest;
+import org.fellesprosjekt.gruppe24.common.models.net.NotificationRequest;
 import org.fellesprosjekt.gruppe24.common.models.net.Request;
 import org.fellesprosjekt.gruppe24.common.models.net.Response;
 import org.fellesprosjekt.gruppe24.database.UserDatabaseHandler;
@@ -71,7 +73,13 @@ public class AuthController extends ServerController{
 
         logger.info("User " + connection.getUser() + " logged in.");
 
-        // connection.sendTCP(res);
+        connection.sendTCP(res);
+
+        // Sender uleste notifications til brukeren som har logget inn.
+        Request req = new NotificationRequest(Request.Type.LIST, false, user);
+        ServerController c = new NotificationController(connection);
+        c.list(req);
+
         return true;
     }
 
