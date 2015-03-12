@@ -104,7 +104,7 @@ public class CalendarController extends ClientController {
     }
 
     @FXML
-    public void seeMessages(ActionEvent a) {
+    public void seeNotifications(ActionEvent a) {
     	String path = Layout.Notification;
     	getApplication().newScene(path);
     }
