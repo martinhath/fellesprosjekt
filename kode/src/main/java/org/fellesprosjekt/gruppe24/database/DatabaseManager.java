@@ -62,7 +62,7 @@ public final class DatabaseManager {
         cpds.setMaxPoolSize(20); // klikka under tester da den bare var 20
         cpds.setMaxIdleTime(1);
 
-        cpds.setJdbcUrl("jdbc:h2:mem:test;MODE=MySQL;INIT=runscript from " +
+        cpds.setJdbcUrl("jdbc:h2:mem:test;MODE=MySQL;IGNORECASE=TRUE;INIT=runscript from " +
                 "'../docs/database_script.sql'\\;runscript from '../docs/database_data.sql'");
     }
 
@@ -207,7 +207,7 @@ public final class DatabaseManager {
         if (rs.next()) {
             ResultSetMetaData rsmd = rs.getMetaData();
             for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-                result.put(rsmd.getColumnLabel(i), rs.getString(i));
+                result.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getString(i));
             }
         }
         try {
@@ -235,7 +235,7 @@ public final class DatabaseManager {
                 ResultSetMetaData rsmd = rs.getMetaData();
                 HashMap<String, String> row = new HashMap<String, String>();
                 for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-                    row.put(rsmd.getColumnLabel(i), rs.getString(i));
+                    row.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getString(i));
                 }
                 result.add(row);
             }
