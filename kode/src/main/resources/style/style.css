@@ -8,23 +8,16 @@
     -fx-text-fill: black;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 );
     -fx-font-family: "Helvetica";
+    -fx-font-size: 17;
 }
 
 .anchor-pane {
     -fx-background-color:linear-gradient(white,#DDDDDD);
-    -fx-background-image: url("../image/background2.jpg");
+   /*  -fx-background-image: url("../image/background2.jpg");
     -fx-background-repeat: stretch;   
     -fx-background-size: 1200, 1000;
 
-	-fx-background-position: center;
-    
-    
-        
-}
-
-.label {
-	-fx-font-family: "Helvetica";
-	-fx-font-size: 15;
+	-fx-background-position: center;*/       
 }
 
 .grid-pane {
@@ -33,6 +26,11 @@
 	-fx-border-color: white;
 	-fx-opacity: 0.9;
 	-fx-border-style: dashed;
+}
+
+.label {
+	-fx-font-family: "Helvetica";
+	-fx-font-size: 15;
 }
 
 
