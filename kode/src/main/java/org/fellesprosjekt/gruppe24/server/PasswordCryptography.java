@@ -26,9 +26,7 @@ public class PasswordCryptography {
 	}
 	
 	public PasswordCryptography(String s) {
-		lgr.log(Level.INFO, "Starting encryption of '" + s + "'");
 		this.salt = generateSalt();
-		lgr.log(Level.INFO, "Generated random salt: " + this.salt);
 		saltAndHash(s);
 	}
 	
@@ -39,9 +37,7 @@ public class PasswordCryptography {
 	
 	private void saltAndHash(String s) {
 		s += this.salt;
-		lgr.log(Level.INFO, "Password with appended salt: '" + s + "'");
 		this.hash = stringToSHA256(s);
-		lgr.log(Level.INFO, "Finished hash: '" + this.hash + "'");
 	}
 	
 	private String stringToSHA256(String s) {
