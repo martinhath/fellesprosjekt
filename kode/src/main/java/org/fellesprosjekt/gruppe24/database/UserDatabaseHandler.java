@@ -16,7 +16,7 @@ import javax.xml.crypto.Data;
 
 public class UserDatabaseHandler extends DatabaseHandler<User> {
 
-    private static Logger lgr = Logger.getLogger(MeetingDatabaseHandler.class.getName());
+    private static Logger lgr = Logger.getLogger(UserDatabaseHandler.class.getName());
     private static UserDatabaseHandler instance;
     
 	public static UserDatabaseHandler GetInstance() {
