@@ -49,4 +49,8 @@
       <Button layoutX="326.0" layoutY="433.0" mnemonicParsing="false" text="Avbryt" />
    </children>
 </AnchorPane>
+<<<<<<< HEAD
 >>>>>>> lagde notificationcontroller
+=======
+
+>>>>>>> lagde notificationController

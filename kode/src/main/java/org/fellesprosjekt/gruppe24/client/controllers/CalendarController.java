@@ -102,7 +102,8 @@ public class CalendarController extends ClientController {
         date = LocalDateTime.now();
         setCalendarLabels(date);
     }
-    	
+
+    @FXML
     public void seeMessages(ActionEvent a) {
     	String path = Layout.Notification;
     	getApplication().newScene(path);
