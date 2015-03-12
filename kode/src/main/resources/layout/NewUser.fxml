@@ -6,9 +6,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 
-<TitledPane text="Registrer ny bruker" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<TitledPane prefHeight="448.0" prefWidth="286.0" text="Registrer ny bruker" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <content>
-      <AnchorPane prefHeight="421.0" prefWidth="449.0" styleClass="anchor-pane" stylesheets="@../style/style.css">
+      <AnchorPane prefHeight="421.0" prefWidth="435.0" styleClass="anchor-pane" stylesheets="@../style/style.css">
          <children>
             <GridPane layoutX="43.0" layoutY="48.0" prefHeight="260.0" prefWidth="348.0">
                <columnConstraints>
