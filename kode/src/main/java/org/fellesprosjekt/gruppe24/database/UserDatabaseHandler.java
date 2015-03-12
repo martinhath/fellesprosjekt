@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
 import org.fellesprosjekt.gruppe24.common.models.User;
+import org.fellesprosjekt.gruppe24.server.PasswordCryptography;
 
 import javax.xml.crypto.Data;
 
@@ -60,9 +61,14 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
     }
 
     public User authenticate(String username, String password) {
-        String query = String.format("SELECT * FROM User WHERE username=\"%s\" AND password=\"%s\"", username, password);
+        String query = String.format("SELECT * FROM User WHERE username=\"%s\"", username, password);
         try{
-            return generateUser(DatabaseManager.getRow(query));
+        	HashMap<String, String> row = DatabaseManager.getRow(query);
+        	PasswordCryptography pc = new PasswordCryptography(password, row.get("salt"));
+        	if(pc.compareHash(row.get("password")))
+        		return generateUser(row);
+        	else
+        		return null;
         } catch (SQLException ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
             return null;
