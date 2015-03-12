@@ -3,7 +3,6 @@ package org.fellesprosjekt.gruppe24.database;
 import junit.framework.TestCase;
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
 import org.fellesprosjekt.gruppe24.common.models.User;
-import org.junit.After;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,23 +14,10 @@ public class UserDatabaseHandlerTest {
     private UserDatabaseHandler uhandler;
     private MeetingDatabaseHandler mhandler;
 
-    User user;
-
     @Before
     public void before() {
         uhandler = UserDatabaseHandler.GetInstance();
         mhandler = MeetingDatabaseHandler.GetInstance();
-
-        user = new User("Viktor_124", "viktor1");
-        user.setName("Viktor Andersen");
-        uhandler.insert(user);
-    }
-
-    @After
-    public void after() {
-        if (!uhandler.delete(user)){
-            System.err.println("Failed to delete " + user);
-        }
     }
 
     @Test
@@ -79,8 +65,8 @@ public class UserDatabaseHandlerTest {
         Meeting meeting = allMeetings.get(0);
         Meeting meeting2 = allMeetings.get(1);
 
-        mhandler.addUserToMeeting(meeting, user);
-        mhandler.addUserToMeeting(meeting2, user);
+        // mhandler.addUserToMeeting(meeting, user);
+        // mhandler.addUserToMeeting(meeting2, user);
 
         List<Meeting> userMeetings = uhandler.getMeetingsOfUser(user);
 

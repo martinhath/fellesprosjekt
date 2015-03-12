@@ -24,13 +24,13 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
 	}
 
     private User generateUser(HashMap<String, String> info) {
-		try {
-			User user = new User(Integer.parseInt(info.get("userid")), info.get("username"), info.get("name"),
-					info.get("password"), info.get("email"));
-			return user;
-		} catch (Exception ex) {
-			return null;
-		}
+        String id = info.get("userid");
+		String username = info.get("username");
+		String name = info.get("name");
+		String password = info.get("password");
+		String email = info.get("email");
+        User user = new User(Integer.parseInt(id), username, name, password, email);
+        return user;
 	}
     /**
      * Inserts a new user into the database
