@@ -1,5 +1,6 @@
 package org.fellesprosjekt.gruppe24.database;
 
+import org.fellesprosjekt.gruppe24.common.models.Meeting;
 import org.fellesprosjekt.gruppe24.common.models.Room;
 import org.fellesprosjekt.gruppe24.common.models.Room;
 import org.fellesprosjekt.gruppe24.common.models.User;
@@ -8,8 +9,10 @@ import javax.xml.crypto.Data;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -119,6 +122,36 @@ public final class RoomDatabaseHandler extends DatabaseHandler<Room> {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
             return false;
         }
+    }
+
+    public List<Room> getAvailableRooms(Meeting meeting) {
+        // finner alle rom som er åpne og som har kapasitet til møtet
+        List<Room> result = new ArrayList<Room>();
+        List<Room> excludedRooms = new ArrayList<Room>();
+        String query = String.format(
+                "SELECT * FROM Room WHERE capacity >= %d AND available = 1;",
+                meeting.getParticipants().size());
+        List<HashMap<String, String>> rooms = DatabaseManager.getList(query);
+
+        for (HashMap<String, String> hm : rooms) {
+            result.add(generateRoom(hm));
+        }
+
+        // filtrerer rom som er opptatte
+        for (Room room : result) {
+            query = String.format(
+                    "SELECT meetingid, start_time, end_time FROM Meeting WHERE Room_roomid = %s;", room.getId());
+            List<HashMap<String, String>> meetings = DatabaseManager.getList(query);
+            for (HashMap<String, String> interval : meetings) {
+                // sjekker om møtet kolliderer
+                if (!(DatabaseManager.stringToDateTime(interval.get("start_time")).isAfter(meeting.getTo()) ||
+                        DatabaseManager.stringToDateTime(interval.get("end_time")).isBefore(meeting.getFrom()))) {
+                    excludedRooms.add(room);
+                }
+            }
+        }
+        result.removeAll(excludedRooms);
+        return result;
     }
 
 
