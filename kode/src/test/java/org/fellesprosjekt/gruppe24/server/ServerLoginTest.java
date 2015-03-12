@@ -10,9 +10,7 @@ import org.fellesprosjekt.gruppe24.common.models.User;
 import org.fellesprosjekt.gruppe24.common.models.net.AuthRequest;
 import org.fellesprosjekt.gruppe24.common.models.net.Request;
 import org.fellesprosjekt.gruppe24.common.models.net.Response;
-import org.fellesprosjekt.gruppe24.database.UserDatabaseHandler;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -22,16 +20,8 @@ public class ServerLoginTest {
     static CalendarServer server;
     static Client client;
 
-    UserDatabaseHandler uhandler;
-
-    User user;
-
     @Before
     public void before() throws Exception {
-        uhandler = UserDatabaseHandler.GetInstance();
-        user = new User("martinhath_9123904", "passord7");
-        user.setName("Martin Thoresen");
-        uhandler.insert(user);
 
         int tcp = 6788;
         int udp = 6789;
@@ -46,13 +36,6 @@ public class ServerLoginTest {
             client.connect(5000, "127.0.0.1", tcp, udp);
 
             KryoUtils.registerClasses(client.getKryo());
-        }
-    }
-
-    @After
-    public void after() {
-        if (!uhandler.delete(user)){
-            System.err.println("Failed to delete user " + user);
         }
     }
 
