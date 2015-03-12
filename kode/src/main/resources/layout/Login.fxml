@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="200.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.fellesprosjekt.gruppe24.client.controllers.LoginController">
+<BorderPane prefHeight="200.0" prefWidth="300.0" styleClass="anchor-pane" stylesheets="@../style/style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.fellesprosjekt.gruppe24.client.controllers.LoginController">
    <top>
-      <Label text="Login" BorderPane.alignment="TOP_LEFT">
+      <Label styleClass="week-label" text="Login" BorderPane.alignment="TOP_LEFT">
          <font>
             <Font size="24.0" />
          </font>
@@ -17,7 +18,7 @@
       </Label>
    </top>
    <center>
-      <GridPane>
+      <GridPane stylesheets="@../style/style.css">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
