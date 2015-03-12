@@ -63,7 +63,7 @@ public final class DatabaseManager {
         cpds.setMaxIdleTime(1);
 
         cpds.setJdbcUrl("jdbc:h2:mem:test;MODE=MySQL;INIT=runscript from " +
-                "'../docs/database_script.sql'");
+                "'../docs/database_script.sql'\\;'../docs/database_data.sql'");
     }
 
     /**
