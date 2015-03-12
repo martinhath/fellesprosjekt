@@ -1,17 +1,15 @@
 package org.fellesprosjekt.gruppe24.database;
 
-import junit.framework.TestCase;
-import org.fellesprosjekt.gruppe24.common.models.Entity;
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
 import org.fellesprosjekt.gruppe24.common.models.Room;
 import org.fellesprosjekt.gruppe24.common.models.User;
+import static org.junit.Assert.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -65,10 +63,10 @@ public class MeetingDatabaseHandlerTest {
                 new ArrayList<>(),
                 user));
         Meeting meeting2 = mhandler.get(meeting.getId());
-        TestCase.assertEquals(meeting.getId(), meeting2.getId());
+        assertEquals(meeting.getId(), meeting2.getId());
 
         mhandler.delete(meeting);
-        TestCase.assertNull(mhandler.get(meeting.getId()));
+        assertNull(mhandler.get(meeting.getId()));
         mhandler.delete(meeting);
     }
 
@@ -76,9 +74,9 @@ public class MeetingDatabaseHandlerTest {
     public void testCanRetrieveMeetingFromDB() {
         List<Meeting> meetingList = mhandler.getAll();
         Meeting meeting = meetingList.get(0);
-        TestCase.assertNotNull(meeting);
-        TestCase.assertNotNull(meeting.getOwner());
-        TestCase.assertNotNull(meeting.getName());
+        assertNotNull(meeting);
+        assertNotNull(meeting.getOwner());
+        assertNotNull(meeting.getName());
     }
 
     @Test
@@ -88,17 +86,17 @@ public class MeetingDatabaseHandlerTest {
         int sizeBefore = mhandler.getUsersOfMeeting(meeting).size();
 
         mhandler.addUserToMeeting(meeting, user);
-        TestCase.assertTrue(mhandler.getUsersOfMeeting(meeting).size() > sizeBefore);
+        assertTrue(mhandler.getUsersOfMeeting(meeting).size() > sizeBefore);
 
         mhandler.removeUserFromMeeting(meeting, user);
-        TestCase.assertEquals(sizeBefore, mhandler.getUsersOfMeeting(meeting).size());
+        assertEquals(sizeBefore, mhandler.getUsersOfMeeting(meeting).size());
     }
 
     @Test
     public void testCanGetUsersOfMeeting() {
         Meeting meeting = MeetingDatabaseHandler.GetInstance().getAll().get(0);
         List<User> users = MeetingDatabaseHandler.GetInstance().getUsersOfMeeting(meeting);
-        TestCase.assertNotNull(users);
-        TestCase.assertNotNull(users.get(0).getUsername());
+        assertNotNull(users);
+        assertNotNull(users.get(0).getUsername());
     }
 }

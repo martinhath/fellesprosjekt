@@ -1,7 +1,7 @@
 package org.fellesprosjekt.gruppe24.database;
 
-import junit.framework.TestCase;
 import org.fellesprosjekt.gruppe24.common.models.Room;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,15 +22,15 @@ public class RoomDatabaseHandlerTest {
     @Test
     public void testCanGetRoomById() {
         Room room2 = rhandler.get(room.getId());
-        TestCase.assertNotNull(room);
-        TestCase.assertNotNull(room.getName());
-        TestCase.assertEquals(room.getId(), room2.getId());
+        assertNotNull(room);
+        assertNotNull(room.getName());
+        assertEquals(room.getId(), room2.getId());
     }
     @Test
     public void testCanInsertAndDeleteRoom() {
         Room room2 = rhandler.insert(new Room("nytt_rom_fra_test", 4, true));
         Room room3 = rhandler.get(room2.getId());
-        TestCase.assertEquals(room2.getId(), room3.getId());
+        assertEquals(room2.getId(), room3.getId());
         rhandler.delete(room2);
 
         rhandler.get(room2.getId());
@@ -39,7 +39,7 @@ public class RoomDatabaseHandlerTest {
     @Test
     public void testCanGetAllRooms() {
         List allRooms = rhandler.getAll();
-        TestCase.assertNotNull(allRooms);
+        assertNotNull(allRooms);
     }
 
     @Test
@@ -47,6 +47,6 @@ public class RoomDatabaseHandlerTest {
         boolean originalAccessible = room.isAccessible();
         room.setAccessible(!originalAccessible);
         rhandler.update(room);
-        TestCase.assertEquals(!originalAccessible, rhandler.get(room.getId()).isAccessible());
+        assertEquals(!originalAccessible, rhandler.get(room.getId()).isAccessible());
     }
 }
