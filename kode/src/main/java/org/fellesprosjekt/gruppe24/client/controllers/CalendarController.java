@@ -1,11 +1,14 @@
 package org.fellesprosjekt.gruppe24.client.controllers;
 
 import com.esotericsoftware.kryonet.Connection;
+
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.text.Text;
+
 import org.fellesprosjekt.gruppe24.client.Layout;
 import org.fellesprosjekt.gruppe24.client.listeners.ClientListener;
 import org.fellesprosjekt.gruppe24.common.models.net.AuthRequest;
@@ -32,6 +35,8 @@ public class CalendarController extends ClientController {
     @FXML private Label labelSun;
     @FXML private Label labelWeek;
     @FXML private Label labelMonth;
+    @FXML private Text textBruker;
+    
 
     private DateTimeFormatter dayformat = DateTimeFormatter.ofPattern("EEEE d.");
     private DateTimeFormatter weekformat = DateTimeFormatter.ofPattern("w");
@@ -44,6 +49,11 @@ public class CalendarController extends ClientController {
         super.initialize(location, resources);
         date = LocalDateTime.now();
         setCalendarLabels(date);
+    }
+
+    @Override
+    public void init() {
+        textBruker.setText("Logget inn som " + getApplication().getUser().getUsername());
     }
 
     /**

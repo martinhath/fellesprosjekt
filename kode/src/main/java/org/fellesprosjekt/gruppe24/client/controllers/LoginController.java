@@ -8,12 +8,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+
 import org.fellesprosjekt.gruppe24.client.Layout;
 import org.fellesprosjekt.gruppe24.client.listeners.ClientListener;
 import org.fellesprosjekt.gruppe24.common.models.LoginInfo;
+import org.fellesprosjekt.gruppe24.common.models.User;
 import org.fellesprosjekt.gruppe24.common.models.net.AuthRequest;
 import org.fellesprosjekt.gruppe24.common.models.net.Request;
 import org.fellesprosjekt.gruppe24.common.models.net.Response;
@@ -51,7 +52,7 @@ public class LoginController extends ClientController {
             public void receivedResponse(Connection conn, Response res) {
                 Platform.runLater(() -> {
                     if (res.type == Response.Type.OK) {
-                        handleLogin();
+                        handleLogin(res);
                     } else {
                         handleRejectedLogin(res);
                     }
@@ -61,8 +62,10 @@ public class LoginController extends ClientController {
         });
     }
 
-    public void handleLogin(){
+    public void handleLogin(Response res){
         System.out.println("Vi er nå logget inn");
+        getApplication().setUser((User) res.payload);
+
         ClientController controller = getApplication()
                 .newScene(Layout.Calendar);
         getApplication().removeStage(getStage());

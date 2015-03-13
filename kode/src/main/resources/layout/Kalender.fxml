@@ -118,5 +118,6 @@
          </font>
       </Label>
       <Button layoutX="396.0" layoutY="87.0" mnemonicParsing="false" onAction="#clickCurrentWeek" text="Idag" />
+      <Text fx:id="textBruker" layoutX="807.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" text="user" />
    </children>
 </AnchorPane>

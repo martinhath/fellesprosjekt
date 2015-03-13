@@ -48,7 +48,7 @@ public class MeetingController extends ClientController {
 
     private Meeting meeting;
 
-    private void init() {
+    public void init() {
         /*
         Gjør det slik at validateASD() funksjonene kjøres
         hver gang fokus for tekstboksene (ol.) endres.
