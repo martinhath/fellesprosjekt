@@ -73,14 +73,14 @@ public class GroupDatabaseHandler extends DatabaseHandler<Group> {
         return invites;
     }
     
-    public void setInviteConfirmation(int userid, int groupid, boolean confirmed) {
+    public boolean setInviteConfirmation(int userid, int groupid, boolean confirmed) {
 		int b = confirmed ? 1 : 0;
 		String query = String.format("UPDATE User_group_has_User SET confirmed = %s WHERE User_userid = %s AND "
 				+ "User_group_groupid = %s", b, userid, groupid);
-		DatabaseManager.updateQuery(query);
+		return DatabaseManager.updateQuery(query);
 	}
 	
-	public void addUserToGroup(User user, Group group, String message) {
+	public boolean addUserToGroup(User user, Group group, String message) {
 		try {
 			lgr.log(Level.INFO, String.format("Trying to add User (userid: %s) to User_group (groupid: %s)", 
 					user.getId(), group.getId())); 
@@ -101,15 +101,16 @@ public class GroupDatabaseHandler extends DatabaseHandler<Group> {
 					message = String.format("Du har blitt invitert til gruppen '%s'.", group.getName());
 			}
 			ps.setString(3, message);
-			DatabaseManager.executePS(ps);
+			return DatabaseManager.executePS(ps) != -1; // executePS returns -1 when failing
 		} catch (Exception ex) {
 			lgr.log(Level.SEVERE, ex.getMessage(), ex);
+            return false;
 		}
 	}
 	
-	public void removeUserFromGroup(int userid, int groupid) {
+	public boolean removeUserFromGroup(int userid, int groupid) {
 		String query = String.format("DELETE FROM User_group_has_user WHERE User_userid = %s AND User_group_groupid = %s;");
-		DatabaseManager.updateQuery(query);
+		return DatabaseManager.updateQuery(query);
 	}
 	
 	public List<Meeting> getAllMeetingsForGroup(int groupid) {
