@@ -42,6 +42,7 @@ public class KryoUtils {
         k.register(Calendar.class);
         k.register(Meeting.class);
         k.register(Room.class);
+        k.register(Notification.class);
 
         // Java ting
         k.register(LocalDateTime.class, new LocalDateTimeSerializer());
@@ -60,6 +61,7 @@ public class KryoUtils {
         k.register(InvitationRequest.Answer.class);
         k.register(MeetingRequest.class);
         k.register(MeetingRequest.Handler.class);
+        k.register(NotificationRequest.class);
         k.register(RoomRequest.class);
 
         // Response
