@@ -152,9 +152,9 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
         return true;
     }
 
-    public void addUserToMeeting(Meeting meeting, User user) {
+    public void addUserToMeeting(Meeting meeting, User user, String message) {
         try {
-            insertUserInvitedToMeeting(meeting.getId(), user.getId(), "Dette møtet er superviktig.");
+            insertUserInvitedToMeeting(meeting.getId(), user.getId(), message);
         } catch (SQLException ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
         }
