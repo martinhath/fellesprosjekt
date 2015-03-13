@@ -3,24 +3,44 @@ package org.fellesprosjekt.gruppe24.database;
 import junit.framework.TestCase;
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
 import org.fellesprosjekt.gruppe24.common.models.User;
+import org.junit.After;
+import static org.junit.Assert.*;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
 
-/**
- * Created by viktor on 03.03.15.
- */
-public class UserDatabaseHandlerTest extends TestCase {
-    public void setUp() {
+public class UserDatabaseHandlerTest {
 
+    private UserDatabaseHandler uhandler;
+    private MeetingDatabaseHandler mhandler;
+
+    User user;
+
+    @Before
+    public void before() {
+        uhandler = UserDatabaseHandler.GetInstance();
+        mhandler = MeetingDatabaseHandler.GetInstance();
+
+        user = new User("Viktor_124", "viktor1");
+        user.setName("Viktor Andersen");
+        uhandler.insert(user);
     }
 
+    @After
+    public void after() {
+        if (!uhandler.delete(user)){
+            System.err.println("Failed to delete " + user);
+        }
+    }
+
+    @Test
     public void testCanGetAllUsers() {
-        List<User> userList = UserDatabaseHandler.GetInstance().getAll();
-        TestCase.assertNotNull(userList);
+        List<User> userList = uhandler.getAll();
+        assertNotNull(userList);
     }
 
-    @Test(expected = java.sql.SQLException.class)
+    @Test
     public void testCanInsertAndDeleteUser() {
         String username = "gopet";
         String name = "Geir Ove Pettersen";
@@ -30,48 +50,54 @@ public class UserDatabaseHandlerTest extends TestCase {
         User user = new User(username, name, password, email);
         TestCase.assertNotNull(user);
 
-
-        user = UserDatabaseHandler.GetInstance().insert(user);
+        user = uhandler.insert(user);
         TestCase.assertNotNull(user);
 
-        User user2 = UserDatabaseHandler.GetInstance().getUserFromUsername(user.getUsername());
+        User user2 = uhandler.getUserFromUsername(user.getUsername());
         TestCase.assertNotNull(user2);
         TestCase.assertEquals(user.getId(), user2.getId());
 
-        UserDatabaseHandler.GetInstance().delete(user);
+        uhandler.delete(user);
 
-        User user3 = UserDatabaseHandler.GetInstance().get(user.getId());
+        assertNull(uhandler.get(user.getId()));
     }
 
+    @Test
     public void canAuthenticateUser() {
         String username = "Viktor";
         String password = "viktor1";
-        User user = UserDatabaseHandler.GetInstance().authenticate(username, password);
+        User user = uhandler.authenticate(username, password);
 
-        TestCase.assertNotNull(user);
-        TestCase.assertEquals(username, user.getUsername());
+        assertNotNull(user);
+        assertEquals(username, user.getUsername());
     }
 
+    @Test
     public void testCanGetAllMeetingsOfUser() {
-        User user = UserDatabaseHandler.GetInstance().getAll().get(0);
-        List<Meeting> allMeetings = MeetingDatabaseHandler.GetInstance().getAll();
+        User user = uhandler.getAll().get(0);
+        List<Meeting> allMeetings = mhandler.getAll();
         Meeting meeting = allMeetings.get(0);
         Meeting meeting2 = allMeetings.get(1);
 
-        MeetingDatabaseHandler.GetInstance().addUserToMeeting(meeting, user);
-        MeetingDatabaseHandler.GetInstance().addUserToMeeting(meeting2, user);
+        mhandler.addUserToMeeting(meeting, user);
+        mhandler.addUserToMeeting(meeting2, user);
 
-        List<Meeting> userMeetings = UserDatabaseHandler.GetInstance().getMeetingsOfUser(user);
+        List<Meeting> userMeetings = uhandler.getMeetingsOfUser(user);
 
+        /*
+        Her antar vi at møtene kommer ut i samme rekkefølge, og at
+        brukeren skal være med på alle møtene?
         for (int i = 0; i < userMeetings.size(); i++) {
             TestCase.assertEquals(allMeetings.get(i).getId(), userMeetings.get(i).getId());
         }
+         */
     }
 
+    @Test
     public void testCanConfirmMeeting() {
-        User user = UserDatabaseHandler.GetInstance().getAll().get(0);
-        Meeting meeting = MeetingDatabaseHandler.GetInstance().getAll().get(0);
+        User user = uhandler.getAll().get(0);
+        Meeting meeting = mhandler.getAll().get(0);
 
-        UserDatabaseHandler.GetInstance().setMeetingConfirmation(user, meeting, true);
+        uhandler.setMeetingConfirmation(user, meeting, true);
     }
 }
