@@ -79,8 +79,8 @@ public class UserDatabaseHandlerTest {
         Meeting meeting = allMeetings.get(0);
         Meeting meeting2 = allMeetings.get(1);
 
-        mhandler.addUserToMeeting(meeting, user);
-        mhandler.addUserToMeeting(meeting2, user);
+        mhandler.addUserToMeeting(meeting, user, "");
+        mhandler.addUserToMeeting(meeting2, user, "");
 
         List<Meeting> userMeetings = uhandler.getMeetingsOfUser(user);
 

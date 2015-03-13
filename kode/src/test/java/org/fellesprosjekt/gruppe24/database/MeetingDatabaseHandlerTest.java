@@ -37,7 +37,7 @@ public class MeetingDatabaseHandlerTest {
                 "Freddy`s bar",
                 new ArrayList<>(),
                 user));
-        mhandler.addUserToMeeting(meeting, user);
+        mhandler.addUserToMeeting(meeting, user, "");
         room = rhandler.insert(new Room("Mororommet", 8, true));
     }
 
@@ -85,7 +85,7 @@ public class MeetingDatabaseHandlerTest {
         Meeting meeting = mhandler.getAll().get(0);
         int sizeBefore = mhandler.getUsersOfMeeting(meeting).size();
 
-        mhandler.addUserToMeeting(meeting, user);
+        mhandler.addUserToMeeting(meeting, user, "");
         assertTrue(mhandler.getUsersOfMeeting(meeting).size() > sizeBefore);
 
         mhandler.removeUserFromMeeting(meeting, user);
