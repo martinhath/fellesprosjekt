@@ -60,7 +60,7 @@ public class GroupController extends ServerController{
             res.payload = handler.get(id);
             res.type = Response.Type.OK;
         } else if (req.payload instanceof String) {
-            // payload er name
+            // payload er brukernavn
             String name = (String) req.payload;
             res.payload = handler.getGroupFromName(name);
             res.type = Response.Type.OK;
