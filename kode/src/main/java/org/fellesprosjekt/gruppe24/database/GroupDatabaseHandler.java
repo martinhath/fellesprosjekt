@@ -151,6 +151,17 @@ public class GroupDatabaseHandler extends DatabaseHandler<Group> {
             return null;
         }
     }
+    
+    public Group getGroupFromName(String name) {
+		String query = "SELECT * FROM User_group WHERE name = '" + name + "';";
+		try {
+			HashMap<String, String> row = DatabaseManager.getRow(query);
+			return generateGroup(row);
+		} catch (SQLException ex) {
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+			return null;
+		}
+	}
 
     @Override
     public List<Group> getAll() {

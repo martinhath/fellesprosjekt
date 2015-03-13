@@ -1,8 +1,12 @@
 package org.fellesprosjekt.gruppe24.server.controllers;
 
+import org.fellesprosjekt.gruppe24.common.models.Group;
 import org.fellesprosjekt.gruppe24.common.models.net.Request;
+import org.fellesprosjekt.gruppe24.common.models.net.Response;
+import org.fellesprosjekt.gruppe24.database.GroupDatabaseHandler;
 import org.fellesprosjekt.gruppe24.server.ServerConnection;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 public class GroupController extends ServerController{
@@ -20,19 +24,59 @@ public class GroupController extends ServerController{
 
     @Override
     public void put(Request req) {
-        // TODO: implement
-        throw new RuntimeException("Not implemented");
+    	if (!(req.payload instanceof Group)) {
+            connection.sendTCP(new Response(Response.Type.FAIL,
+                    "Wrong payload: not Group"));
+            return;
+        }
+    	Group g = (Group) req.payload;
+    	if(g == null) {
+    		connection.sendTCP(new Response(Response.Type.FAIL,
+    				"Payload error: null"));
+            return;
+    	}
+    	GroupDatabaseHandler handler = GroupDatabaseHandler.GetInstance();
+    	handler.insert(g);
+    	g = handler.getGroupFromName(g.getName());
+    	Response res = new Response();
+    	if(g == null) {
+    		res.type = Response.Type.FAIL;
+    		res.payload = "Something went wrong";
+    	} else {
+    		res.type = Response.Type.OK;
+    		res.payload = g;
+    	}
+    	connection.sendTCP(res);
     }
 
     @Override
     public void get(Request req) {
-        // TODO: implement
-        throw new RuntimeException("Not implemented");
+    	Response res = new Response();
+    	GroupDatabaseHandler handler = GroupDatabaseHandler.GetInstance();
+        if (req.payload instanceof Integer) {
+            // payload er Id
+            Integer id = (Integer) req.payload;
+            res.payload = handler.get(id);
+            res.type = Response.Type.OK;
+        } else if (req.payload instanceof String) {
+            // payload er brukernavn
+            String name = (String) req.payload;
+            res.payload = handler.getGroupFromName(name);
+            res.type = Response.Type.OK;
+        } else {
+            res.type = Response.Type.FAIL;
+            res.payload = "Unknown payload type.";
+        }
+        connection.sendTCP(res);
     }
 
     @Override
     public void list(Request req) {
-        // TODO: implement
-        throw new RuntimeException("Not implemented");
+    	GroupDatabaseHandler handler = GroupDatabaseHandler.GetInstance();
+        Response res = new Response();
+        res.type = Response.Type.OK;
+        List<Group> groups = handler.getAll();
+        res.payload = groups;
+        connection.sendTCP(res);
     }
 }
