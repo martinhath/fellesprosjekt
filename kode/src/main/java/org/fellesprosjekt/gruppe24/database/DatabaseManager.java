@@ -7,6 +7,7 @@ import java.beans.PropertyVetoException;
 import java.nio.file.Paths;
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -268,6 +269,23 @@ public final class DatabaseManager {
             return null;
         }
     }
+    /**
+     * Takes a string of a timestamp like one from a SQL Time Field and returns a LocalTime object
+     * To be used when getting raw strings from a SQL select query
+     *
+     * @param timestamp string of a timestamp like SQL Time
+     * @return LocalTime object
+     */
+
+    public static LocalTime stringToTime(String timestamp) {
+        try {
+            return java.sql.Time.valueOf(timestamp).toLocalTime();
+        } catch (Exception ex) {
+            lgr.log(Level.SEVERE, "Could not convert timestamp to LocalTime");
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+            return null;
+        }
+    }
 
     @Deprecated
     public static int getLastId(String table) {
@@ -388,21 +406,21 @@ public final class DatabaseManager {
         }
     }
 
-    public static void deleteRow(String table, int id) throws SQLException {
+    public static boolean deleteRow(String table, int id) throws SQLException {
         String query = String.format("DELETE FROM %s WHERE %sid=?", table, table);
         PreparedStatement ps = getPreparedStatement(query);
         ps.setInt(1, id);
-        executePS(ps);
+        return executePS(ps) != -1; // executePS gir -1 hvis den var mislykket
     }
 
-    public static void deleteRow(
+    public static boolean deleteRow(
             String table, String foreignTable1, String foreignTable2, int fk1, int fk2) throws SQLException {
         String query = String.format("DELETE FROM %s WHERE %s_%sid=? AND %s_%sid=?",
                 table, foreignTable1, foreignTable1, foreignTable2, foreignTable2);
         PreparedStatement ps = getPreparedStatement(query);
         ps.setInt(1, fk1);
         ps.setInt(2, fk2);
-        executePS(ps);
+        return executePS(ps) != -1; // executePS gir -1 hvis den var mislykket
     }
 
 }

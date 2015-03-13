@@ -195,16 +195,17 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
         return result;
     }
 
-    public void removeUserFromMeeting(Meeting meeting, User user) {
+    public boolean removeUserFromMeeting(Meeting meeting, User user) {
         try {
-            deleteUserInvitedToMeeting(meeting.getId(), user.getId());
+            return deleteUserInvitedToMeeting(meeting.getId(), user.getId());
         } catch (SQLException ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
+            return false;
         }
     }
 
-    private void deleteUserInvitedToMeeting(int meetingid, int userid) throws SQLException {
-        DatabaseManager.deleteRow("User_invited_to_meeting", "meeting", "user", meetingid, userid);
+    private boolean deleteUserInvitedToMeeting(int meetingid, int userid) throws SQLException {
+        return DatabaseManager.deleteRow("User_invited_to_meeting", "meeting", "user", meetingid, userid);
     }
 
 }
