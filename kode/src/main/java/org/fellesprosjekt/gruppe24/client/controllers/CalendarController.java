@@ -64,6 +64,10 @@ public class CalendarController extends ClientController {
         labelWeek.setText("Uke " + date.format(weekformat));
         labelMonth.setText(date.format(monthformat));
     }
+    
+    private void setLocalWeek(LocalDateTime week){
+    	
+    }
 
     @FXML
     public void clickPrevWeek(ActionEvent e) {
@@ -81,6 +85,13 @@ public class CalendarController extends ClientController {
     public void newMeeting(ActionEvent a) {
         String path = Layout.NewMeeting;
         getApplication().newScene(path);
+    }
+    
+    @FXML
+    public void clickCurrentWeek(ActionEvent e) {
+    	date = LocalDateTime.now();
+    	setCalendarLabels(date);
+    	
     }
 
     @FXML
