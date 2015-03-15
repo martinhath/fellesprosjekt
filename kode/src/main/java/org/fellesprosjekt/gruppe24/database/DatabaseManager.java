@@ -50,20 +50,30 @@ public final class DatabaseManager {
     public static void init_test() {
         cpds = new ComboPooledDataSource();
         try {
-            cpds.setDriverClass("com.mysql.jdbc.Driver");
+            //cpds.setDriverClass("com.mysql.jdbc.Driver");
+            cpds.setDriverClass("org.h2.Driver");
         } catch (PropertyVetoException e) {
             e.printStackTrace();
         }
-        //loads the jdbc driver
 
-        // the settings below are optional -- c3p0 can work with defaults
         cpds.setMinPoolSize(5);
         cpds.setAcquireIncrement(5);
-        cpds.setMaxPoolSize(20); // klikka under tester da den bare var 20
+        cpds.setAcquireRetryAttempts(5);
+        cpds.setAcquireRetryDelay(200);
+        cpds.setMaxPoolSize(20);
         cpds.setMaxIdleTime(1);
 
-        cpds.setJdbcUrl("jdbc:h2:mem:test;MODE=MySQL;IGNORECASE=TRUE;INIT=runscript from " +
+        cpds.setJdbcUrl("jdbc:h2:mem:test_database;MODE=MySQL;IGNORECASE=true;DB_CLOSE_DELAY=-1;" +
+                "INIT=runscript from " +
                 "'../docs/database_script.sql'\\;runscript from '../docs/database_data.sql'");
+        try {
+            Connection c = cpds.getConnection();
+            c.close();
+        } catch (SQLException e) {
+            lgr.severe("Failed to get an initial connection");
+            System.exit(69);
+        }
+        lgr.info("Init done.");
     }
 
     /**
@@ -79,7 +89,6 @@ public final class DatabaseManager {
         try {
             Connection con = cpds.getConnection();
             return con;
-            //con = DriverManager.getConnection(url, user, password);
         } catch (SQLException ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
             return null;
@@ -124,10 +133,11 @@ public final class DatabaseManager {
 
     public static Statement getStatement() {
         try {
-            Statement st = createConnection().createStatement();
+            Connection con = createConnection();
+            Statement st = con.createStatement();
             return st;
         } catch (SQLException ex) {
-            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+            //lgr.log(Level.SEVERE, ex.getMessage(), ex);
         }
         return null;
     }
@@ -169,16 +179,12 @@ public final class DatabaseManager {
      * @throws SQLException
      */
     public static ResultSet readQuery(String query) {
-        Statement st = getStatement();
-        if (st == null)  {
-            lgr.severe("huehuehueh");
-            return null;
-        }
         try {
+            Statement st = getStatement();
             ResultSet rs = st.executeQuery(query);
             return rs;
-        } catch (SQLException ex) {
-            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+        } catch (Exception ex) {
+            //lgr.log(Level.SEVERE, ex.getMessage());
         }
         return null;
     }
@@ -192,18 +198,23 @@ public final class DatabaseManager {
      */
     public static boolean updateQuery(String query) {
         Statement st = getStatement();
+        boolean ret = false;
         try {
             st.executeUpdate(query);
-            return true;
+            ret =  true;
+            st.close();
+        } catch (org.h2.jdbc.JdbcSQLException e){
+            lgr.warning("halla gutta hva skjer a");
         } catch (SQLException ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
-            return false;
         }
+        return ret;
     }
 
     public static HashMap<String, String> getRow(String query) throws SQLException {
         HashMap<String, String> result = new HashMap<String, String>();
         ResultSet rs = readQuery(query);
+        if (rs == null) return null;
         if (rs.next()) {
             ResultSetMetaData rsmd = rs.getMetaData();
             for (int i = 1; i <= rsmd.getColumnCount(); i++) {
@@ -243,7 +254,9 @@ public final class DatabaseManager {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
         } finally {
             try {
-                rs.getStatement().getConnection().close();
+                Statement s = rs.getStatement();
+                Connection c = s.getConnection();
+                c.close();
             } catch (Exception ex) {
                 lgr.log(Level.SEVERE, ex.getMessage(), ex);
             }

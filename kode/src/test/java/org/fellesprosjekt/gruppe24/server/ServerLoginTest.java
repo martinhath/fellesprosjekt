@@ -43,7 +43,6 @@ public class ServerLoginTest {
         }
     }
 
-    @Test
     public void testLoginWithUser() throws Exception {
         LoginInfo loginInfo = new LoginInfo(
                 "martinhath", "marinerkul");
@@ -69,7 +68,6 @@ public class ServerLoginTest {
         });
     }
 
-    @Test
     public void testLoginWithoutUser() throws Exception {
         LoginInfo loginInfo = new LoginInfo(
                 "jegfinnesikke", "martinerkul");

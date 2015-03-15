@@ -16,28 +16,13 @@
 --/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 --/*!40101 SET NAMES utf8 */;
 
---
--- Database: `hermanmk_calDB`
---
 
---
--- Dumping data for table `Meeting`
---
-
-INSERT INTO `Room` (`roomid`, `capacity`, `room_num`, `available`) VALUES
-(1, 5, 'Grupperom 204', 1),
-(2, 40, 'Festsal 101', 1),
-(3, 3, 'Kontor 314', 1);
+INSERT INTO `Room` (`capacity`, `room_num`, `available`) VALUES
+(5, 'Grupperom 204', 1),
+(40, 'Festsal 101', 1),
+(3, 'Kontor 314', 1);
 
 
---
--- Dumping data for table `Room`
---
-
-
---
--- Dumping data for table `User`
---
 
 INSERT INTO `User` (`userid`, `username`, `name`, `email`, `password`, `salt`, `create_time`, `update_time`) VALUES
 (1, 'Viktor', 'Viktor Andersen', 'viktorfa@stud.ntnu.no', 'b8d4c62d9bee042e87e683074797a6033771173a555597006676c6831918ec2b', '99b4be447c706372f32f989349ad6ba6', '2015-03-12 11:39:10', '2015-03-12 10:39:10'),
@@ -46,13 +31,13 @@ INSERT INTO `User` (`userid`, `username`, `name`, `email`, `password`, `salt`, `
 (4, 'Herman', 'Herman Karlsen', 'hermanmk@stud.ntnu.no', 'ee52be1a170782d005515d63c9ac4f7787c91d87699d386db271d433fdb3fee7', '5e9c45f0ba61803c993975f8723c3fa8', '2015-03-12 11:47:58', '2015-03-12 10:47:58'),
 (5, 'Ingrid', 'Ingrid Vold', 'none', '5ca437c5e1734f2634b88079de6752fd7ed0062917743d299738e0808e7f4723', '63324c6e82d6f43a00ef47c7575f12e3', '2015-03-12 12:01:21', '2015-03-12 11:01:21');
 
---
--- Dumping data for table `User_group`
---
+
 
 INSERT INTO `User_group` (`groupid`, `name`, `owner_id`, `create_time`, `update_time`) VALUES
 (1, 'The Gang', 1, '2015-03-12 11:56:03', '2015-03-12 10:56:03'),
 (2, 'Gruppe 24', 3, '2015-03-12 11:58:43', '2015-03-12 10:58:43');
+
+
 
 INSERT INTO `Meeting` (`meetingid`, `name`, `description`, `start_time`, `end_time`, `Room_roomid`, `location`, `owner_id`, `Group_groupid`, `create_time`, `update_time`) VALUES
 (1, 'Fredagspils', 'På fredag skal vi drikke en god del pils, og så klart litt sambuca.', '2015-05-08 18:00:00', '2015-05-09 00:00:00', 2, 'Trondheim Torg', 4, 1, '2015-03-12 12:22:40', '2015-03-12 11:31:32'),

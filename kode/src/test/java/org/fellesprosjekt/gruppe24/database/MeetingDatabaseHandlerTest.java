@@ -81,7 +81,7 @@ public class MeetingDatabaseHandlerTest {
 
     @Test
     public void testCanAddAndRemoveUserToMeeting() {
-        User user = UserDatabaseHandler.GetInstance().getAll().get(1);
+        User user = uhandler.getAll().get(1);
         Meeting meeting = mhandler.getAll().get(0);
         int sizeBefore = mhandler.getUsersOfMeeting(meeting).size();
 
@@ -94,8 +94,8 @@ public class MeetingDatabaseHandlerTest {
 
     @Test
     public void testCanGetUsersOfMeeting() {
-        Meeting meeting = MeetingDatabaseHandler.GetInstance().getAll().get(0);
-        List<User> users = MeetingDatabaseHandler.GetInstance().getUsersOfMeeting(meeting);
+        Meeting meeting = mhandler.getAll().get(0);
+        List<User> users = mhandler.getUsersOfMeeting(meeting);
         assertNotNull(users);
         assertNotNull(users.get(0).getUsername());
     }
