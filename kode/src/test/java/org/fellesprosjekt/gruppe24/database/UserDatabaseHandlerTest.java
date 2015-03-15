@@ -114,24 +114,24 @@ public class UserDatabaseHandlerTest {
         assertEquals(username, user.getUsername());
     }
 
+    @Test
     public void testCanGetAllMeetingsOfUser() {
-        User user = uhandler.getAll().get(0);
+        User user = new User("uname", "Bruker Brukersen", "pass", "e@ma.il");
+        user = uhandler.insert(user);
         List<Meeting> allMeetings = mhandler.getAll();
         Meeting meeting = allMeetings.get(0);
         Meeting meeting2 = allMeetings.get(1);
 
-        // mhandler.addUserToMeeting(meeting, user);
-        // mhandler.addUserToMeeting(meeting2, user);
+        mhandler.addUserToMeeting(meeting, user);
+        mhandler.addUserToMeeting(meeting2, user);
 
         List<Meeting> userMeetings = uhandler.getMeetingsOfUser(user);
 
-        /*
-        Her antar vi at møtene kommer ut i samme rekkefølge, og at
-        brukeren skal være med på alle møtene?
         for (int i = 0; i < userMeetings.size(); i++) {
-            TestCase.assertEquals(allMeetings.get(i).getId(), userMeetings.get(i).getId());
+            int mid = allMeetings.get(i).getId();
+            int uid = userMeetings.get(i).getId();
+            TestCase.assertEquals(mid, uid);
         }
-         */
     }
 
     public void testCanConfirmMeeting() {

@@ -164,7 +164,7 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
 
     private void insertUserInvitedToMeeting(int meetingid, int userid, String message) throws SQLException {
         String query = "INSERT INTO User_invited_to_meeting " +
-                "(User_userid, meeting_meetingid, notification_message) " +
+                "(user_userid, meeting_meetingid, notification_message) " +
                 "VALUES (?, ?, ?)";
         PreparedStatement ps = DatabaseManager.getPreparedStatement(query);
         ps.setInt(1, userid);
