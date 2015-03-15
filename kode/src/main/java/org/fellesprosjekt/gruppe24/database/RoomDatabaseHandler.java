@@ -85,7 +85,8 @@ public final class RoomDatabaseHandler extends DatabaseHandler<Room> {
 
     public Room get(int id) {
         try {
-            HashMap<String, String> info = DatabaseManager.getRow(String.format("SELECT * FROM Room WHERE roomid=%d", id));
+            HashMap<String, String> info = DatabaseManager.getRow(
+                    String.format("SELECT * FROM Room WHERE roomid=%d", id));
             return generateRoom(info);
         } catch (NumberFormatException|SQLException ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);

@@ -101,23 +101,44 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
 	        ps.setString(3, user.getPassword());
 	        ps.setString(4, user.getEmail());
 	        int id = DatabaseManager.executePS(ps);
-	        User u = new User(id, user.getUsername(), user.getName(), user.getPassword(), user.getEmail());
-	        return u;
+			if (id < 0) {
+				lgr.severe("Got negative index from DatabaseManager.executePS()");
+				return null;
+			}
+	        return new User(id, user.getUsername(), user.getName(), user.getPassword(), user.getEmail());
 		} catch (Exception ex) {
 			lgr.log(Level.SEVERE, ex.getMessage(), ex);
 	        return null;
 	    }
 	}
 
+	public User get(String username) {
+		HashMap<String, String> info;
+		try {
+			info = DatabaseManager.getRow(String.format(
+					"SELECT * FROM User WHERE username='%s'", username));
+			if (info.size() == 0)
+				return null;
+			return generateUser(info);
+		} catch (SQLException ex) {
+			lgr.log(Level.SEVERE, ex.getMessage(), ex);
+			return null;
+		} catch (NullPointerException e){
+			lgr.info(String.format("User '%s' not found.", username));
+			return null;
+		}
+	}
+
 	@Override
 	public User get(int id) {
 		try {
-            HashMap<String, String> info = DatabaseManager.getRow(String.format("SELECT * FROM User WHERE userid=%d", id));
+            HashMap<String, String> info = DatabaseManager.getRow(
+					String.format("SELECT * FROM User WHERE userid=%d", id));
+			if (info.size() == 0)
+				return null;
             return generateUser(info);
-        } catch (Exception ex) {
-            lgr.log(Level.SEVERE, ex.getMessage(), ex);
-            return null;
-        }
+        } catch (SQLException ex) {}
+		return null;
 	}
 
 	@Override
@@ -128,11 +149,15 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
 
 	@Override
 	public boolean delete(User user) {
+		int id = user.getId();
+		System.out.println("Deleting user " + id);
 		try {
-			if (user.getId() < 0) // id er satt
-				return DatabaseManager.updateQuery(String.format("DELETE FROM User WHERE username='%s'", user.getUsername()));
+			if (id < 0) // id er ikke satt
+				return DatabaseManager.updateQuery(
+						String.format("DELETE FROM User WHERE username='%s'", user.getUsername()));
 			else
-				return DatabaseManager.updateQuery(String.format("DELETE FROM User WHERE userid=%d", user.getId()));
+				return DatabaseManager.updateQuery(
+						String.format("DELETE FROM User WHERE userid='%d'", id));
 		} catch (Exception ex) {
 			lgr.log(Level.SEVERE, ex.getMessage(), ex);
 			return false;
@@ -146,6 +171,7 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
 		DatabaseManager.updateQuery(query);
 		return true;
 	}
+
     public List<Meeting> getMeetingsOfUser(User user) {
         List<Meeting> result = new ArrayList<>();
         try {
@@ -158,6 +184,7 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
             return result;
         }
     }
+
     private List<Integer> selectMeetingIDsOfUser(int userid) throws SQLException {
         List<Integer> result = new ArrayList<>();
         String query = String.format("SELECT Meeting_meetingid FROM User_invited_to_meeting WHERE User_userid=%d", userid);
