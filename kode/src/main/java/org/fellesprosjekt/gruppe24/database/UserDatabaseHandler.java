@@ -191,7 +191,7 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
         String query = String.format("SELECT Meeting_meetingid FROM User_invited_to_meeting WHERE User_userid=%d", userid);
         ArrayList<HashMap<String, String>> resultSet = DatabaseManager.getList(query);
         for (HashMap<String, String> row: resultSet) {
-            result.add(Integer.parseInt(row.get("Meeting_meetingid")));
+            result.add(Integer.parseInt(row.get("meeting_meetingid")));
         }
         return result;
     }
