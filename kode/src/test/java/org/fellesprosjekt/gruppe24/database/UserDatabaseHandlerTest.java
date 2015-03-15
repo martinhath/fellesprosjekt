@@ -1,16 +1,19 @@
 package org.fellesprosjekt.gruppe24.database;
 
 import junit.framework.TestCase;
+import org.fellesprosjekt.gruppe24.TestInitRunner;
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
 import org.fellesprosjekt.gruppe24.common.models.User;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
+@RunWith(TestInitRunner.class)
 public class UserDatabaseHandlerTest {
 
     private Logger logger = Logger.getLogger(getClass().getName());

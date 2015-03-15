@@ -1,5 +1,6 @@
 package org.fellesprosjekt.gruppe24.database;
 
+import org.fellesprosjekt.gruppe24.TestInitRunner;
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
 import org.fellesprosjekt.gruppe24.common.models.Room;
 import org.fellesprosjekt.gruppe24.common.models.User;
@@ -7,12 +8,14 @@ import static org.junit.Assert.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 
+@RunWith(TestInitRunner.class)
 public class MeetingDatabaseHandlerTest {
     private User user;
     private Room room;

@@ -20,14 +20,28 @@ public final class DatabaseManager {
 
     private static ComboPooledDataSource cpds;
 
-    /**
-     * Initializes a specific database
-     *
-     * @param url      url to the database
-     * @param user     username in the database
-     * @param password user's password to the database
-     */
-    public static void init(String url, String database, String user, String password) {
+    private static boolean isInit = false;
+
+    public enum Type {PROD, TEST}
+
+    public static void init(Type t) {
+        if (isInit) {
+            lgr.warning("Database is already initialized!");
+            return;
+        }
+        isInit = true;
+        switch (t) {
+            case PROD:
+                init_prod("mysql.stud.ntnu.no", "hermanmk_calDB", "hermanmk_cal", "cal123");
+                break;
+            case TEST:
+                init_test();
+
+        }
+    }
+
+    public static void init_prod(String url, String database, String user, String password) {
+        if (!isInit) return;
         // Connection Pooling
         cpds = new ComboPooledDataSource();
         try {
@@ -48,6 +62,7 @@ public final class DatabaseManager {
     }
 
     public static void init_test() {
+        if (!isInit) return;
         cpds = new ComboPooledDataSource();
         try {
             //cpds.setDriverClass("com.mysql.jdbc.Driver");
@@ -74,15 +89,6 @@ public final class DatabaseManager {
             System.exit(69);
         }
         lgr.info("Init done.");
-    }
-
-    /**
-     * Initializes a default database
-     *
-     */
-    static {
-        //init("mysql.stud.ntnu.no", "hermanmk_calDB", "hermanmk_cal", "cal123");
-        init_test();
     }
 
     public static Connection createConnection() {
