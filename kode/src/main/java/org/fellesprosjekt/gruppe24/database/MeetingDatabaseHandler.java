@@ -174,10 +174,12 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
     }
 
     public List<User> getUsersOfMeeting(Meeting meeting) {
+        UserDatabaseHandler uhandler = UserDatabaseHandler.GetInstance();
         List<User> result = new ArrayList<>();
         try {
-            for (int userid : selectUserIDsOfMeeting(meeting.getId())) {
-                result.add(UserDatabaseHandler.GetInstance().get(userid));
+            List<Integer> ids = selectUserIDsOfMeeting(meeting.getId());
+            for (int id : ids) {
+                result.add(uhandler.get(id));
             }
             return result;
         } catch (SQLException ex) {
@@ -188,11 +190,13 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
 
     private List<Integer> selectUserIDsOfMeeting(int meetingid) throws SQLException {
         List<Integer> result = new ArrayList<>();
-        String query = String.format("SELECT User_userid FROM" +
+        String query = String.format("SELECT User_userid FROM " +
                 "user_invited_to_meeting WHERE meeting_meetingid=%d", meetingid);
-        ArrayList<HashMap<String, String>> resultSet = DatabaseManager.getList(query);
+        ArrayList<HashMap<String, String>> resultSet =
+                DatabaseManager.getList(query);
+
         for (HashMap<String, String> row: resultSet) {
-            result.add(Integer.parseInt(row.get("User_userid")));
+            result.add(Integer.parseInt(row.get("user_userid")));
         }
         return result;
     }

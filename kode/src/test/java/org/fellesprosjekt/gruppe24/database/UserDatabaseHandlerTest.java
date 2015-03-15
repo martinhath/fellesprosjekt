@@ -104,8 +104,7 @@ public class UserDatabaseHandlerTest {
     @Test
     public void canAuthenticateUser() {
         String username = "Viktor";
-        String password = "b8d4c62d9bee042e87e683074797a6033771173a555597006676c6831918ec2b";
-        uhandler.getAll();
+        String password = "viktor1";
         User user = uhandler.authenticate(username, password);
 
         assertNotNull(user);

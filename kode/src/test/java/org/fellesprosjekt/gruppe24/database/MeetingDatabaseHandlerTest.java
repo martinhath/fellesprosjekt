@@ -22,7 +22,7 @@ public class MeetingDatabaseHandlerTest {
     private RoomDatabaseHandler rhandler;
 
     @Before
-    public void setUp() {
+    public void before() {
         uhandler = UserDatabaseHandler.GetInstance();
         mhandler = MeetingDatabaseHandler.GetInstance();
         rhandler = RoomDatabaseHandler.GetInstance();
@@ -42,7 +42,7 @@ public class MeetingDatabaseHandlerTest {
     }
 
     @After
-    public void tearDown() {
+    public void after() {
         User user = uhandler.getAll().get(0);
 
         Meeting meeting = mhandler.getAll().get(0);
@@ -94,9 +94,9 @@ public class MeetingDatabaseHandlerTest {
 
     @Test
     public void testCanGetUsersOfMeeting() {
-        Meeting meeting = mhandler.getAll().get(0);
+        Meeting meeting = mhandler.get(2);   // Gruppemøte
         List<User> users = mhandler.getUsersOfMeeting(meeting);
         assertNotNull(users);
-        assertNotNull(users.get(0).getUsername());
+        assertNotEquals(users.size(), 0);
     }
 }
