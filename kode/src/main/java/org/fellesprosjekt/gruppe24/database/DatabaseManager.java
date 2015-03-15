@@ -223,8 +223,6 @@ public final class DatabaseManager {
         }
         try {
             rs.getStatement().getConnection().close();
-            rs.getStatement().close();
-            rs.close();
         } catch (Exception ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
         }
@@ -259,8 +257,6 @@ public final class DatabaseManager {
                 Statement s = rs.getStatement();
                 Connection c = s.getConnection();
                 c.close();
-                s.close();
-                rs.close();
             } catch (Exception ex) {
                 lgr.log(Level.SEVERE, ex.getMessage(), ex);
             }
