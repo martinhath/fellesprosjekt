@@ -150,7 +150,6 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
 	@Override
 	public boolean delete(User user) {
 		int id = user.getId();
-		System.out.println("Deleting user " + id);
 		try {
 			if (id < 0) // id er ikke satt
 				return DatabaseManager.updateQuery(

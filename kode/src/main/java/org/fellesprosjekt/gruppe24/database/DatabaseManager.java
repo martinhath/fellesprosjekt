@@ -202,9 +202,8 @@ public final class DatabaseManager {
         try {
             st.executeUpdate(query);
             ret =  true;
+            st.getConnection().close();
             st.close();
-        } catch (org.h2.jdbc.JdbcSQLException e){
-            lgr.warning("halla gutta hva skjer a");
         } catch (SQLException ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
         }
