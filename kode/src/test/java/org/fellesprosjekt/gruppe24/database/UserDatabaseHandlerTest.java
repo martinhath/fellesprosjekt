@@ -45,7 +45,6 @@ public class UserDatabaseHandlerTest {
         boolean isinlist = false;
         List<User> list = uhandler.getAll();
         for (User u: list) {
-            System.out.println(u.getUsername());
             if (user.getUsername() == u.getUsername())
                 isinlist = true;
         }
@@ -70,11 +69,10 @@ public class UserDatabaseHandlerTest {
         uhandler.delete(users.get(0));
         uhandler.delete(users.get(1));
         uhandler.delete(users.get(2));
-        /*
+
         for (int i = 0; i < 100; i++) {
             uhandler.delete(users.get(i));
         }
-        */
     }
 
     @Test
@@ -86,27 +84,15 @@ public class UserDatabaseHandlerTest {
     @Test
     public void testCanInsertAndDeleteUser() {
         User user = new User("brukernavn", "navn", "password", "e-mail@lel.no");
+
         User ret = uhandler.insert(user);
         assertNotNull(ret);
 
-        for (User u: uhandler.getAll()){
-            System.out.println(u.getUsername());
-        }
-
-        if (!uhandler.delete(ret)) {
+        if (!uhandler.delete(ret))
             fail();
-        }
-
-        System.out.println("Delete er good");
-
-        for (User u: uhandler.getAll()){
-            System.out.println(u.getUsername());
-        }
-        System.out.println("getAll er good");
 
         ret = uhandler.get(ret.getId());
         assertNull(ret);
-        System.out.println("get er good");
     }
 
     @Test
@@ -114,27 +100,6 @@ public class UserDatabaseHandlerTest {
         User user = uhandler.get("Martin");
         assertNotNull(user);
     }
-
-    /*
-    public void testCanInsertAndDeleteUser() {
-        User user = new User("brukernavn 321", "navn", "password", "e-mail@lel.no");
-        TestCase.assertNotNull(user);
-
-        user = uhandler.insert(user);
-        TestCase.assertNotNull(user);
-
-        logger.info("get username");
-        User user2 = uhandler.get(user.getUsername());
-        TestCase.assertNotNull(user2);
-        TestCase.assertEquals(user.getId(), user2.getId());
-
-        logger.info("delete");
-        uhandler.delete(user);
-
-        logger.info("get id");
-        uhandler.get(user.getId());
-    }
-    */
 
     @Test
     public void canAuthenticateUser() {
