@@ -55,10 +55,12 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
     }
 
     public User authenticate(String username, String password) {
-        String query = String.format("SELECT * FROM User WHERE username=\"%s\"", username, password);
+        String query = String.format(
+                "SELECT * FROM User WHERE username='%s'", username);
         try{
         	HashMap<String, String> row = DatabaseManager.getRow(query);
-        	PasswordCryptography pc = new PasswordCryptography(password, row.get("salt"));
+        	PasswordCryptography pc = new PasswordCryptography(
+                    password, row.get("salt"));
         	if(pc.compareHash(row.get("password")))
         		return generateUser(row);
         	else

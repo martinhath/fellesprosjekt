@@ -184,7 +184,7 @@ public final class DatabaseManager {
             ResultSet rs = st.executeQuery(query);
             return rs;
         } catch (Exception ex) {
-            //lgr.log(Level.SEVERE, ex.getMessage());
+            lgr.log(Level.SEVERE, ex.getMessage());
         }
         return null;
     }
@@ -213,7 +213,8 @@ public final class DatabaseManager {
     public static HashMap<String, String> getRow(String query) throws SQLException {
         HashMap<String, String> result = new HashMap<String, String>();
         ResultSet rs = readQuery(query);
-        if (rs == null) return null;
+        if (rs == null)
+            return null;
         if (rs.next()) {
             ResultSetMetaData rsmd = rs.getMetaData();
             for (int i = 1; i <= rsmd.getColumnCount(); i++) {
@@ -222,11 +223,12 @@ public final class DatabaseManager {
         }
         try {
             rs.getStatement().getConnection().close();
+            rs.getStatement().close();
+            rs.close();
         } catch (Exception ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
         }
         return result;
-        //blir connection lukket nå?
     }
 
     /**
@@ -240,6 +242,7 @@ public final class DatabaseManager {
     protected static ArrayList<HashMap<String, String>> getList(String query) {
         ArrayList<HashMap<String, String>> result = new ArrayList<HashMap<String, String>>();
         ResultSet rs = readQuery(query);
+        if (rs == null) return null;
         try {
             while (rs.next()) {
                 ResultSetMetaData rsmd = rs.getMetaData();
@@ -256,6 +259,8 @@ public final class DatabaseManager {
                 Statement s = rs.getStatement();
                 Connection c = s.getConnection();
                 c.close();
+                s.close();
+                rs.close();
             } catch (Exception ex) {
                 lgr.log(Level.SEVERE, ex.getMessage(), ex);
             }
