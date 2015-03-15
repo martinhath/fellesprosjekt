@@ -33,6 +33,8 @@ public class User extends Entity {
     public User(int id, String username, String name, String password, String email) {
         super(id, name);
         this.username = username;
+        this.password = password;
+        this.email = email;
     }
 
     public User(String username, String name, String password, String email) {

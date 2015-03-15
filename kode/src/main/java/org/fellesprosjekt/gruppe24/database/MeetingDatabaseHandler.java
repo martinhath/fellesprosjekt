@@ -154,7 +154,8 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
 
     public void addUserToMeeting(Meeting meeting, User user) {
         try {
-            insertUserInvitedToMeeting(meeting.getId(), user.getId(), "Dette møtet er superviktig.");
+            insertUserInvitedToMeeting(meeting.getId(), user.getId(),
+                    "Dette møtet er superviktig.");
         } catch (SQLException ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
         }
@@ -163,7 +164,7 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
 
     private void insertUserInvitedToMeeting(int meetingid, int userid, String message) throws SQLException {
         String query = "INSERT INTO User_invited_to_meeting " +
-                "(User_userid, Meeting_meetingid, notification_message) " +
+                "(User_userid, meeting_meetingid, notification_message) " +
                 "VALUES (?, ?, ?)";
         PreparedStatement ps = DatabaseManager.getPreparedStatement(query);
         ps.setInt(1, userid);
@@ -173,10 +174,12 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
     }
 
     public List<User> getUsersOfMeeting(Meeting meeting) {
+        UserDatabaseHandler uhandler = UserDatabaseHandler.GetInstance();
         List<User> result = new ArrayList<>();
         try {
-            for (int userid : selectUserIDsOfMeeting(meeting.getId())) {
-                result.add(UserDatabaseHandler.GetInstance().get(userid));
+            List<Integer> ids = selectUserIDsOfMeeting(meeting.getId());
+            for (int id : ids) {
+                result.add(uhandler.get(id));
             }
             return result;
         } catch (SQLException ex) {
@@ -187,10 +190,13 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
 
     private List<Integer> selectUserIDsOfMeeting(int meetingid) throws SQLException {
         List<Integer> result = new ArrayList<>();
-        String query = String.format("SELECT User_userid FROM User_invited_to_meeting WHERE Meeting_meetingid=%d", meetingid);
-        ArrayList<HashMap<String, String>> resultSet = DatabaseManager.getList(query);
+        String query = String.format("SELECT User_userid FROM " +
+                "user_invited_to_meeting WHERE meeting_meetingid=%d", meetingid);
+        ArrayList<HashMap<String, String>> resultSet =
+                DatabaseManager.getList(query);
+
         for (HashMap<String, String> row: resultSet) {
-            result.add(Integer.parseInt(row.get("User_userid")));
+            result.add(Integer.parseInt(row.get("user_userid")));
         }
         return result;
     }
@@ -204,7 +210,7 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
     }
 
     private void deleteUserInvitedToMeeting(int meetingid, int userid) throws SQLException {
-        DatabaseManager.deleteRow("User_invited_to_meeting", "meeting", "user", meetingid, userid);
+        DatabaseManager.deleteRow("user_invited_to_meeting", "meeting", "user", meetingid, userid);
     }
 
 }

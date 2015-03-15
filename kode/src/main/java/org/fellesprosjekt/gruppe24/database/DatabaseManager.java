@@ -20,14 +20,28 @@ public final class DatabaseManager {
 
     private static ComboPooledDataSource cpds;
 
-    /**
-     * Initializes a specific database
-     *
-     * @param url      url to the database
-     * @param user     username in the database
-     * @param password user's password to the database
-     */
-    public static void init(String url, String database, String user, String password) {
+    private static boolean isInit = false;
+
+    public enum Type {PROD, TEST}
+
+    public static void init(Type t) {
+        if (isInit) {
+            lgr.warning("Database is already initialized!");
+            return;
+        }
+        isInit = true;
+        switch (t) {
+            case PROD:
+                init_prod("mysql.stud.ntnu.no", "hermanmk_calDB", "hermanmk_cal", "cal123");
+                break;
+            case TEST:
+                init_test();
+
+        }
+    }
+
+    public static void init_prod(String url, String database, String user, String password) {
+        if (!isInit) return;
         // Connection Pooling
         cpds = new ComboPooledDataSource();
         try {
@@ -48,38 +62,39 @@ public final class DatabaseManager {
     }
 
     public static void init_test() {
+        if (!isInit) return;
         cpds = new ComboPooledDataSource();
         try {
-            cpds.setDriverClass("com.mysql.jdbc.Driver");
+            //cpds.setDriverClass("com.mysql.jdbc.Driver");
+            cpds.setDriverClass("org.h2.Driver");
         } catch (PropertyVetoException e) {
             e.printStackTrace();
         }
-        //loads the jdbc driver
 
-        // the settings below are optional -- c3p0 can work with defaults
         cpds.setMinPoolSize(5);
         cpds.setAcquireIncrement(5);
-        cpds.setMaxPoolSize(20); // klikka under tester da den bare var 20
+        cpds.setAcquireRetryAttempts(5);
+        cpds.setAcquireRetryDelay(200);
+        cpds.setMaxPoolSize(20);
         cpds.setMaxIdleTime(1);
 
-        cpds.setJdbcUrl("jdbc:h2:mem:test;MODE=MySQL;INIT=runscript from " +
-                "'../docs/database_script.sql'");
-    }
-
-    /**
-     * Initializes a default database
-     *
-     */
-    static {
-        //init("mysql.stud.ntnu.no", "hermanmk_calDB", "hermanmk_cal", "cal123");
-        init_test();
+        cpds.setJdbcUrl("jdbc:h2:mem:test_database;MODE=MySQL;IGNORECASE=true;DB_CLOSE_DELAY=-1;" +
+                "INIT=runscript from " +
+                "'../docs/database_script.sql'\\;runscript from '../docs/database_data.sql'");
+        try {
+            Connection c = cpds.getConnection();
+            c.close();
+        } catch (SQLException e) {
+            lgr.severe("Failed to get an initial connection");
+            System.exit(69);
+        }
+        lgr.info("Init done.");
     }
 
     public static Connection createConnection() {
         try {
             Connection con = cpds.getConnection();
             return con;
-            //con = DriverManager.getConnection(url, user, password);
         } catch (SQLException ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
             return null;
@@ -124,10 +139,11 @@ public final class DatabaseManager {
 
     public static Statement getStatement() {
         try {
-            Statement st = createConnection().createStatement();
+            Connection con = createConnection();
+            Statement st = con.createStatement();
             return st;
         } catch (SQLException ex) {
-            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+            //lgr.log(Level.SEVERE, ex.getMessage(), ex);
         }
         return null;
     }
@@ -169,16 +185,12 @@ public final class DatabaseManager {
      * @throws SQLException
      */
     public static ResultSet readQuery(String query) {
-        Statement st = getStatement();
-        if (st == null)  {
-            lgr.severe("huehuehueh");
-            return null;
-        }
         try {
+            Statement st = getStatement();
             ResultSet rs = st.executeQuery(query);
             return rs;
-        } catch (SQLException ex) {
-            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+        } catch (Exception ex) {
+            lgr.log(Level.SEVERE, ex.getMessage());
         }
         return null;
     }
@@ -192,22 +204,27 @@ public final class DatabaseManager {
      */
     public static boolean updateQuery(String query) {
         Statement st = getStatement();
+        boolean ret = false;
         try {
             st.executeUpdate(query);
-            return true;
+            ret =  true;
+            st.getConnection().close();
+            st.close();
         } catch (SQLException ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
-            return false;
         }
+        return ret;
     }
 
     public static HashMap<String, String> getRow(String query) throws SQLException {
         HashMap<String, String> result = new HashMap<String, String>();
         ResultSet rs = readQuery(query);
+        if (rs == null)
+            return null;
         if (rs.next()) {
             ResultSetMetaData rsmd = rs.getMetaData();
             for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-                result.put(rsmd.getColumnLabel(i), rs.getString(i));
+                result.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getString(i));
             }
         }
         try {
@@ -216,7 +233,6 @@ public final class DatabaseManager {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
         }
         return result;
-        //blir connection lukket nå?
     }
 
     /**
@@ -230,12 +246,13 @@ public final class DatabaseManager {
     protected static ArrayList<HashMap<String, String>> getList(String query) {
         ArrayList<HashMap<String, String>> result = new ArrayList<HashMap<String, String>>();
         ResultSet rs = readQuery(query);
+        if (rs == null) return null;
         try {
             while (rs.next()) {
                 ResultSetMetaData rsmd = rs.getMetaData();
                 HashMap<String, String> row = new HashMap<String, String>();
                 for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-                    row.put(rsmd.getColumnLabel(i), rs.getString(i));
+                    row.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getString(i));
                 }
                 result.add(row);
             }
@@ -243,7 +260,9 @@ public final class DatabaseManager {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
         } finally {
             try {
-                rs.getStatement().getConnection().close();
+                Statement s = rs.getStatement();
+                Connection c = s.getConnection();
+                c.close();
             } catch (Exception ex) {
                 lgr.log(Level.SEVERE, ex.getMessage(), ex);
             }

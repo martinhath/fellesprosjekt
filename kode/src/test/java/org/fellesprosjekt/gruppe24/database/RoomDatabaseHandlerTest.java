@@ -1,12 +1,15 @@
 package org.fellesprosjekt.gruppe24.database;
 
+import org.fellesprosjekt.gruppe24.TestInitRunner;
 import org.fellesprosjekt.gruppe24.common.models.Room;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.List;
 
+@RunWith(TestInitRunner.class)
 public class RoomDatabaseHandlerTest {
 
     private Room room;

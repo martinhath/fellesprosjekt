@@ -4,6 +4,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 
 import org.fellesprosjekt.gruppe24.common.KryoUtils;
+import org.fellesprosjekt.gruppe24.database.DatabaseManager;
 import org.fellesprosjekt.gruppe24.server.listeners.InvitationListener;
 import org.fellesprosjekt.gruppe24.server.listeners.AuthListener;
 import org.fellesprosjekt.gruppe24.server.listeners.MeetingListener;
@@ -52,6 +53,7 @@ public class CalendarServer {
 
 
     public static void main(String[] args){
+        DatabaseManager.init(DatabaseManager.Type.PROD);
         CalendarServer server = new CalendarServer(9001, 9002);
         KryoUtils.registerClasses(server.getServer().getKryo());
         server.init();

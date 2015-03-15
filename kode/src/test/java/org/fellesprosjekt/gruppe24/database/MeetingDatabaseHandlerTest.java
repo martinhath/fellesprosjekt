@@ -1,5 +1,6 @@
 package org.fellesprosjekt.gruppe24.database;
 
+import org.fellesprosjekt.gruppe24.TestInitRunner;
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
 import org.fellesprosjekt.gruppe24.common.models.Room;
 import org.fellesprosjekt.gruppe24.common.models.User;
@@ -7,12 +8,14 @@ import static org.junit.Assert.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 
+@RunWith(TestInitRunner.class)
 public class MeetingDatabaseHandlerTest {
     private User user;
     private Room room;
@@ -22,7 +25,7 @@ public class MeetingDatabaseHandlerTest {
     private RoomDatabaseHandler rhandler;
 
     @Before
-    public void setUp() {
+    public void before() {
         uhandler = UserDatabaseHandler.GetInstance();
         mhandler = MeetingDatabaseHandler.GetInstance();
         rhandler = RoomDatabaseHandler.GetInstance();
@@ -42,7 +45,7 @@ public class MeetingDatabaseHandlerTest {
     }
 
     @After
-    public void tearDown() {
+    public void after() {
         User user = uhandler.getAll().get(0);
 
         Meeting meeting = mhandler.getAll().get(0);
@@ -81,7 +84,7 @@ public class MeetingDatabaseHandlerTest {
 
     @Test
     public void testCanAddAndRemoveUserToMeeting() {
-        User user = UserDatabaseHandler.GetInstance().getAll().get(1);
+        User user = uhandler.getAll().get(1);
         Meeting meeting = mhandler.getAll().get(0);
         int sizeBefore = mhandler.getUsersOfMeeting(meeting).size();
 
@@ -94,9 +97,9 @@ public class MeetingDatabaseHandlerTest {
 
     @Test
     public void testCanGetUsersOfMeeting() {
-        Meeting meeting = MeetingDatabaseHandler.GetInstance().getAll().get(0);
-        List<User> users = MeetingDatabaseHandler.GetInstance().getUsersOfMeeting(meeting);
+        Meeting meeting = mhandler.get(2);   // Gruppemøte
+        List<User> users = mhandler.getUsersOfMeeting(meeting);
         assertNotNull(users);
-        assertNotNull(users.get(0).getUsername());
+        assertNotEquals(users.size(), 0);
     }
 }
