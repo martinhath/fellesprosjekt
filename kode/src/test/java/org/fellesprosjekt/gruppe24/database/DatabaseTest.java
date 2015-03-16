@@ -2,18 +2,26 @@ package org.fellesprosjekt.gruppe24.database;
 
 import junit.framework.TestCase;
 
-import org.fellesprosjekt.gruppe24.database.DatabaseManager;
+import org.fellesprosjekt.gruppe24.TestInitRunner;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import javax.xml.crypto.Data;
-import java.util.HashMap;
+import java.sql.SQLException;
+import java.sql.Statement;
 
-public class DatabaseTest extends TestCase {
-    public void setUp() {
 
-    }
+@RunWith(TestInitRunner.class)
+public class DatabaseTest {
 
+    @Test
     public void testCanConnectToDefaultDB() {
-        TestCase.assertNotNull(DatabaseManager.getStatement());
+        Statement s = DatabaseManager.getStatement();
+        TestCase.assertNotNull(s);
+        try {
+            s.getConnection().close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 }

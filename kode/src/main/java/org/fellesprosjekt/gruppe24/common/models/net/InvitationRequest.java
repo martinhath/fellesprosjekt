@@ -1,25 +1,21 @@
 package org.fellesprosjekt.gruppe24.common.models.net;
 
 
+import java.util.Map;
+
 public class InvitationRequest extends Request {
 
 	public enum Answer {YES, NO, MAYBE};
 	
-	private Answer ans;
-	
+	public Answer ans;
+
+	// Skal være på formen {<'userId': user.getId()>, <'meetingId': meeting.getId()>}
+	public Map<String, Integer> ids;
+
 	public InvitationRequest() {}
 	
-	public InvitationRequest(Type type, int id, Answer ans) {
-		super(type, id);
+	public InvitationRequest(Type type, Map<String, Integer> ids, Answer ans) {
+		super(type, ids);
 		this.ans = ans;
 	}
-
-	public Answer getAns() {
-		return ans;
-	}
-
-	public void setAns(Answer ans) {
-		this.ans = ans;
-	}
-	
 }

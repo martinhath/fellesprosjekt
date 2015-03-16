@@ -1,77 +1,143 @@
 package org.fellesprosjekt.gruppe24.database;
 
 import junit.framework.TestCase;
+import org.fellesprosjekt.gruppe24.TestInitRunner;
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
 import org.fellesprosjekt.gruppe24.common.models.User;
+import static org.junit.Assert.*;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Logger;
 
-/**
- * Created by viktor on 03.03.15.
- */
-public class UserDatabaseHandlerTest extends TestCase {
-    public void setUp() {
+@RunWith(TestInitRunner.class)
+public class UserDatabaseHandlerTest {
 
+    private Logger logger = Logger.getLogger(getClass().getName());
+
+    private UserDatabaseHandler uhandler;
+    private MeetingDatabaseHandler mhandler;
+
+    @Before
+    public void before() {
+        uhandler = UserDatabaseHandler.GetInstance();
+        mhandler = MeetingDatabaseHandler.GetInstance();
     }
 
+    @Test
     public void testCanGetAllUsers() {
-        List<User> userList = UserDatabaseHandler.GetInstance().getAll();
-        TestCase.assertNotNull(userList);
+        List<User> userList = uhandler.getAll();
+        assertNotNull(userList);
     }
 
-    @Test(expected = java.sql.SQLException.class)
+    @Test
+    public void testFailToGetUserById() {
+        User user = uhandler.get(98123);
+        assertNull(user);
+    }
+
+    @Test
+    public void testCanInsertUser() {
+        User user = new User("brukernavn", "navn", "password", "e-mail@lel.no");
+        User ret = uhandler.insert(user);
+        assertNotNull(ret);
+
+        boolean isinlist = false;
+        List<User> list = uhandler.getAll();
+        for (User u: list) {
+            if (user.getUsername() == u.getUsername())
+                isinlist = true;
+        }
+        if (!isinlist){
+            fail();
+        }
+    }
+
+    @Test
+    public void testCanStressDB() {
+        for (int i = 0; i < 100; i++) {
+            uhandler.get(i);
+        }
+        List<User> users = new LinkedList<>();
+        for (int i = 0; i < 100; i++) {
+            User user = new User("username1"+i, "passowrd");
+            users.add(uhandler.insert(user));
+        }
+        for (int i = 0; i < 100; i++) {
+            uhandler.getAll();
+        }
+        uhandler.delete(users.get(0));
+        uhandler.delete(users.get(1));
+        uhandler.delete(users.get(2));
+
+        for (int i = 0; i < 100; i++) {
+            uhandler.delete(users.get(i));
+        }
+    }
+
+    @Test
+    public void testCanDeleteMissingUser() {
+        boolean ret = uhandler.delete(new User(9876, "fail", "lel"));
+        assertTrue(ret);
+    }
+
+    @Test
     public void testCanInsertAndDeleteUser() {
-        String username = "gopet";
-        String name = "Geir Ove Pettersen";
-        String password = "123";
-        String email = "gopet@ntnu.no";
+        User user = new User("brukernavn", "navn", "password", "e-mail@lel.no");
 
-        User user = new User(username, name, password, email);
-        TestCase.assertNotNull(user);
+        User ret = uhandler.insert(user);
+        assertNotNull(ret);
 
+        if (!uhandler.delete(ret))
+            fail();
 
-        user = UserDatabaseHandler.GetInstance().insert(user);
-        TestCase.assertNotNull(user);
-
-        User user2 = UserDatabaseHandler.GetInstance().getUserFromUsername(user.getUsername());
-        TestCase.assertNotNull(user2);
-        TestCase.assertEquals(user.getId(), user2.getId());
-
-        UserDatabaseHandler.GetInstance().delete(user);
-
-        User user3 = UserDatabaseHandler.GetInstance().get(user.getId());
+        ret = uhandler.get(ret.getId());
+        assertNull(ret);
     }
 
+    @Test
+    public void testCanGetUserByUsername() {
+        User user = uhandler.get("Martin");
+        assertNotNull(user);
+    }
+
+    @Test
     public void canAuthenticateUser() {
         String username = "Viktor";
         String password = "viktor1";
-        User user = UserDatabaseHandler.GetInstance().authenticate(username, password);
+        User user = uhandler.authenticate(username, password);
 
-        TestCase.assertNotNull(user);
-        TestCase.assertEquals(username, user.getUsername());
+        assertNotNull(user);
+        assertEquals(username, user.getUsername());
     }
 
+    @Test
     public void testCanGetAllMeetingsOfUser() {
-        User user = UserDatabaseHandler.GetInstance().getAll().get(0);
-        List<Meeting> allMeetings = MeetingDatabaseHandler.GetInstance().getAll();
+        User user = new User("uname", "Bruker Brukersen", "pass", "e@ma.il");
+        user = uhandler.insert(user);
+        List<Meeting> allMeetings = mhandler.getAll();
         Meeting meeting = allMeetings.get(0);
         Meeting meeting2 = allMeetings.get(1);
 
-        MeetingDatabaseHandler.GetInstance().addUserToMeeting(meeting, user);
-        MeetingDatabaseHandler.GetInstance().addUserToMeeting(meeting2, user);
+        mhandler.addUserToMeeting(meeting, user, "");
+        mhandler.addUserToMeeting(meeting2, user, "");
 
-        List<Meeting> userMeetings = UserDatabaseHandler.GetInstance().getMeetingsOfUser(user);
+        List<Meeting> userMeetings = uhandler.getMeetingsOfUser(user);
 
         for (int i = 0; i < userMeetings.size(); i++) {
-            TestCase.assertEquals(allMeetings.get(i).getId(), userMeetings.get(i).getId());
+            int mid = allMeetings.get(i).getId();
+            int uid = userMeetings.get(i).getId();
+            TestCase.assertEquals(mid, uid);
         }
     }
 
     public void testCanConfirmMeeting() {
-        User user = UserDatabaseHandler.GetInstance().getAll().get(0);
-        Meeting meeting = MeetingDatabaseHandler.GetInstance().getAll().get(0);
+        User user = uhandler.getAll().get(0);
+        Meeting meeting = mhandler.getAll().get(0);
 
-        UserDatabaseHandler.GetInstance().setMeetingConfirmation(user, meeting, true);
+        uhandler.setMeetingConfirmation(user, meeting, true);
     }
 }

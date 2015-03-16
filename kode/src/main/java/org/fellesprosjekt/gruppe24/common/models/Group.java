@@ -33,15 +33,6 @@ public class Group extends Entity{
         return members;
     }
 
-    public void printMembers(){
-        for (Entity e : getMembers()) {
-            if (e instanceof Group)
-                ((Group) e).printMembers();
-            else
-                System.out.println(e.getName());
-        }
-    }
-    
     public int getOwnerId() {
     	return ownerId;
     }

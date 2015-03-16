@@ -4,8 +4,10 @@ import org.fellesprosjekt.gruppe24.common.models.Room;
 import org.fellesprosjekt.gruppe24.server.CalendarServer;
 
 import java.beans.PropertyVetoException;
+import java.nio.file.Paths;
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -15,20 +17,32 @@ import com.mchange.v2.c3p0.*;
 
 public final class DatabaseManager {
 
-    private static Logger lgr;
+    private static Logger lgr = Logger.getLogger(CalendarServer.class.getName());
 
     private static ComboPooledDataSource cpds;
 
-    /**
-     * Initializes a specific database
-     *
-     * @param url      url to the database
-     * @param user     username in the database
-     * @param password user's password to the database
-     */
-    public static void init(String url, String database, String user, String password) {
-        lgr = Logger.getLogger(CalendarServer.class.getName());
+    private static boolean isInit = false;
 
+    public enum Type {PROD, TEST}
+
+    public static void init(Type t) {
+        if (isInit) {
+            lgr.warning("Database is already initialized!");
+            return;
+        }
+        isInit = true;
+        switch (t) {
+            case PROD:
+                init_prod("mysql.stud.ntnu.no", "hermanmk_calDB", "hermanmk_cal", "cal123");
+                break;
+            case TEST:
+                init_test();
+
+        }
+    }
+
+    public static void init_prod(String url, String database, String user, String password) {
+        if (!isInit) return;
         // Connection Pooling
         cpds = new ComboPooledDataSource();
         try {
@@ -48,20 +62,40 @@ public final class DatabaseManager {
         cpds.setMaxIdleTime(1);
     }
 
-    /**
-     * Initializes a default database
-     *
-     */
-    static {
-        init("mysql.stud.ntnu.no", "hermanmk_calDB", "hermanmk_cal", "cal123");
+    public static void init_test() {
+        if (!isInit) return;
+        cpds = new ComboPooledDataSource();
+        try {
+            //cpds.setDriverClass("com.mysql.jdbc.Driver");
+            cpds.setDriverClass("org.h2.Driver");
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
+        }
+
+        cpds.setMinPoolSize(5);
+        cpds.setAcquireIncrement(5);
+        cpds.setAcquireRetryAttempts(5);
+        cpds.setAcquireRetryDelay(200);
+        cpds.setMaxPoolSize(20);
+        cpds.setMaxIdleTime(1);
+
+        cpds.setJdbcUrl("jdbc:h2:mem:test_database;MODE=MySQL;IGNORECASE=true;DB_CLOSE_DELAY=-1;" +
+                "INIT=runscript from " +
+                "'../docs/database_script.sql'\\;runscript from '../docs/database_data.sql'");
+        try {
+            Connection c = cpds.getConnection();
+            c.close();
+        } catch (SQLException e) {
+            lgr.severe("Failed to get an initial connection");
+            System.exit(69);
+        }
+        lgr.info("Init done.");
     }
 
     public static Connection createConnection() {
         try {
             Connection con = cpds.getConnection();
-            lgr.log(Level.INFO, con.toString());
             return con;
-            //con = DriverManager.getConnection(url, user, password);
         } catch (SQLException ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
             return null;
@@ -106,10 +140,11 @@ public final class DatabaseManager {
 
     public static Statement getStatement() {
         try {
-            Statement st = createConnection().createStatement();
+            Connection con = createConnection();
+            Statement st = con.createStatement();
             return st;
         } catch (SQLException ex) {
-            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+            //lgr.log(Level.SEVERE, ex.getMessage(), ex);
         }
         return null;
     }
@@ -125,7 +160,6 @@ public final class DatabaseManager {
         Statement st = getStatement();
         try {
             String query = String.format("SELECT * FROM %s;", from);
-            lgr.log(Level.INFO, "Executing query: " + query);
             ResultSet rs = st.executeQuery(query);
 
             if (rs.next()) {
@@ -152,13 +186,12 @@ public final class DatabaseManager {
      * @throws SQLException
      */
     public static ResultSet readQuery(String query) {
-        Statement st = getStatement();
         try {
-            lgr.log(Level.INFO, "Executing query: " + query);
+            Statement st = getStatement();
             ResultSet rs = st.executeQuery(query);
             return rs;
-        } catch (SQLException ex) {
-            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+        } catch (Exception ex) {
+            lgr.log(Level.SEVERE, ex.getMessage());
         }
         return null;
     }
@@ -170,54 +203,29 @@ public final class DatabaseManager {
      * @param query
      * @throws SQLException
      */
-    public static void updateQuery(String query) {
+    public static boolean updateQuery(String query) {
         Statement st = getStatement();
+        boolean ret = false;
         try {
-            lgr.log(Level.INFO, "Executing query: " + query);
             st.executeUpdate(query);
+            ret =  true;
+            st.getConnection().close();
+            st.close();
         } catch (SQLException ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
         }
+        return ret;
     }
 
-    /**
-     * Executes a SQL query, and returns a HashMap with the columns specified in the query.
-     * Should also work when using the 'AS' keyword because it gets the labels and not names.
-     *
-     * @param query
-     * @return a HashMap<String, String> with the column labels as keys.
-     */
-    /*
     public static HashMap<String, String> getRow(String query) throws SQLException {
         HashMap<String, String> result = new HashMap<String, String>();
         ResultSet rs = readQuery(query);
-        try {
-            if (rs.next()) {
-                ResultSetMetaData rsmd = rs.getMetaData();
-                for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-                    result.put(rsmd.getColumnLabel(i), rs.getString(i));
-                }
-            }
-        } catch (SQLException ex) {
-            lgr.log(Level.SEVERE, ex.getMessage(), ex);
-            throw ex;
-        } finally {
-            try {
-                rs.getStatement().getConnection().close();
-            } catch (Exception ex) {
-                lgr.log(Level.SEVERE, ex.getMessage(), ex);
-            }
-        }
-        return result;
-    }
-    */
-    public static HashMap<String, String> getRow(String query) throws SQLException {
-        HashMap<String, String> result = new HashMap<String, String>();
-        ResultSet rs = readQuery(query);
+        if (rs == null)
+            return null;
         if (rs.next()) {
             ResultSetMetaData rsmd = rs.getMetaData();
             for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-                result.put(rsmd.getColumnLabel(i), rs.getString(i));
+                result.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getString(i));
             }
         }
         try {
@@ -226,7 +234,6 @@ public final class DatabaseManager {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
         }
         return result;
-        //blir connection lukket nå?
     }
 
     /**
@@ -240,12 +247,13 @@ public final class DatabaseManager {
     protected static ArrayList<HashMap<String, String>> getList(String query) {
         ArrayList<HashMap<String, String>> result = new ArrayList<HashMap<String, String>>();
         ResultSet rs = readQuery(query);
+        if (rs == null) return null;
         try {
             while (rs.next()) {
                 ResultSetMetaData rsmd = rs.getMetaData();
                 HashMap<String, String> row = new HashMap<String, String>();
                 for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-                    row.put(rsmd.getColumnLabel(i), rs.getString(i));
+                    row.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getString(i));
                 }
                 result.add(row);
             }
@@ -253,7 +261,9 @@ public final class DatabaseManager {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
         } finally {
             try {
-                rs.getStatement().getConnection().close();
+                Statement s = rs.getStatement();
+                Connection c = s.getConnection();
+                c.close();
             } catch (Exception ex) {
                 lgr.log(Level.SEVERE, ex.getMessage(), ex);
             }
@@ -278,6 +288,23 @@ public final class DatabaseManager {
             return null;
         }
     }
+    /**
+     * Takes a string of a timestamp like one from a SQL Time Field and returns a LocalTime object
+     * To be used when getting raw strings from a SQL select query
+     *
+     * @param timestamp string of a timestamp like SQL Time
+     * @return LocalTime object
+     */
+
+    public static LocalTime stringToTime(String timestamp) {
+        try {
+            return java.sql.Time.valueOf(timestamp).toLocalTime();
+        } catch (Exception ex) {
+            lgr.log(Level.SEVERE, "Could not convert timestamp to LocalTime");
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+            return null;
+        }
+    }
 
     @Deprecated
     public static int getLastId(String table) {
@@ -286,7 +313,6 @@ public final class DatabaseManager {
                             "FROM %s;", table));
         try {
             if (rs.next()) {
-                lgr.log(Level.INFO, String.format("Next increment id for %s is %d", table, rs.getInt("last_id")));
                 return rs.getInt("last_id");
             } else {
                 return -1;
@@ -399,21 +425,21 @@ public final class DatabaseManager {
         }
     }
 
-    public static void deleteRow(String table, int id) throws SQLException {
+    public static boolean deleteRow(String table, int id) throws SQLException {
         String query = String.format("DELETE FROM %s WHERE %sid=?", table, table);
         PreparedStatement ps = getPreparedStatement(query);
         ps.setInt(1, id);
-        executePS(ps);
+        return executePS(ps) != -1; // executePS gir -1 hvis den var mislykket
     }
 
-    public static void deleteRow(
+    public static boolean deleteRow(
             String table, String foreignTable1, String foreignTable2, int fk1, int fk2) throws SQLException {
         String query = String.format("DELETE FROM %s WHERE %s_%sid=? AND %s_%sid=?",
                 table, foreignTable1, foreignTable1, foreignTable2, foreignTable2);
         PreparedStatement ps = getPreparedStatement(query);
         ps.setInt(1, fk1);
         ps.setInt(2, fk2);
-        executePS(ps);
+        return executePS(ps) != -1; // executePS gir -1 hvis den var mislykket
     }
 
 }

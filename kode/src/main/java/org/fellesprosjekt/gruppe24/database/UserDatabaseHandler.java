@@ -1,7 +1,6 @@
 package org.fellesprosjekt.gruppe24.database;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,8 +11,6 @@ import java.util.logging.Logger;
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
 import org.fellesprosjekt.gruppe24.common.models.User;
 import org.fellesprosjekt.gruppe24.server.PasswordCryptography;
-
-import javax.xml.crypto.Data;
 
 public class UserDatabaseHandler extends DatabaseHandler<User> {
 
@@ -27,15 +24,13 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
 	}
 
     private User generateUser(HashMap<String, String> info) {
-		try {
-			lgr.log(Level.INFO, "Generating user based on: " + info);
-			User user = new User(Integer.parseInt(info.get("userid")), info.get("username"), info.get("name"),
-					info.get("password"), info.get("email"));
-			return user;
-		} catch (Exception ex) {
-			lgr.log(Level.SEVERE, ex.getMessage(), ex);
-			return null;
-		}
+        String id = info.get("userid");
+		String username = info.get("username");
+		String name = info.get("name");
+		String password = info.get("password");
+		String email = info.get("email");
+        User user = new User(Integer.parseInt(id), username, name, password, email);
+        return user;
 	}
     /**
      * Inserts a new user into the database
@@ -55,22 +50,22 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
             ps.setString(3, password);
             return DatabaseManager.executePS(ps);
         } catch (Exception ex) {
-            lgr.log(Level.SEVERE, ex.getMessage(), ex);
             return -1;
         }
     }
 
     public User authenticate(String username, String password) {
-        String query = String.format("SELECT * FROM User WHERE username=\"%s\"", username, password);
+        String query = String.format(
+                "SELECT * FROM User WHERE username='%s'", username);
         try{
         	HashMap<String, String> row = DatabaseManager.getRow(query);
-        	PasswordCryptography pc = new PasswordCryptography(password, row.get("salt"));
+        	PasswordCryptography pc = new PasswordCryptography(
+                    password, row.get("salt"));
         	if(pc.compareHash(row.get("password")))
         		return generateUser(row);
         	else
         		return null;
         } catch (SQLException ex) {
-            lgr.log(Level.SEVERE, ex.getMessage(), ex);
             return null;
         }
     }
@@ -98,7 +93,6 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
 	@Override
 	public User insert(User user) {
 		try {
-		lgr.log(Level.INFO, String.format("Inserting user %s", user));
 			String query =
 				"INSERT INTO User " +
 	            "(username, name, password, email, create_time) " +
@@ -109,25 +103,44 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
 	        ps.setString(3, user.getPassword());
 	        ps.setString(4, user.getEmail());
 	        int id = DatabaseManager.executePS(ps);
-	        User u = new User(id, user.getUsername(), user.getName(), user.getPassword(), user.getEmail());
-	        return u;
+			if (id < 0) {
+				lgr.severe("Got negative index from DatabaseManager.executePS()");
+				return null;
+			}
+	        return new User(id, user.getUsername(), user.getName(), user.getPassword(), user.getEmail());
 		} catch (Exception ex) {
 			lgr.log(Level.SEVERE, ex.getMessage(), ex);
 	        return null;
 	    }
 	}
 
+	public User get(String username) {
+		HashMap<String, String> info;
+		try {
+			info = DatabaseManager.getRow(String.format(
+					"SELECT * FROM User WHERE username='%s'", username));
+			if (info.size() == 0)
+				return null;
+			return generateUser(info);
+		} catch (SQLException ex) {
+			lgr.log(Level.SEVERE, ex.getMessage(), ex);
+			return null;
+		} catch (NullPointerException e){
+			lgr.info(String.format("User '%s' not found.", username));
+			return null;
+		}
+	}
+
 	@Override
 	public User get(int id) {
 		try {
-            lgr.log(Level.INFO, "Trying to get user by id: " + id);
-            HashMap<String, String> info = DatabaseManager.getRow(String.format("SELECT * FROM User WHERE userid=%d", id));
-            lgr.log(Level.INFO, "Trying to generate user from: " + info.toString());
+            HashMap<String, String> info = DatabaseManager.getRow(
+					String.format("SELECT * FROM User WHERE userid=%d", id));
+			if (info.size() == 0)
+				return null;
             return generateUser(info);
-        } catch (Exception ex) {
-            lgr.log(Level.SEVERE, ex.getMessage(), ex);
-            return null;
-        }
+        } catch (SQLException ex) {}
+		return null;
 	}
 
 	@Override
@@ -138,10 +151,14 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
 
 	@Override
 	public boolean delete(User user) {
+		int id = user.getId();
 		try {
-			lgr.log(Level.INFO, "Trying to delete user by id: " + user.getId());
-			DatabaseManager.updateQuery(String.format("DELETE FROM User WHERE userid=%d", user.getId()));
-			return true;
+			if (id < 0) // id er ikke satt
+				return DatabaseManager.updateQuery(
+						String.format("DELETE FROM User WHERE username='%s'", user.getUsername()));
+			else
+				return DatabaseManager.updateQuery(
+						String.format("DELETE FROM User WHERE userid='%d'", id));
 		} catch (Exception ex) {
 			lgr.log(Level.SEVERE, ex.getMessage(), ex);
 			return false;
@@ -155,6 +172,7 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
 		DatabaseManager.updateQuery(query);
 		return true;
 	}
+
     public List<Meeting> getMeetingsOfUser(User user) {
         List<Meeting> result = new ArrayList<>();
         try {
@@ -167,19 +185,19 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
             return result;
         }
     }
+
     private List<Integer> selectMeetingIDsOfUser(int userid) throws SQLException {
         List<Integer> result = new ArrayList<>();
         String query = String.format("SELECT Meeting_meetingid FROM User_invited_to_meeting WHERE User_userid=%d", userid);
         ArrayList<HashMap<String, String>> resultSet = DatabaseManager.getList(query);
         for (HashMap<String, String> row: resultSet) {
-            result.add(Integer.parseInt(row.get("Meeting_meetingid")));
+            result.add(Integer.parseInt(row.get("meeting_meetingid")));
         }
         return result;
     }
 
     public void setMeetingConfirmation(User user, Meeting meeting, boolean confirm) {
         try {
-            lgr.log(Level.INFO, String.format("Confirming User %s coming to Meeting %s", user.getUsername(), meeting.getName()));
             DatabaseManager.updateField(
                     user.getId(), meeting.getId(), "User_invited_to_meeting", "confirmed", "user", "meeting", confirm);
         } catch (SQLException ex) {

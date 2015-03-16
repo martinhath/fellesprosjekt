@@ -81,4 +81,12 @@ public class Room implements Comparable<Room> {
 	public int compareTo(Room other) {
 		return this.getCapacity() - other.getCapacity();
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == null) return false;
+		else if (!(o instanceof Room)) return false;
+		else if (o == this) return true;
+		else return ((Room) o).getId() == this.getId();
+	}
 }

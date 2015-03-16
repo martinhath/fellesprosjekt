@@ -78,7 +78,7 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
                            String location) throws SQLException {
         String query =
                 "INSERT INTO Meeting " +
-                        "(name, description, start_time, end_time, Room_roomid, owner_id, Group_groupid, location) " +
+                        "(name, description, start_time, end_time, room_roomid, owner_id, group_groupid, location) " +
                         "VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
         PreparedStatement ps = DatabaseManager.getPreparedStatement(query);
         ps.setString(1, name);
@@ -107,10 +107,8 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
 
     public Meeting generateMeeting(HashMap<String, String> info) {
         try {
-            lgr.log(Level.INFO, "Generating meeting object based on: " + info.toString());
-            lgr.log(Level.INFO, "Room in this meeting: " + info.get("Room_roomid") + info.get("Room_roomid"));
-            Room room = info.get("Room_roomid") == null ?
-                    null : RoomDatabaseHandler.GetInstance().get(Integer.parseInt(info.get("Room_roomid")));
+            Room room = info.get("room_roomid") == null ?
+                    null : RoomDatabaseHandler.GetInstance().get(Integer.parseInt(info.get("room_roomid")));
             Meeting meeting = new Meeting(
                     Integer.parseInt(info.get("meetingid")),
                     info.get("name"),
@@ -122,19 +120,15 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
                     new ArrayList<Entity>(),
                     UserDatabaseHandler.GetInstance().get(Integer.parseInt(info.get("owner_id")))
             );
-            lgr.log(Level.INFO, "Meeting successfully generated");
             return meeting;
         } catch (Exception ex) {
-            lgr.log(Level.INFO, ex.getMessage(), ex);
             return null;
         }
     }
 
     public Meeting get(int id) {
         try {
-            lgr.log(Level.INFO, "Trying to get meeting by id: " + id);
             HashMap<String, String> info = DatabaseManager.getRow(String.format("SELECT * FROM Meeting WHERE meetingid=%d", id));
-            lgr.log(Level.INFO, "Trying to generate meeting from: " + info.toString());
             return generateMeeting(info);
         } catch (Exception ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
@@ -145,7 +139,6 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
 
     public boolean delete(Meeting meeting) {
         try {
-            lgr.log(Level.INFO, "Trying to delete meeting by id: " + meeting.getId());
             DatabaseManager.updateQuery(String.format("DELETE FROM Meeting WHERE meetingid=%d", meeting.getId()));
             return true;
         } catch (Exception ex) {
@@ -159,10 +152,9 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
         return true;
     }
 
-    public void addUserToMeeting(Meeting meeting, User user) {
+    public void addUserToMeeting(Meeting meeting, User user, String message) {
         try {
-            lgr.log(Level.INFO, String.format("Trying to add User %s to Meeting %s", user.getUsername(), meeting.getName()));
-            insertUserInvitedToMeeting(meeting.getId(), user.getId(), "Dette møtet er superviktig.");
+            insertUserInvitedToMeeting(meeting.getId(), user.getId(), message);
         } catch (SQLException ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
         }
@@ -170,8 +162,8 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
     }
 
     private void insertUserInvitedToMeeting(int meetingid, int userid, String message) throws SQLException {
-        String query = "INSERT INTO User_invited_to_meeting " +
-                "(User_userid, Meeting_meetingid, notification_message) " +
+        String query = "INSERT INTO user_invited_to_meeting " +
+                "(user_userid, meeting_meetingid, notification_message) " +
                 "VALUES (?, ?, ?)";
         PreparedStatement ps = DatabaseManager.getPreparedStatement(query);
         ps.setInt(1, userid);
@@ -195,25 +187,25 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
 
     private List<Integer> selectUserIDsOfMeeting(int meetingid) throws SQLException {
         List<Integer> result = new ArrayList<>();
-        String query = String.format("SELECT User_userid FROM User_invited_to_meeting WHERE Meeting_meetingid=%d", meetingid);
+        String query = String.format("SELECT user_userid FROM user_invited_to_meeting WHERE meeting_meetingid=%d", meetingid);
         ArrayList<HashMap<String, String>> resultSet = DatabaseManager.getList(query);
         for (HashMap<String, String> row: resultSet) {
-            result.add(Integer.parseInt(row.get("User_userid")));
+            result.add(Integer.parseInt(row.get("user_userid")));
         }
         return result;
     }
 
-    public void removeUserFromMeeting(Meeting meeting, User user) {
+    public boolean removeUserFromMeeting(Meeting meeting, User user) {
         try {
-            lgr.log(Level.INFO, String.format("Deleting User %s from Meeting %s", user.getUsername(), meeting.getName()));
-            deleteUserInvitedToMeeting(meeting.getId(), user.getId());
+            return deleteUserInvitedToMeeting(meeting.getId(), user.getId());
         } catch (SQLException ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
+            return false;
         }
     }
 
-    private void deleteUserInvitedToMeeting(int meetingid, int userid) throws SQLException {
-        DatabaseManager.deleteRow("User_invited_to_meeting", "meeting", "user", meetingid, userid);
+    private boolean deleteUserInvitedToMeeting(int meetingid, int userid) throws SQLException {
+        return DatabaseManager.deleteRow("user_invited_to_meeting", "meeting", "user", meetingid, userid);
     }
 
 }

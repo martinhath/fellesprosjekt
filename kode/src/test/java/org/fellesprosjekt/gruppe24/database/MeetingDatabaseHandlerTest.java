@@ -1,45 +1,62 @@
 package org.fellesprosjekt.gruppe24.database;
 
-import junit.framework.TestCase;
-import org.fellesprosjekt.gruppe24.common.models.Entity;
+import org.fellesprosjekt.gruppe24.TestInitRunner;
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
 import org.fellesprosjekt.gruppe24.common.models.Room;
 import org.fellesprosjekt.gruppe24.common.models.User;
+import static org.junit.Assert.*;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 
-public class MeetingDatabaseHandlerTest extends TestCase {
-    User user;
-    Room room;
-    public void setUp() {
-        user = UserDatabaseHandler.GetInstance().getAll().get(0);
-        Meeting meeting = MeetingDatabaseHandler.GetInstance().insert(new Meeting(
+@RunWith(TestInitRunner.class)
+public class MeetingDatabaseHandlerTest {
+    private User user;
+    private Room room;
+    private Meeting meeting;
+
+    private UserDatabaseHandler uhandler;
+    private MeetingDatabaseHandler mhandler;
+    private RoomDatabaseHandler rhandler;
+
+    @Before
+    public void before() {
+        uhandler = UserDatabaseHandler.GetInstance();
+        mhandler = MeetingDatabaseHandler.GetInstance();
+        rhandler = RoomDatabaseHandler.GetInstance();
+
+        user = uhandler.getAll().get(0);
+        Meeting meeting = mhandler.insert(new Meeting(
                 "Fredagspils",
                 "Som vanlig ses vi på fredag.",
                 null,
                 LocalDateTime.now(),
                 LocalDateTime.now().plusHours(2),
                 "Freddy`s bar",
-                new ArrayList<Entity>(),
+                new ArrayList<>(),
                 user));
-        MeetingDatabaseHandler.GetInstance().addUserToMeeting(meeting, user);
-        room = RoomDatabaseHandler.GetInstance().insert(new Room("Mororommet", 8, true));
+        mhandler.addUserToMeeting(meeting, user, "");
+        room = rhandler.insert(new Room("Mororommet", 8, true));
     }
-    public void tearDown() {
-        User user = UserDatabaseHandler.GetInstance().getAll().get(0);
-        Meeting meeting = MeetingDatabaseHandler.GetInstance().getAll().get(0);
-        MeetingDatabaseHandler.GetInstance().removeUserFromMeeting(meeting, user);
-        MeetingDatabaseHandler.GetInstance().delete(meeting);
+
+    @After
+    public void after() {
+        User user = uhandler.getAll().get(0);
+
+        Meeting meeting = mhandler.getAll().get(0);
+        mhandler.removeUserFromMeeting(meeting, user);
+        mhandler.delete(meeting);
     }
     
-    @Test(expected = java.sql.SQLException.class)
+    @Test
     public void testCanInsertAndDeleteMeeting() {
-        Meeting meeting = MeetingDatabaseHandler.GetInstance().insert(
+        Meeting meeting = mhandler.insert(
                 new Meeting(
                 "pressekonferanse",
                 "",
@@ -49,39 +66,42 @@ public class MeetingDatabaseHandlerTest extends TestCase {
                 "P15",
                 new ArrayList<>(),
                 user));
-        Meeting meeting2 = MeetingDatabaseHandler.GetInstance().get(meeting.getId());
-        TestCase.assertEquals(meeting.getId(), meeting2.getId());
+        Meeting meeting2 = mhandler.get(meeting.getId());
+        assertEquals(meeting.getId(), meeting2.getId());
 
-        MeetingDatabaseHandler.GetInstance().delete(meeting);
-        TestCase.assertNull(MeetingDatabaseHandler.GetInstance().get(meeting.getId()));
-        MeetingDatabaseHandler.GetInstance().delete(meeting);
+        mhandler.delete(meeting);
+        assertNull(mhandler.get(meeting.getId()));
+        mhandler.delete(meeting);
     }
 
+    @Test
     public void testCanRetrieveMeetingFromDB() {
-        List<Meeting> meetingList = MeetingDatabaseHandler.GetInstance().getAll();
+        List<Meeting> meetingList = mhandler.getAll();
         Meeting meeting = meetingList.get(0);
-        System.out.println("Found meeting: " + meeting);
-        TestCase.assertNotNull(meeting);
-        TestCase.assertNotNull(meeting.getOwner());
-        TestCase.assertNotNull(meeting.getName());
+        assertNotNull(meeting);
+        assertNotNull(meeting.getOwner());
+        assertNotNull(meeting.getName());
     }
 
+    @Test
     public void testCanAddAndRemoveUserToMeeting() {
-        User user = UserDatabaseHandler.GetInstance().getAll().get(1);
-        Meeting meeting = MeetingDatabaseHandler.GetInstance().getAll().get(0);
-        int sizeBefore = MeetingDatabaseHandler.GetInstance().getUsersOfMeeting(meeting).size();
+        User user = uhandler.getAll().get(1);
+        Meeting meeting = mhandler.getAll().get(0);
+        int sizeBefore = mhandler.getUsersOfMeeting(meeting).size();
 
-        MeetingDatabaseHandler.GetInstance().addUserToMeeting(meeting, user);
-        TestCase.assertTrue(MeetingDatabaseHandler.GetInstance().getUsersOfMeeting(meeting).size() > sizeBefore);
+        mhandler.addUserToMeeting(meeting, user, "");
+        assertTrue(mhandler.getUsersOfMeeting(meeting).size() > sizeBefore);
 
-        MeetingDatabaseHandler.GetInstance().removeUserFromMeeting(meeting, user);
-        TestCase.assertEquals(sizeBefore, MeetingDatabaseHandler.GetInstance().getUsersOfMeeting(meeting).size());
+        mhandler.removeUserFromMeeting(meeting, user);
+        assertEquals(sizeBefore, mhandler.getUsersOfMeeting(meeting).size());
     }
 
+    @Test
     public void testCanGetUsersOfMeeting() {
-        Meeting meeting = MeetingDatabaseHandler.GetInstance().getAll().get(0);
-        List<User> users = MeetingDatabaseHandler.GetInstance().getUsersOfMeeting(meeting);
-        TestCase.assertNotNull(users);
-        TestCase.assertNotNull(users.get(0).getUsername());
+        Meeting meeting = mhandler.get(2);   // Gruppemøte
+        System.out.println(meeting);
+        List<User> users = mhandler.getUsersOfMeeting(meeting);
+        assertNotNull(users);
+        assertNotEquals(users.size(), 0);
     }
 }
