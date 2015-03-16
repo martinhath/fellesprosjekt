@@ -22,7 +22,7 @@ public class CalendarServer {
         this.portTCP = portTCP;
         this.portUDP = portUDP;
 
-        server = new Server() {
+        server = new Server(65536, 8096) {
             protected Connection newConnection(){
                 return new ServerConnection();
             }

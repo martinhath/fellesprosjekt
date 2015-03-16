@@ -32,7 +32,7 @@
                 <Label fx:id="labelSun" layoutX="721.0" layoutY="174.0" styleClass="label-day" text="Søndag 7"/>
             </children>
         </HBox>
-        <ScrollPane layoutX="59.0" layoutY="193.0" styleClass="scroll-pane">
+        <ScrollPane fx:id="scrollPane" layoutX="59.0" layoutY="193.0" styleClass="scroll-pane">
             <content>
                 <GridPane fx:id="calendarGrid" styleClass="grid-pane">
                     <columnConstraints>
