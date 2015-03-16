@@ -18,6 +18,7 @@ import com.esotericsoftware.kryonet.Connection;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 
@@ -28,6 +29,8 @@ public class NotificationController extends ClientController {
 	
 	@FXML
 	ListView listView;
+	@FXML
+	Button abortButton;
 	
 
 	@Override
@@ -57,21 +60,19 @@ public class NotificationController extends ClientController {
                 	addNotificationToList(not);
                 }
         	}
-        });
-        	
-        
-        	
-        
+        }); 
 	}
-              
-		
-		
-
+          
 	private void addNotificationToList(Notification not) {
 		Label label = new Label();
 		label.setStyle("-fx-font-color: #ff9933");
 		listView.getItems().add(not);
 		}
+	
+	public void clickAbort(ActionEvent actionEvent) {
+        // TODO: Kanskje legge inn en 'er du sikker?' hvis vi har noe data
+        getApplication().removeStage(getStage());
+    }
         
 }
 
