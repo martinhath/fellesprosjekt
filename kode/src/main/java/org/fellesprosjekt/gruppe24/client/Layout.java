@@ -10,7 +10,7 @@ public class Layout {
 
     public static final String Calendar = "/layout/Kalender.fxml";
 
-    public static final String NewMeeting = "/layout/nyttmøte.fxml";
+    public static final String NewMeeting = "/layout/NewMeeting.fxml";
 
 
 }

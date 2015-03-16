@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<BorderPane prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            stylesheets="@../style/style.css" styleClass="border-pane"
+            fx:controller="org.fellesprosjekt.gruppe24.client.controllers.MeetingController">
+    <top>
+        <Label styleClass="meeting-title" text="Nytt møte" />
+    </top>
+    <center>
+        <GridPane BorderPane.alignment="CENTER" styleClass="meeting-grid">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="-Infinity" />
+                <ColumnConstraints />
+            </columnConstraints>
+            <children>
+                <Label text="Beskrivelse:" styleClass="meeting-label"
+                            GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <TextArea
+                            GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                <Label text="Rom:" styleClass="meeting-label"
+                            GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <TextField fx:id="fieldRoom"
+                            GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                <Label text="Dato:" styleClass="meeting-label"
+                            GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <DatePicker fx:id="datePicker"
+                            GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                <Label text="Fra kl.:" styleClass="meeting-label"
+                            GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                <TextField fx:id="fieldFromTime"
+                            GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+                <Label text="Til kl.:" styleClass="meeting-label"
+                            GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                <TextField fx:id="fieldToTime"
+                            GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+                <Label text="Deltagere: " styleClass="meeting-label"
+                            GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                <ComboBox fx:id="dropdownParticipants"
+                            GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+            </children>
+        </GridPane>
+    </center>
+    <bottom>
+        <FlowPane prefHeight="50.0" prefWidth="200.0" alignment="CENTER_RIGHT">
+            <children>
+                <Button fx:id="buttonAbort" onAction="#clickAbort" text="Avbryt" />
+                <Button fx:id="buttonOk" onAction="#clickOk" text="OK" />
+            </children>
+        </FlowPane>
+    </bottom>
+</BorderPane>
