@@ -1,6 +1,8 @@
 package org.fellesprosjekt.gruppe24.client.controllers;
 
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import org.fellesprosjekt.gruppe24.client.Layout;
@@ -91,7 +93,11 @@ public class InvitationController extends ClientController {
 		} else if (selected == venter) {
 			ans = Answer.MAYBE;	
 		}
-    	InvitationRequest inv = new InvitationRequest(Type.POST, meeting.getId(), ans);
+        Map<String, Integer> ids = new HashMap<String, Integer>();
+        User user = new User(); // TODO skal være innlogget bruker
+        ids.put("meetingId", meeting.getId());
+        ids.put("userId", user.getId());
+    	InvitationRequest inv = new InvitationRequest(Type.POST, ids, ans);
         
         Client client = getClient();
         client.sendTCP(inv);

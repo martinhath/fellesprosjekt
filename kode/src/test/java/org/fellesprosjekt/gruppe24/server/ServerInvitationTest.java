@@ -35,9 +35,9 @@ public class ServerInvitationTest extends TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        martin = UserDatabaseHandler.GetInstance().getUserFromUsername("martinhath");
-        viktor = UserDatabaseHandler.GetInstance().getUserFromUsername("viktorfa");
-        ingrid = UserDatabaseHandler.GetInstance().getUserFromUsername("ingridvold");
+        martin = UserDatabaseHandler.GetInstance().getUserFromUsername("Martin");
+        viktor = UserDatabaseHandler.GetInstance().getUserFromUsername("Viktor");
+        ingrid = UserDatabaseHandler.GetInstance().getUserFromUsername("Ingrid");
         if (martin == null) {
             martin = new User("martinhath", "Martin Thoresen", "", "");
             martin = UserDatabaseHandler.GetInstance().insert(martin);
@@ -76,6 +76,21 @@ public class ServerInvitationTest extends TestCase {
                     new ArrayList<Entity>(),
                     martin);
             MeetingDatabaseHandler.GetInstance().insert(meeting1);
+        }
+        int tcp = 6788;
+        int udp = 6789;
+
+        if (server == null) {
+            server = new CalendarServer(tcp, udp);
+            server.start();
+        }
+
+        if (client == null) {
+            client = new Client();
+            client.start();
+            client.connect(5000, "127.0.0.1", tcp, udp);
+
+            KryoUtils.registerClasses(client.getKryo());
         }
     }
 
