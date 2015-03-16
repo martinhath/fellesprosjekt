@@ -15,12 +15,11 @@ import javafx.scene.layout.Pane;
 import org.controlsfx.control.CheckComboBox;
 import org.fellesprosjekt.gruppe24.client.listeners.ClientListener;
 import org.fellesprosjekt.gruppe24.common.Regexes;
+import org.fellesprosjekt.gruppe24.common.models.Entity;
+import org.fellesprosjekt.gruppe24.common.models.Group;
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
 import org.fellesprosjekt.gruppe24.common.models.User;
-import org.fellesprosjekt.gruppe24.common.models.net.MeetingRequest;
-import org.fellesprosjekt.gruppe24.common.models.net.Request;
-import org.fellesprosjekt.gruppe24.common.models.net.Response;
-import org.fellesprosjekt.gruppe24.common.models.net.UserRequest;
+import org.fellesprosjekt.gruppe24.common.models.net.*;
 
 import java.net.URL;
 import java.text.ParseException;
@@ -28,6 +27,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
@@ -46,7 +46,7 @@ public class MeetingController extends ClientController {
     @FXML
     private TextField fieldToTime;
     @FXML
-    private CheckComboBox<User> dropdownParticipants;
+    private CheckComboBox<Entity> dropdownParticipants;
     @FXML
     private DatePicker datePicker;
     @FXML
@@ -57,13 +57,15 @@ public class MeetingController extends ClientController {
     private LocalTime fromtime;
     private LocalTime totime;
 
-    private List<User> users;
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
-        init();
 
+        getAllUsers();
+        getAllGroups();
+    }
+
+    private void getAllUsers() {
         UserRequest req = new UserRequest(Request.Type.LIST, null);
         getClient().sendTCP(req);
         getClient().addListener(new ClientListener(){
@@ -72,20 +74,42 @@ public class MeetingController extends ClientController {
                     logger.info((String) res.payload);
                     return;
                 }
+                List<Entity> participants = new LinkedList<Entity>();
                 try{
-                    users = (List<User>) res.payload;
+                    participants.addAll((List<User>) res.payload);
                 } catch (ClassCastException e){
                     logger.warning("Payload was of wrong type: " + res.payload);
                     return;
                 }
-                populateUsersBox();
+                dropdownParticipants.getItems().addAll(participants);
+                getClient().removeListener(this);
+            }
+        });
+    }
+
+    private void getAllGroups() {
+        GroupRequest req = new GroupRequest(Request.Type.LIST, null);
+        getClient().sendTCP(req);
+        getClient().addListener(new ClientListener(){
+            public void receivedResponse(Connection conn, Response res) {
+                if (res.type == Response.Type.FAIL) {
+                    logger.info((String) res.payload);
+                    return;
+                }
+                List<Entity> participants = new LinkedList<Entity>();
+                try{
+                    participants.addAll((List<Group>) res.payload);
+                } catch (ClassCastException e){
+                    logger.warning("Payload was of wrong type: " + res.payload);
+                    return;
+                }
+                dropdownParticipants.getItems().addAll(participants);
                 getClient().removeListener(this);
             }
         });
     }
 
     private void populateUsersBox() {
-        dropdownParticipants.getItems().addAll(users);
     }
 
     private void setOKText(Node n) {
@@ -197,6 +221,12 @@ public class MeetingController extends ClientController {
 
         mins = fromtime.getHour() * 60 + fromtime.getMinute();
         meeting.getTo().plusMinutes(mins);
+
+        List<Entity> participants = new LinkedList<>();
+        for (Entity e : dropdownParticipants.getItems()){
+            participants.add(e);
+        }
+        meeting.setParticipants(participants);
         return true;
     }
 
