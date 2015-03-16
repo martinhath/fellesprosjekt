@@ -27,8 +27,8 @@ import java.util.HashMap;
 @RunWith(TestInitRunner.class)
 public class ServerInvitationTest extends TestCase {
 
-    static CalendarServer server;
-    static Client client;
+    CalendarServer server = TestInitRunner.server;
+    Client client = TestInitRunner.client;
 
     User martin;
     User viktor;
@@ -81,20 +81,6 @@ public class ServerInvitationTest extends TestCase {
                     new ArrayList<Entity>(),
                     martin);
             MeetingDatabaseHandler.GetInstance().insert(meeting1);
-        }
-        int tcp = 6788;
-        int udp = 6789;
-
-        if (server == null) {
-            server = new CalendarServer(tcp, udp);
-        }
-
-        if (client == null) {
-            client = new Client();
-            client.start();
-            client.connect(5000, "127.0.0.1", tcp, udp);
-
-            KryoUtils.registerClasses(client.getKryo());
         }
     }
 

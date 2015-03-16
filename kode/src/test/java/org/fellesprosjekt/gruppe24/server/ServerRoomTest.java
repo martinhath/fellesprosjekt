@@ -26,8 +26,8 @@ import java.util.List;
 @RunWith(TestInitRunner.class)
 public class ServerRoomTest extends TestCase {
 
-    static CalendarServer server;
-    static Client client;
+    CalendarServer server = TestInitRunner.server;
+    Client client = TestInitRunner.client;
     User viktor;
     User martin;
     User herman;
@@ -45,20 +45,6 @@ public class ServerRoomTest extends TestCase {
         viktor = uhandler.getUserFromUsername("Viktor");
         room1 = rhandler.get(1);
 
-        int tcp = 6788;
-        int udp = 6789;
-
-        if (server == null) {
-            server = new CalendarServer(tcp, udp);
-        }
-
-        if (client == null) {
-            client = new Client();
-            client.start();
-            client.connect(5000, "127.0.0.1", tcp, udp);
-
-            KryoUtils.registerClasses(client.getKryo());
-        }
     }
 
     @Test
