@@ -4,6 +4,7 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import junit.framework.TestCase;
+import org.fellesprosjekt.gruppe24.TestInitRunner;
 import org.fellesprosjekt.gruppe24.common.KryoUtils;
 import org.fellesprosjekt.gruppe24.common.models.LoginInfo;
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
@@ -15,10 +16,14 @@ import org.fellesprosjekt.gruppe24.common.models.net.Response;
 import org.fellesprosjekt.gruppe24.common.models.net.RoomRequest;
 import org.fellesprosjekt.gruppe24.database.RoomDatabaseHandler;
 import org.fellesprosjekt.gruppe24.database.UserDatabaseHandler;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@RunWith(TestInitRunner.class)
 public class ServerRoomTest extends TestCase {
 
     static CalendarServer server;
@@ -32,8 +37,8 @@ public class ServerRoomTest extends TestCase {
     RoomDatabaseHandler rhandler;
     UserDatabaseHandler uhandler;
 
-    @Override
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         super.setUp();
         uhandler = UserDatabaseHandler.GetInstance();
         rhandler = RoomDatabaseHandler.GetInstance();
@@ -45,7 +50,6 @@ public class ServerRoomTest extends TestCase {
 
         if (server == null) {
             server = new CalendarServer(tcp, udp);
-            server.start();
         }
 
         if (client == null) {
@@ -57,6 +61,7 @@ public class ServerRoomTest extends TestCase {
         }
     }
 
+    @Test
     public void testGetRoomsForMeeting() throws Exception {
         Request req = new RoomRequest(Request.Type.LIST, meeting1);
         client.sendTCP(req);
