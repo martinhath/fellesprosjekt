@@ -14,9 +14,11 @@ import javafx.scene.control.TextField;
 import org.fellesprosjekt.gruppe24.client.listeners.ClientListener;
 import org.fellesprosjekt.gruppe24.common.Regexes;
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
+import org.fellesprosjekt.gruppe24.common.models.User;
 import org.fellesprosjekt.gruppe24.common.models.net.MeetingRequest;
 import org.fellesprosjekt.gruppe24.common.models.net.Request;
 import org.fellesprosjekt.gruppe24.common.models.net.Response;
+import org.fellesprosjekt.gruppe24.common.models.net.UserRequest;
 
 import java.net.URL;
 import java.text.ParseException;
@@ -24,6 +26,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -52,13 +55,39 @@ public class MeetingController extends ClientController {
     private LocalTime fromtime;
     private LocalTime totime;
 
+    private List<User> users;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
         init();
+
+        UserRequest req = new UserRequest(Request.Type.LIST, null);
+        getClient().sendTCP(req);
+        getClient().addListener(new ClientListener(){
+            public void receivedResponse(Connection conn, Response res) {
+                if (res.type == Response.Type.FAIL)
+                    logger.info((String) res.payload);
+
+                if (!(res.payload instanceof List))
+                    return;
+
+                try{
+                    users = (List<User>) res.payload;
+                } catch (ClassCastException e){
+                    logger.warning("Payload was of wrong type: " + res.payload);
+                }
+                populateUsersBox();
+                getClient().removeListener(this);
+            }
+        });
     }
 
+    private void populateUsersBox() {
+        for (User u : users) {
+            dropdownParticipants.getItems().add(u);
+        }
+    }
 
     private void setOKText(Node n) {
         n.setStyle("-fx-text-fill: #333333;");

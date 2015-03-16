@@ -63,6 +63,7 @@ public class KryoUtils {
         k.register(MeetingRequest.Handler.class);
         k.register(NotificationRequest.class);
         k.register(RoomRequest.class);
+        k.register(UserRequest.class);
 
         // Response
         k.register(Response.class);
