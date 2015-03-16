@@ -6,6 +6,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -58,17 +59,41 @@ public class MeetingController extends ClientController {
         init();
     }
 
+
+    private void setOKText(Node n) {
+        n.setStyle("-fx-text-fill: #333333;");
+    }
+
+    private void setErrText(Node n) {
+        n.setStyle("-fx-text-fill: #ff4444;");
+    }
+
     public void init() {
         /*
         Gjør det slik at validateASD() funksjonene kjøres
         hver gang fokus for tekstboksene (ol.) endres.
          */
         fieldRoom.focusedProperty().addListener(
-                (FocusChangeListener) -> validateRoom());
+                (FocusChangeListener) -> {
+                    if (validateRoom())
+                        setOKText(fieldRoom);
+                    else
+                        setErrText(fieldRoom);
+                });
         fieldFromTime.focusedProperty().addListener(
-                (FocusChangeListener) -> validateFromTime());
+                (FocusChangeListener) -> {
+                    if (validateFromTime())
+                        setOKText(fieldFromTime);
+                    else
+                        setErrText(fieldFromTime);
+                });
         fieldToTime.focusedProperty().addListener(
-                (FocusChangeListener) -> validateToTime());
+                (FocusChangeListener) -> {
+                    if (validateToTime())
+                        setOKText(fieldToTime);
+                    else
+                        setErrText(fieldToTime);
+                });
 
         meeting = new Meeting();
     }
