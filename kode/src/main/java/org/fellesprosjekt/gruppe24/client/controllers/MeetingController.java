@@ -234,6 +234,7 @@ public class MeetingController extends ClientController {
         if (!validateFields())
             return;
 
+        System.out.println(meeting);
         Request req = new MeetingRequest(Request.Type.POST, meeting);
         getClient().sendTCP(req);
         getClient().addListener(new ClientListener() {
