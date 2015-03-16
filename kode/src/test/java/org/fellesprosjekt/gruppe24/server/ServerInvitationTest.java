@@ -4,6 +4,7 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import junit.framework.TestCase;
+import org.fellesprosjekt.gruppe24.TestInitRunner;
 import org.fellesprosjekt.gruppe24.common.KryoUtils;
 import org.fellesprosjekt.gruppe24.common.models.Entity;
 import org.fellesprosjekt.gruppe24.common.models.LoginInfo;
@@ -15,11 +16,15 @@ import org.fellesprosjekt.gruppe24.common.models.net.Request;
 import org.fellesprosjekt.gruppe24.common.models.net.Response;
 import org.fellesprosjekt.gruppe24.database.MeetingDatabaseHandler;
 import org.fellesprosjekt.gruppe24.database.UserDatabaseHandler;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+@RunWith(TestInitRunner.class)
 public class ServerInvitationTest extends TestCase {
 
     static CalendarServer server;
@@ -32,8 +37,8 @@ public class ServerInvitationTest extends TestCase {
     Meeting meeting2;
 
 
-    @Override
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         super.setUp();
         martin = UserDatabaseHandler.GetInstance().getUserFromUsername("Martin");
         viktor = UserDatabaseHandler.GetInstance().getUserFromUsername("Viktor");
@@ -82,7 +87,6 @@ public class ServerInvitationTest extends TestCase {
 
         if (server == null) {
             server = new CalendarServer(tcp, udp);
-            server.start();
         }
 
         if (client == null) {
@@ -94,14 +98,17 @@ public class ServerInvitationTest extends TestCase {
         }
     }
 
+    @Test
     public void testCanAcceptInvitation() {
 
     }
 
+    @Test
     public void testCanDeclineInvitation() {
 
     }
 
+    @Test
     public void testCanGetInvitation() {
         HashMap<String, Integer> ids = new HashMap<String, Integer>(2);
         ids.put("meetingId", meeting1.getId());
@@ -125,6 +132,7 @@ public class ServerInvitationTest extends TestCase {
         });
     }
 
+    @Test
     public void testCanGetAllInvitationsOfUser() {
 
     }

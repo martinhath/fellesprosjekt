@@ -4,6 +4,7 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import junit.framework.TestCase;
+import org.fellesprosjekt.gruppe24.TestInitRunner;
 import org.fellesprosjekt.gruppe24.common.KryoUtils;
 import org.fellesprosjekt.gruppe24.common.models.Entity;
 import org.fellesprosjekt.gruppe24.common.models.LoginInfo;
@@ -15,11 +16,15 @@ import org.fellesprosjekt.gruppe24.common.models.net.Request;
 import org.fellesprosjekt.gruppe24.common.models.net.Response;
 import org.fellesprosjekt.gruppe24.database.MeetingDatabaseHandler;
 import org.fellesprosjekt.gruppe24.database.UserDatabaseHandler;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@RunWith(TestInitRunner.class)
 public class ServerMeetingTest extends TestCase {
 
     static CalendarServer server;
@@ -29,8 +34,8 @@ public class ServerMeetingTest extends TestCase {
     User ingrid;
     Meeting meeting1;
 
-    @Override
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         super.setUp();
         martin = UserDatabaseHandler.GetInstance().getUserFromUsername("Martin");
         viktor = UserDatabaseHandler.GetInstance().getUserFromUsername("Viktor");
@@ -63,7 +68,6 @@ public class ServerMeetingTest extends TestCase {
 
         if (server == null) {
             server = new CalendarServer(tcp, udp);
-            server.start();
         }
 
         if (client == null) {
@@ -75,6 +79,7 @@ public class ServerMeetingTest extends TestCase {
         }
     }
 
+    @Test
     public void testGetMeeting() throws Exception {
         Request req = new MeetingRequest(MeetingRequest.Type.GET, meeting1.getId());
         client.sendTCP(req);
@@ -97,6 +102,7 @@ public class ServerMeetingTest extends TestCase {
         });
     }
 
+    @Test
     public void testUpdateMeeting() throws Exception {
         String expectedDesc = "Dette blir et hyggelig møte.";
         meeting1.setDescription(expectedDesc);
@@ -122,6 +128,7 @@ public class ServerMeetingTest extends TestCase {
         });
     }
 
+    @Test
     public void testCreateMeeting() throws Exception {
         String expectedDesc = "sjekker om man kan lage møte";
         Meeting meeting2 = new Meeting(
@@ -156,6 +163,8 @@ public class ServerMeetingTest extends TestCase {
             }
         });
     }
+
+    @Test
     public void testListAllMeetings() throws Exception {
         List<Meeting> expected = MeetingDatabaseHandler.GetInstance().getAll();
         Request req = new MeetingRequest(MeetingRequest.Type.LIST, null);
@@ -180,6 +189,8 @@ public class ServerMeetingTest extends TestCase {
             }
         });
     }
+
+    @Test
     public void testListAllMeetingsOfUser() throws Exception {
         Meeting meeting2 = new Meeting(
                 "Videokonferanse",
@@ -215,6 +226,7 @@ public class ServerMeetingTest extends TestCase {
         });
     }
 
+    @Test
     public void testCreateMeetingNotifications() throws Exception {
         List<Entity> expectedParticipants = new ArrayList<Entity>(2);
         expectedParticipants.add(viktor);
@@ -249,6 +261,8 @@ public class ServerMeetingTest extends TestCase {
             }
         });
     }
+
+    @Test
     public void testUpdateMeetingNotifications() throws Exception {
         List<Entity> firstParticipants = new ArrayList<Entity>(2);
         List<Entity> expectedParticipants = firstParticipants;

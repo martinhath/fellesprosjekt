@@ -28,7 +28,7 @@ public class ServerLoginTest {
     static Client client;
 
     @Before
-    public void before() throws Exception {
+    public void setUp() throws Exception {
 
         int tcp = 6788;
         int udp = 6789;
@@ -46,6 +46,7 @@ public class ServerLoginTest {
         }
     }
 
+    @Test
     public void testLoginWithUser() throws Exception {
         LoginInfo loginInfo = new LoginInfo(
                 "martinhath", "marinerkul");
@@ -71,6 +72,7 @@ public class ServerLoginTest {
         });
     }
 
+    @Test
     public void testLoginWithoutUser() throws Exception {
         LoginInfo loginInfo = new LoginInfo(
                 "jegfinnesikke", "martinerkul");
