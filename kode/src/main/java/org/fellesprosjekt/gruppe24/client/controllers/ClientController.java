@@ -23,7 +23,9 @@ public abstract class ClientController implements Initializable{
 	public void initialize(URL location, ResourceBundle resources) {
         client = CalendarClient.GetInstance().getClient();
 	}
-    
+
+    public void init(){};
+
     public Client getClient(){
     	return client;
     }
