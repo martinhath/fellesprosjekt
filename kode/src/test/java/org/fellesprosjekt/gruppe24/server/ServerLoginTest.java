@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.time.format.TextStyle;
 import java.util.logging.Logger;
 
 import static org.junit.Assert.*;
@@ -24,27 +25,8 @@ import static org.junit.Assert.*;
 public class ServerLoginTest {
     Logger logger = Logger.getLogger(getClass().getName());
 
-    static CalendarServer server;
-    static Client client;
-
-    @Before
-    public void setUp() throws Exception {
-
-        int tcp = 6788;
-        int udp = 6789;
-        if (server == null) {
-            server = new CalendarServer(tcp, udp);
-            KryoUtils.registerClasses(server.getServer().getKryo());
-            server.start();
-        }
-        if (client == null) {
-            client = new Client();
-            client.start();
-            client.connect(5000, "127.0.0.1", tcp, udp);
-
-            KryoUtils.registerClasses(client.getKryo());
-        }
-    }
+    CalendarServer server = TestInitRunner.server;
+    Client client = TestInitRunner.client;
 
     @Test
     public void testLoginWithUser() throws Exception {

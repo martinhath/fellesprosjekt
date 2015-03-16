@@ -2,6 +2,7 @@ package org.fellesprosjekt.gruppe24.common;
 
 import com.esotericsoftware.kryo.Kryo;
 
+import org.fellesprosjekt.gruppe24.common.Kryo.LocalDateTimeSerializer;
 import org.fellesprosjekt.gruppe24.common.models.*;
 import org.fellesprosjekt.gruppe24.common.models.net.*;
 
@@ -43,7 +44,7 @@ public class KryoUtils {
         k.register(Room.class);
 
         // Java ting
-        k.register(LocalDateTime.class);
+        k.register(LocalDateTime.class, new LocalDateTimeSerializer());
         k.register(LocalDate.class);
         k.register(LocalTime.class);
         k.register(String.class);

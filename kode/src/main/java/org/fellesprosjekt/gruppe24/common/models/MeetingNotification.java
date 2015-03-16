@@ -7,6 +7,8 @@ public class MeetingNotification extends Notification {
 	private Meeting meeting;
 	private boolean hide;
 	private LocalTime alarmTime;
+
+	public MeetingNotification() {}
 	
 	public MeetingNotification(User user, String message, boolean read, boolean confirmed, Meeting meeting, boolean hide, LocalTime alarmTime) {
 		super(user, message, read, confirmed);

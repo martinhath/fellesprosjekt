@@ -5,6 +5,8 @@ public class MeetingRequest extends Request {
 
     public Handler handler;
 
+    public MeetingRequest() {}
+
     public MeetingRequest(Type type, Object payload) {
         super(type, payload);
         this.handler = Handler.NA;

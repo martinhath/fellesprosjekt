@@ -4,6 +4,8 @@ public class GroupNotification extends Notification {
 	
 	private Group group;
 
+	public GroupNotification() {}
+
 	public GroupNotification(User user, String message, boolean read, boolean confirmed, Group group) {
 		super(user, message, read, confirmed);
 		this.group = group;
