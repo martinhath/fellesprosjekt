@@ -1,19 +1,21 @@
 
 .anchor-pane {
     -fx-background-color:linear-gradient(white,#DDDDDD);
-   /*  -fx-background-image: url("../image/background2.jpg");
-    -fx-background-repeat: stretch;   
-    -fx-background-size: 1200, 1000;
-
-	-fx-background-position: center;*/       
 }
 
 .grid-pane {
 	-fx-background-color: white;
-	-fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3,0.0,0,1);
+	-fx-effect: dropshadow(three-pass-box , rgba(0,0,0,0.6) , 3,0.0,0,1);
 	-fx-border-color: white;
 	-fx-opacity: 0.9;
 	-fx-border-style: dashed;
+	-fx-pref-height: 400px;
+	-fx-pref-width: 800px;
+}
+
+.scroll-pane {
+	-fx-pref-height: 400px;
+	-fx-pref-width: 800px;
 }
 
 .label {
@@ -21,12 +23,18 @@
 	-fx-font-size: 15;
 }
 
+.label-day {
+	-fx-pref-width: 100px;
+	-fx-alignment: center;
+}
+
 
 .time-label {
 	-fx-font-family:"Helvetica";
-	-fx-font-size: 15;
-
+	-fx-font-size: 14;
 	-fx-opacity: 0.4;
+	-fx-max-height: 100;
+	-fx-padding: 8;
 }
 
 .month-label {
