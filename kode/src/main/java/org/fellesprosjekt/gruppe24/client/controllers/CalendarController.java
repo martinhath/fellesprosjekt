@@ -5,8 +5,10 @@ import com.esotericsoftware.kryonet.Connection;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.text.Text;
 
 import javafx.scene.layout.GridPane;
@@ -23,6 +25,7 @@ import org.fellesprosjekt.gruppe24.common.models.net.Response;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
@@ -44,6 +47,7 @@ public class CalendarController extends ClientController {
     @FXML private Text textBruker;
     
     @FXML private GridPane calendarGrid;
+    @FXML private ScrollPane scrollPane;
 
     private DateTimeFormatter dayformat = DateTimeFormatter.ofPattern("EEEE d.");
     private DateTimeFormatter weekformat = DateTimeFormatter.ofPattern("w");
@@ -59,7 +63,18 @@ public class CalendarController extends ClientController {
         date = LocalDateTime.now();
         setCalendarLabels(date);
 
-        Request req = new MeetingRequest(Request.Type.LIST, /*getClient().getUser()*/null);
+        // 08:00 er øverst
+        double kl8 = (scrollPane.getVmax() - scrollPane.getVmin()) * 8 / 13;
+        scrollPane.setVvalue(kl8);
+
+    }
+
+    @Override
+    public void init() {
+        textBruker.setText("Logget inn som " + getApplication().getUser().getUsername());
+
+        // Får tak i alle møter
+        Request req = new MeetingRequest(Request.Type.LIST, getApplication().getUser());
         getClient().sendTCP(req);
         getClient().addListener(new ClientListener() {
             @Override
@@ -85,10 +100,13 @@ public class CalendarController extends ClientController {
      */
     private void showMeetings() {
         // Fjerner møtene som vises nå.
+        List<Node> toRemove = new LinkedList<>();
         calendarGrid.getChildren().forEach((node) -> {
             if (node instanceof MeetingPane)
-                calendarGrid.getChildren().remove(node);
+                toRemove.add(node);
         });
+        for (Node node:toRemove)
+            calendarGrid.getChildren().remove(node);
         if (meetings == null) return;
         for (Meeting m : meetings) {
             showMeeting(m);
@@ -121,11 +139,6 @@ public class CalendarController extends ClientController {
         // lel
         GridPane.setColumnSpan(pane, 2);
         GridPane.setRowSpan(pane, 2);
-    }
-
-    @Override
-    public void init() {
-        textBruker.setText("Logget inn som " + getApplication().getUser().getUsername());
     }
 
     /**
