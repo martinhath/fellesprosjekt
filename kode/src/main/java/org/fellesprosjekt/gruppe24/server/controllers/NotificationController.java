@@ -106,4 +106,10 @@ public class NotificationController extends ServerController {
         Response res = new Response(Response.Type.OK, result);
         connection.sendTCP(res);
     }
+
+	@Override
+	public void delete(Request req) {
+		// TODO Auto-generated method stub
+		
+	}
 }

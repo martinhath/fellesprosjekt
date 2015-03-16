@@ -1,6 +1,7 @@
 package org.fellesprosjekt.gruppe24.server.controllers;
 
 import org.fellesprosjekt.gruppe24.common.models.Group;
+import org.fellesprosjekt.gruppe24.common.models.User;
 import org.fellesprosjekt.gruppe24.common.models.net.Request;
 import org.fellesprosjekt.gruppe24.common.models.net.Response;
 import org.fellesprosjekt.gruppe24.database.GroupDatabaseHandler;
@@ -73,10 +74,39 @@ public class GroupController extends ServerController{
     @Override
     public void list(Request req) {
     	GroupDatabaseHandler handler = GroupDatabaseHandler.GetInstance();
+    	Object pl = req.payload;
+    	List<Group> groups = null;
+    	if(pl instanceof User) {
+    		handler.getAllGroupsForUser((User) pl);
+    	} else {
+    		groups = handler.getAll();
+    	}
         Response res = new Response();
-        res.type = Response.Type.OK;
-        List<Group> groups = handler.getAll();
+        if(groups == null)
+        	res.type = Response.Type.OK;
+        else
+        	res.type = Response.Type.OK;
         res.payload = groups;
         connection.sendTCP(res);
     }
+
+	@Override
+	public void delete(Request req) {
+		Response res = new Response();
+    	GroupDatabaseHandler handler = GroupDatabaseHandler.GetInstance();
+        if (req.payload instanceof Integer) {
+            // payload er Id
+            Integer id = (Integer) req.payload;
+            Group group = handler.get(id);
+            handler.delete(group);
+            res.type = Response.Type.OK;
+        } else if (req.payload instanceof Group) {
+            Group group = (Group) req.payload;
+            handler.delete(group);
+            res.type = Response.Type.OK;
+        } else {
+            res.type = Response.Type.FAIL;
+            res.payload = "Unknown payload type.";
+        }
+	}
 }

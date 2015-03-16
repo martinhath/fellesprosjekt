@@ -97,4 +97,10 @@ public class AuthController extends ServerController{
         connection.sendTCP(res);
         return true;
     }
+
+	@Override
+	public void delete(Request req) {
+		// TODO Auto-generated method stub
+		
+	}
 }

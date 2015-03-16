@@ -36,4 +36,10 @@ public class InvitationController extends ServerController {
 		// TODO: implement
 		throw new RuntimeException("Not implemented");
 	}
+
+	@Override
+	public void delete(Request req) {
+		// TODO Auto-generated method stub
+		
+	}
 }
