@@ -65,9 +65,12 @@ public class UserController extends ServerController{
         Response res = new Response();
         res.type = Response.Type.OK;
         List<User> users = handler.getAll();
+        if (users == null){
+            connection.sendTCP(Response.GetFailResponse("Database returned null."));
+            return;
+        }
         res.payload = users;
         connection.sendTCP(res);
-        logger.info("sendt");
     }
 
     @Override

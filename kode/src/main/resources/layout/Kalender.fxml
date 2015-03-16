@@ -96,20 +96,6 @@
                         <Label styleClass="time-label" text=" 21:00" GridPane.rowIndex="21"/>
                         <Label styleClass="time-label" text=" 22:00" GridPane.rowIndex="22"/>
                         <Label styleClass="time-label" text=" 23:00" GridPane.rowIndex="23"/>
-                        <Pane styleClass="meeting-block" GridPane.rowSpan="10"
-                              prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #ff0000;"
-                              GridPane.columnIndex="2" GridPane.rowIndex="0"/>
-                        <Pane styleClass="meeting-block" prefHeight="200.0" prefWidth="200.0"
-                              style="-fx-background-color: #0ff000;" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
-                        <Pane styleClass="meeting-block" prefHeight="200.0" prefWidth="200.0"
-                              style="-fx-background-color: #ffff00;" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
-                        <Pane styleClass="meeting-block" prefHeight="200.0" prefWidth="200.0"
-                              style="-fx-background-color: #ffff00;" GridPane.columnIndex="3" GridPane.rowIndex="3"/>
-                        <Pane styleClass="meeting-block" prefHeight="200.0" prefWidth="200.0"
-                              style="-fx-background-color: #00f0f0;" GridPane.columnIndex="4" GridPane.rowIndex="0"
-                              GridPane.rowSpan="3"/>
-                        <Pane styleClass="meeting-block" GridPane.rowSpan="20" prefHeight="200.0" prefWidth="200.0"
-                              style="-fx-background-color: #0000ff;" GridPane.columnIndex="5" GridPane.rowIndex="1"/>
                     </children>
                 </GridPane>
             </content>

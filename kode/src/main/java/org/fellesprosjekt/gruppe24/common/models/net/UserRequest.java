@@ -6,6 +6,6 @@ public class UserRequest extends Request {
     }
 
     public UserRequest(Type type, Object payload) {
-
+        super(type, payload);
     }
 }
