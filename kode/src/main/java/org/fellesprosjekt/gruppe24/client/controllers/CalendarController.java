@@ -12,8 +12,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.text.Text;
 
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import org.fellesprosjekt.gruppe24.client.Components.MeetingPane;
+import org.fellesprosjekt.gruppe24.client.components.MeetingPane;
 import org.fellesprosjekt.gruppe24.client.Layout;
 import org.fellesprosjekt.gruppe24.client.listeners.ClientListener;
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
@@ -134,11 +133,9 @@ public class CalendarController extends ClientController {
          */
 
         MeetingPane pane = new MeetingPane(m);
-        pane.setStyle("-fx-background-color: #ff9933;");
         calendarGrid.add(pane, col, row);
-        // lel
-        GridPane.setColumnSpan(pane, 2);
-        GridPane.setRowSpan(pane, 2);
+        int duration = m.getTo().getHour() - m.getFrom().getHour() + 1;
+        GridPane.setRowSpan(pane, duration);
     }
 
     /**
