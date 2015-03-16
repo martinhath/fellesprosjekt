@@ -5,7 +5,6 @@
 
 .calendar-grid {
 	-fx-background-color: white;
-	-fx-effect: dropshadow(three-pass-box , rgba(0,0,0,0.6) , 3,0.0,0,1);
 	-fx-border-color: white;
 	-fx-opacity: 0.9;
 	-fx-border-style: dashed;
@@ -15,7 +14,7 @@
 
 .scroll-pane {
 	-fx-pref-height: 400px;
-	-fx-pref-width: 800px;
+	-fx-pref-width: 820px;
 }
 
 .label {
@@ -24,6 +23,7 @@
 }
 
 .label-day {
+    -fx-font-size: 12px;
 	-fx-pref-width: 100px;
 	-fx-alignment: center;
 }
@@ -31,7 +31,7 @@
 
 .time-label {
 	-fx-font-family:"Helvetica";
-	-fx-font-size: 14;
+	-fx-font-size: 10;
 	-fx-opacity: 0.4;
 	-fx-max-height: 100;
 	-fx-padding: 8;
@@ -58,6 +58,7 @@
 .meeting-label {
 	-fx-pref-width: inherit;
 	-fx-padding: 4px;
+    -fx-fill-height: true;
 }
 
 .meeting-title {
@@ -65,5 +66,28 @@
 	-fx-font-size: 36px;
 	-fx-alignment: center-left;
 	-fx-font-weight:200;
+}
+
+.meeting-box {
+    -fx-padding: 4px;
+}
+
+.meeting-box:hover {
+}
+
+.meeting-box-title {
+    -fx-font-size: 12px;
+    -fx-alignment: center;
+    -fx-font-weight: bold;
+}
+
+.meeting-box-time {
+    -fx-font-size: 10px;
+    -fx-alignment: center;
+    -fx-font-style: italic;
+}
+
+.meeting-box-desc {
+    -fx-font-size: 10px;
 }
 

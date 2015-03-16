@@ -12,6 +12,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.text.Text;
 
 import javafx.scene.layout.GridPane;
+import org.fellesprosjekt.gruppe24.client.Formatters;
 import org.fellesprosjekt.gruppe24.client.components.MeetingPane;
 import org.fellesprosjekt.gruppe24.client.Layout;
 import org.fellesprosjekt.gruppe24.client.listeners.ClientListener;
@@ -47,10 +48,6 @@ public class CalendarController extends ClientController {
     
     @FXML private GridPane calendarGrid;
     @FXML private ScrollPane scrollPane;
-
-    private DateTimeFormatter dayformat = DateTimeFormatter.ofPattern("EEEE d.");
-    private DateTimeFormatter weekformat = DateTimeFormatter.ofPattern("w");
-    private DateTimeFormatter monthformat = DateTimeFormatter.ofPattern("MMMM");
 
     private LocalDateTime date;
 
@@ -145,16 +142,16 @@ public class CalendarController extends ClientController {
     private void setCalendarLabels(LocalDateTime date) {
         int i = date.getDayOfWeek().getValue();
         date = date.minusDays(i-1);
-        labelMon.setText(date.plusDays(0).format(dayformat));
-        labelTue.setText(date.plusDays(1).format(dayformat));
-        labelWed.setText(date.plusDays(2).format(dayformat));
-        labelThu.setText(date.plusDays(3).format(dayformat));
-        labelFri.setText(date.plusDays(4).format(dayformat));
-        labelSat.setText(date.plusDays(5).format(dayformat));
-        labelSun.setText(date.plusDays(6).format(dayformat));
+        labelMon.setText(date.plusDays(0).format(Formatters.dayformat));
+        labelTue.setText(date.plusDays(1).format(Formatters.dayformat));
+        labelWed.setText(date.plusDays(2).format(Formatters.dayformat));
+        labelThu.setText(date.plusDays(3).format(Formatters.dayformat));
+        labelFri.setText(date.plusDays(4).format(Formatters.dayformat));
+        labelSat.setText(date.plusDays(5).format(Formatters.dayformat));
+        labelSun.setText(date.plusDays(6).format(Formatters.dayformat));
 
-        labelWeek.setText("Uke " + date.format(weekformat));
-        labelMonth.setText(date.format(monthformat));
+        labelWeek.setText("Uke " + date.format(Formatters.weekformat));
+        labelMonth.setText(date.format(Formatters.monthformat));
     }
     
     private void setLocalWeek(LocalDateTime week){
