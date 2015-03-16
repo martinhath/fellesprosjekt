@@ -11,6 +11,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
+import org.controlsfx.control.CheckComboBox;
 import org.fellesprosjekt.gruppe24.client.listeners.ClientListener;
 import org.fellesprosjekt.gruppe24.common.Regexes;
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
@@ -44,7 +46,7 @@ public class MeetingController extends ClientController {
     @FXML
     private TextField fieldToTime;
     @FXML
-    private ComboBox dropdownParticipants;
+    private CheckComboBox<User> dropdownParticipants;
     @FXML
     private DatePicker datePicker;
     @FXML
@@ -66,16 +68,15 @@ public class MeetingController extends ClientController {
         getClient().sendTCP(req);
         getClient().addListener(new ClientListener(){
             public void receivedResponse(Connection conn, Response res) {
-                if (res.type == Response.Type.FAIL)
+                if (res.type == Response.Type.FAIL) {
                     logger.info((String) res.payload);
-
-                if (!(res.payload instanceof List))
                     return;
-
+                }
                 try{
                     users = (List<User>) res.payload;
                 } catch (ClassCastException e){
                     logger.warning("Payload was of wrong type: " + res.payload);
+                    return;
                 }
                 populateUsersBox();
                 getClient().removeListener(this);
@@ -84,9 +85,7 @@ public class MeetingController extends ClientController {
     }
 
     private void populateUsersBox() {
-        for (User u : users) {
-            dropdownParticipants.getItems().add(u);
-        }
+        dropdownParticipants.getItems().addAll(users);
     }
 
     private void setOKText(Node n) {

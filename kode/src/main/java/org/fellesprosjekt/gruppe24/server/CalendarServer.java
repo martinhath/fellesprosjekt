@@ -8,6 +8,7 @@ import org.fellesprosjekt.gruppe24.database.DatabaseManager;
 import org.fellesprosjekt.gruppe24.server.listeners.InvitationListener;
 import org.fellesprosjekt.gruppe24.server.listeners.AuthListener;
 import org.fellesprosjekt.gruppe24.server.listeners.MeetingListener;
+import org.fellesprosjekt.gruppe24.server.listeners.UserListener;
 
 import java.io.IOException;
 
@@ -33,6 +34,7 @@ public class CalendarServer {
         server.addListener(new AuthListener());
         server.addListener(new InvitationListener());
         server.addListener(new MeetingListener());
+        server.addListener(new UserListener());
     }
 
     public void start() throws IOException {

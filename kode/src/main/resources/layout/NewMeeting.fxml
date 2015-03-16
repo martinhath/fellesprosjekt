@@ -2,7 +2,7 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Text?>
+<?import org.controlsfx.control.CheckComboBox?>
 <BorderPane prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
             stylesheets="@../style/style.css" styleClass="border-pane"
             fx:controller="org.fellesprosjekt.gruppe24.client.controllers.MeetingController">
@@ -43,7 +43,7 @@
 
                 <Label text="Deltagere: " styleClass="meeting-label"
                             GridPane.columnIndex="0" GridPane.rowIndex="5"/>
-                <ComboBox fx:id="dropdownParticipants"
+                <CheckComboBox fx:id="dropdownParticipants"
                             GridPane.columnIndex="1" GridPane.rowIndex="5"/>
             </children>
         </GridPane>
