@@ -11,6 +11,7 @@ import javafx.scene.text.Text;
 
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import org.fellesprosjekt.gruppe24.client.Components.MeetingPane;
 import org.fellesprosjekt.gruppe24.client.Layout;
 import org.fellesprosjekt.gruppe24.client.listeners.ClientListener;
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
@@ -63,9 +64,9 @@ public class CalendarController extends ClientController {
         getClient().addListener(new ClientListener() {
             @Override
             public void receivedResponse(Connection conn, Response res) {
-                if (!(res.payload instanceof List)) {
+                if (!(res.payload instanceof List))
                     return;
-                }
+
                 try {
                     meetings = (List<Meeting>) res.payload;
                 } catch (ClassCastException e) {
@@ -85,7 +86,7 @@ public class CalendarController extends ClientController {
     private void showMeetings() {
         // Fjerner møtene som vises nå.
         calendarGrid.getChildren().forEach((node) -> {
-            if (node instanceof Pane)
+            if (node instanceof MeetingPane)
                 calendarGrid.getChildren().remove(node);
         });
         if (meetings == null) return;
@@ -106,11 +107,20 @@ public class CalendarController extends ClientController {
 
         int col = from.getDayOfWeek().getValue();
         int row = from.getHour();
-        System.out.println(col + "\t" + row);
-        // vise drit i kalenderen
-        Pane pane = new Pane();
+
+        /*
+         * TODO:
+         * Vi må sjekke om det allerede er møter i kalenderen
+         * i samme tidsrom. Hvis det er det kan vi feks gjøre begge
+         * møtene halvparten så store i bredden
+         */
+
+        MeetingPane pane = new MeetingPane(m);
         pane.setStyle("-fx-background-color: #ff9933;");
         calendarGrid.add(pane, col, row);
+        // lel
+        GridPane.setColumnSpan(pane, 2);
+        GridPane.setRowSpan(pane, 2);
     }
 
     @Override
