@@ -19,6 +19,7 @@ import java.util.List;
 public class MeetingDatabaseHandlerTest {
     private User user;
     private Room room;
+    private Meeting meeting;
 
     private UserDatabaseHandler uhandler;
     private MeetingDatabaseHandler mhandler;
@@ -40,7 +41,7 @@ public class MeetingDatabaseHandlerTest {
                 "Freddy`s bar",
                 new ArrayList<>(),
                 user));
-        mhandler.addUserToMeeting(meeting, user);
+        mhandler.addUserToMeeting(meeting, user, "");
         room = rhandler.insert(new Room("Mororommet", 8, true));
     }
 
@@ -88,7 +89,7 @@ public class MeetingDatabaseHandlerTest {
         Meeting meeting = mhandler.getAll().get(0);
         int sizeBefore = mhandler.getUsersOfMeeting(meeting).size();
 
-        mhandler.addUserToMeeting(meeting, user);
+        mhandler.addUserToMeeting(meeting, user, "");
         assertTrue(mhandler.getUsersOfMeeting(meeting).size() > sizeBefore);
 
         mhandler.removeUserFromMeeting(meeting, user);
@@ -98,6 +99,7 @@ public class MeetingDatabaseHandlerTest {
     @Test
     public void testCanGetUsersOfMeeting() {
         Meeting meeting = mhandler.get(2);   // Gruppemøte
+        System.out.println(meeting);
         List<User> users = mhandler.getUsersOfMeeting(meeting);
         assertNotNull(users);
         assertNotEquals(users.size(), 0);

@@ -32,9 +32,9 @@ public class ServerMeetingTest extends TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        martin = UserDatabaseHandler.GetInstance().getUserFromUsername("martinhath");
-        viktor = UserDatabaseHandler.GetInstance().getUserFromUsername("viktorfa");
-        ingrid = UserDatabaseHandler.GetInstance().getUserFromUsername("ingridvold");
+        martin = UserDatabaseHandler.GetInstance().getUserFromUsername("Martin");
+        viktor = UserDatabaseHandler.GetInstance().getUserFromUsername("Viktor");
+        ingrid = UserDatabaseHandler.GetInstance().getUserFromUsername("Ingrid");
         if (martin == null) {
             martin = new User("martinhath", "Martin Thoresen", "", "");
             martin = UserDatabaseHandler.GetInstance().insert(martin);
