@@ -1,4 +1,4 @@
-package org.fellesprosjekt.gruppe24.common;
+package org.fellesprosjekt.gruppe24.common.Kryo;
 
 import com.esotericsoftware.kryo.Kryo;
 

@@ -3,7 +3,7 @@ package org.fellesprosjekt.gruppe24.server;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 
-import org.fellesprosjekt.gruppe24.common.KryoUtils;
+import org.fellesprosjekt.gruppe24.common.Kryo.KryoUtils;
 import org.fellesprosjekt.gruppe24.database.DatabaseManager;
 import org.fellesprosjekt.gruppe24.server.listeners.InvitationListener;
 import org.fellesprosjekt.gruppe24.server.listeners.AuthListener;
