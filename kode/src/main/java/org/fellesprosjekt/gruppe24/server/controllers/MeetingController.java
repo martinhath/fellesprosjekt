@@ -119,7 +119,6 @@ public class MeetingController extends ServerController {
 
     @Override
     public void list(Request req) {
-        System.out.println("Henter alle møter");
         MeetingDatabaseHandler handler = MeetingDatabaseHandler.GetInstance();
 
         Response res = new Response();

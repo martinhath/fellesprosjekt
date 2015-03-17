@@ -60,11 +60,11 @@ public class NotificationController extends ServerController {
     @Override
     public void list(Request req) {
         NotificationRequest r = (NotificationRequest) req;
-        User user = (User) req.payload;
-        if (user == null) {
+        if (req.payload == null) {
             Response res = Response.GetFailResponse("Payload was null");
             connection.sendTCP(res);
         }
+        User user = (User) req.payload;
         MeetingNotificationHandler mnhandler = MeetingNotificationHandler.GetInstance();
         GroupNotificationHandler gnhandler = GroupNotificationHandler.GetInstance();
         List<Notification> result = new ArrayList<>();
