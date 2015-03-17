@@ -39,7 +39,7 @@ public class NotificationController extends ClientController {
 		init();
 	}
 
-	private void init() {
+	public void init() {
 
 		// får notifications fra server
 		Request req = new NotificationRequest();
