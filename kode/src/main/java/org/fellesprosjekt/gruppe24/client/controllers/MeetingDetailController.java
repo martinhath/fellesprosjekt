@@ -2,12 +2,10 @@ package org.fellesprosjekt.gruppe24.client.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import org.fellesprosjekt.gruppe24.client.Formatters;
 import org.fellesprosjekt.gruppe24.client.Layout;
+import org.fellesprosjekt.gruppe24.common.models.Entity;
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
 
 import java.net.URL;
@@ -23,6 +21,9 @@ public class MeetingDetailController extends ClientController {
     @FXML public DatePicker datePicker;
     @FXML public TextField textFrom;
     @FXML public TextField textTo;
+
+    @FXML public ListView<Entity> listParticipants;
+    @FXML public ListView<Entity> listInvited;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -48,6 +49,10 @@ public class MeetingDetailController extends ClientController {
         datePicker.setValue(meeting.getFrom().toLocalDate());
         textFrom.setText(meeting.getFrom().format(Formatters.hhmmformat));
         textTo.setText(meeting.getTo().format(Formatters.hhmmformat));
+
+        for (Entity e: meeting.getParticipants()){
+            listParticipants.getItems().add(e);
+        }
     }
 
     public void clickEdit(ActionEvent actionEvent) {

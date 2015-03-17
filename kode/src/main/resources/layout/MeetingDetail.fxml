@@ -42,8 +42,12 @@
                 </GridPane>
                 <VBox styleClass="meeting-detail-participants-box">
                     <children>
-                        <Label text="Deltagere"/>
-                        <ListView/>
+                        <Label styleClass="label"
+                               text="Deltagere"/>
+                        <ListView fx:id="listParticipants" />
+                        <Label styleClass="label"
+                               text="Inviterte" />
+                        <ListView fx:id="listInvited"/>
                     </children>
                 </VBox>
             </children>
