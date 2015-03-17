@@ -154,10 +154,6 @@ public class CalendarController extends ClientController {
         labelMonth.setText(date.format(Formatters.monthformat));
     }
     
-    private void setLocalWeek(LocalDateTime week){
-    	
-    }
-
     @FXML
     public void clickPrevWeek(ActionEvent e) {
         date = date.minusWeeks(1);
