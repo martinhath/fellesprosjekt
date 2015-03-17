@@ -52,11 +52,11 @@
     <bottom>
         <HBox BorderPane.alignment="CENTER">
             <children>
-                <Pane>
-                    <Button onAction="#clickEdit" text="Edit"/>
+                <Pane HBox.hgrow="ALWAYS">
+                    <Button onAction="#clickEdit" text="Rediger"/>
                 </Pane>
-                <Pane>
-                    <Button onAction="#clickBack" text="Back"/>
+                <Pane HBox.hgrow="ALWAYS" nodeOrientation="RIGHT_TO_LEFT">
+                    <Button onAction="#clickBack" text="Tilbake"/>
                 </Pane>
             </children>
         </HBox>

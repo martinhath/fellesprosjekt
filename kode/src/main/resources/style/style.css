@@ -126,11 +126,10 @@
     -fx-text-fill: #fff;
 }
 
-
 .meeting-detail-participants-box {
     -fx-pref-width: 300px;
 }
 
 .meeting-detail-hbox {
-    -fx-hgap: 20px;
+    -fx-spacing: 20px;
 }
