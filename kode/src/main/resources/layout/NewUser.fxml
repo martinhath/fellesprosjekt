@@ -7,12 +7,12 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 
-<BorderPane prefHeight="310.0" prefWidth="307.0" styleClass="anchor-pane" stylesheets="@../style/style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="310.0" prefWidth="307.0" styleClass="anchor-pane" stylesheets="@../style/style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.fellesprosjekt.gruppe24.client.controllers.NewuserController">
    <bottom>
       <HBox alignment="BOTTOM_RIGHT" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="349.0" layoutY="319.0" mnemonicParsing="false" text="OK" />
-            <Button mnemonicParsing="false" text="Avbryt">
+            <Button fx:id="ok" layoutX="349.0" layoutY="319.0" mnemonicParsing="false" text="OK" />
+            <Button fx:id="quit" mnemonicParsing="false" text="Avbryt">
                <HBox.margin>
                   <Insets left="10.0" />
                </HBox.margin>
@@ -49,11 +49,11 @@
             <Label layoutX="132.0" layoutY="317.0" text="Brukernavn:" />
             <Label layoutX="44.0" layoutY="251.0" text="Email: " GridPane.rowIndex="4" />
             <Label layoutX="37.0" layoutY="327.0" text="Fornavn:" GridPane.rowIndex="2" />
-            <TextField GridPane.columnIndex="1" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <TextField fx:id="userName" GridPane.columnIndex="1" />
+            <TextField fx:id="password" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="firstName" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="lastName" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="email" GridPane.columnIndex="1" GridPane.rowIndex="4" />
          </children>
          <BorderPane.margin>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

@@ -1,33 +1,46 @@
 package org.fellesprosjekt.gruppe24.client.controllers;
 
+import java.awt.*;
+import java.awt.Button;
+import java.awt.TextField;
+import java.awt.event.ActionEvent;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
+import javafx.scene.control.*;
+import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 import org.fellesprosjekt.gruppe24.client.CalendarApplication;
 import org.fellesprosjekt.gruppe24.client.CalendarClient;
 
 import com.esotericsoftware.kryonet.Client;
 
-public abstract class ClientController implements Initializable{
+import javax.swing.*;
+
+public abstract class ClientController implements Initializable {
 
     private String path;
     private CalendarApplication application;
     private Client client;
 
     private Stage stage;
-    
+
+
     @Override
-	public void initialize(URL location, ResourceBundle resources) {
+    public void initialize(URL location, ResourceBundle resources) {
         client = CalendarClient.GetInstance().getClient();
-	}
+    }
 
-    public void init(){};
+    public void init() {
+    }
 
-    public Client getClient(){
-    	return client;
+    ;
+
+    public Client getClient() {
+        return client;
     }
 
     public void setPath(String path) {
@@ -47,11 +60,12 @@ public abstract class ClientController implements Initializable{
     }
 
 
-	public void setApplication(CalendarApplication application){
+    public void setApplication(CalendarApplication application) {
         this.application = application;
     }
 
-    public CalendarApplication getApplication(){
+    public CalendarApplication getApplication() {
         return this.application;
     }
+
 }
