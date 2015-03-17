@@ -86,6 +86,7 @@
 
 .meeting-grid {
 	-fx-vgap: 10px;
+    -fx-hgap: 10px;
 }
 
 .meeting-label {
@@ -125,3 +126,11 @@
     -fx-text-fill: #fff;
 }
 
+
+.meeting-detail-participants-box {
+    -fx-pref-width: 300px;
+}
+
+.meeting-detail-hbox {
+    -fx-hgap: 20px;
+}
