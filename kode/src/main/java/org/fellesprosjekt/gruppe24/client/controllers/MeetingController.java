@@ -1,18 +1,16 @@
 package org.fellesprosjekt.gruppe24.client.controllers;
 
 import com.esotericsoftware.kryonet.Connection;
-import com.sun.org.apache.xerces.internal.impl.xpath.regex.Match;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
 import org.controlsfx.control.CheckComboBox;
+
 import org.fellesprosjekt.gruppe24.client.listeners.ClientListener;
 import org.fellesprosjekt.gruppe24.common.Regexes;
 import org.fellesprosjekt.gruppe24.common.models.Entity;
@@ -22,25 +20,25 @@ import org.fellesprosjekt.gruppe24.common.models.User;
 import org.fellesprosjekt.gruppe24.common.models.net.*;
 
 import java.net.URL;
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class MeetingController extends ClientController {
     private Logger logger = Logger.getLogger(getClass().getName());
 
     private Meeting meeting;
-
+    
+    //FXML-fält
     @FXML
-    private TextField fieldRoom;
+    private TextField fieldMeetingName;
+    @FXML
+    private CheckBox fieldRoom;
     @FXML
     private TextField fieldFromTime;
     @FXML
@@ -56,6 +54,7 @@ public class MeetingController extends ClientController {
 
     private LocalTime fromtime;
     private LocalTime totime;
+    
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -161,8 +160,21 @@ public class MeetingController extends ClientController {
      * Håndterer validaring av tekstfeltet for Room.
      * @return `true` om tekstfeltet er gyldig.
      */
+    
+    private boolean validateMeetingName() {
+    	String string = fieldMeetingName.getText().trim();
+    	Matcher matcher = Regexes.Text.matcher(string);
+    	if (!matcher.matches()) {
+    		//vis felmeddelande
+    		return false;
+    	}
+    	return true;
+    }    
+    
     private boolean validateRoom() {
-        // TODO: room regex
+        if (fieldRoom.selectedProperty() == null) {
+        	return false;
+        } 
         return true;
     }
 

@@ -10,4 +10,8 @@ public class Regexes {
 
     // matcher ' 13:52  '
     public static Pattern Time = Pattern.compile("\\s*((\\d\\d):(\\d\\d))\\s*");
+    public static Pattern Text = Pattern.compile("[\\p{L} ]*");
+    public static Pattern Room = Pattern.compile("^[A-Za-z\\-\\ ]+[\\ ][0-9]+");
+    
+    
 }
