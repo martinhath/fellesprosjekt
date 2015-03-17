@@ -94,7 +94,7 @@
       <Label fx:id="labelFri" layoutX="529.0" layoutY="174.0" text="Fredag 5" />
       <Label fx:id="labelMon" layoutX="128.0" layoutY="174.0" text="Mandag 1" />
       <Label fx:id="labelSun" layoutX="721.0" layoutY="174.0" text="Søndag 7" />
-      <Button layoutX="797.0" layoutY="35.0" mnemonicParsing="false" style="-fx-font-size: 18;" text="Nye meldinger (3)">
+      <Button fx:id="notificationButton" layoutX="797.0" layoutY="35.0" mnemonicParsing="false" onAction="#seeNotifications" style="-fx-font-size: 18;" text="Nye meldinger (3)">
          <font>
             <Font size="18.0" />
          </font>

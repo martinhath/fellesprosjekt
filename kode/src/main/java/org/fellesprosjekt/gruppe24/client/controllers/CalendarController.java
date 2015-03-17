@@ -99,9 +99,14 @@ public class CalendarController extends ClientController {
     
     @FXML
     public void clickCurrentWeek(ActionEvent e) {
-    	date = LocalDateTime.now();
-    	setCalendarLabels(date);
-    	
+        date = LocalDateTime.now();
+        setCalendarLabels(date);
+    }
+
+    @FXML
+    public void seeNotifications(ActionEvent a) {
+    	String path = Layout.Notification;
+    	getApplication().newScene(path);
     }
 
     @FXML
