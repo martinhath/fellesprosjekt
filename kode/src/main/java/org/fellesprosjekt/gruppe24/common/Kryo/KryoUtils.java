@@ -42,6 +42,8 @@ public class KryoUtils {
         k.register(Meeting.class);
         k.register(Room.class);
         k.register(Notification.class);
+        k.register(GroupNotification.class);
+        k.register(MeetingNotification.class);
 
         // Java ting
         k.register(LocalDateTime.class, new LocalDateTimeSerializer());

@@ -2,21 +2,16 @@ package org.fellesprosjekt.gruppe24.client.controllers;
 
 import com.esotericsoftware.kryonet.Connection;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import org.controlsfx.control.CheckComboBox;
 
 import org.fellesprosjekt.gruppe24.client.listeners.ClientListener;
 import org.fellesprosjekt.gruppe24.common.Regexes;
-import org.fellesprosjekt.gruppe24.common.models.Entity;
-import org.fellesprosjekt.gruppe24.common.models.Group;
-import org.fellesprosjekt.gruppe24.common.models.Meeting;
-import org.fellesprosjekt.gruppe24.common.models.User;
+import org.fellesprosjekt.gruppe24.common.models.*;
 import org.fellesprosjekt.gruppe24.common.models.net.*;
 
 import java.net.URL;
@@ -35,22 +30,14 @@ public class MeetingController extends ClientController {
     private Meeting meeting;
     
     //FXML-fält
-    @FXML
-    private TextField fieldMeetingName;
-    @FXML
-    private CheckBox fieldRoom;
-    @FXML
-    private TextField fieldFromTime;
-    @FXML
-    private TextField fieldToTime;
-    @FXML
-    private CheckComboBox<Entity> dropdownParticipants;
-    @FXML
-    private DatePicker datePicker;
-    @FXML
-    private Button buttonOk;
-    @FXML
-    private Button buttonAbort;
+    @FXML private TextField fieldName;
+    @FXML private ChoiceBox<Room> fieldRoom;
+    @FXML private TextField fieldFromTime;
+    @FXML private TextField fieldToTime;
+    @FXML private CheckComboBox<Entity> dropdownParticipants;
+    @FXML private DatePicker datePicker;
+    @FXML private Button buttonOk;
+    @FXML private Button buttonAbort;
 
     private LocalTime fromtime;
     private LocalTime totime;
@@ -162,7 +149,7 @@ public class MeetingController extends ClientController {
      */
     
     private boolean validateMeetingName() {
-    	String string = fieldMeetingName.getText().trim();
+    	String string = fieldName.getText().trim();
     	Matcher matcher = Regexes.Text.matcher(string);
     	if (!matcher.matches()) {
     		//vis felmeddelande
@@ -172,7 +159,8 @@ public class MeetingController extends ClientController {
     }    
     
     private boolean validateRoom() {
-        if (fieldRoom.selectedProperty() == null) {
+        // Kanskje det er default valg på første rom?
+        if (fieldRoom.getItems() == null) {
         	return false;
         } 
         return true;
@@ -218,16 +206,21 @@ public class MeetingController extends ClientController {
     }
 
     private boolean validateParticipants() {
-        // TODO: denne
+        if (dropdownParticipants.getCheckModel().getCheckedItems().size() == 0)
+            return false;
         return true;
     }
 
     private boolean validateFields() {
-        boolean b =  validateRoom() && validateDate() &&
-                validateFromTime() && validateToTime() &&
-                validateParticipants();
+        boolean b =  validateMeetingName() && validateRoom() &&
+                validateDate() && validateFromTime() &&
+                validateToTime() && validateParticipants();
         if (!b)
             return false;
+        meeting.setName(fieldName.getText());
+
+        meeting.setOwner(getApplication().getUser());
+
         int mins = totime.getHour()*60 + totime.getMinute();
         meeting.getFrom().plusMinutes(mins);
 
@@ -257,7 +250,9 @@ public class MeetingController extends ClientController {
                     // vis noe på skjermen om at det skjedde en feil
                     return;
                 }
-                getApplication().removeStage(getStage());
+                Platform.runLater(() -> {
+                    getApplication().removeStage(getStage());
+                });
                 getClient().removeListener(this);
             }
         });

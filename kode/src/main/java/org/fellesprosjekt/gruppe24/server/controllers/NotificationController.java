@@ -3,13 +3,11 @@ package org.fellesprosjekt.gruppe24.server.controllers;
 import org.fellesprosjekt.gruppe24.common.models.*;
 import org.fellesprosjekt.gruppe24.common.models.net.*;
 import org.fellesprosjekt.gruppe24.database.GroupNotificationHandler;
-import org.fellesprosjekt.gruppe24.database.MeetingDatabaseHandler;
 import org.fellesprosjekt.gruppe24.database.MeetingNotificationHandler;
 import org.fellesprosjekt.gruppe24.server.ServerConnection;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class NotificationController extends ServerController {
@@ -69,9 +67,9 @@ public class NotificationController extends ServerController {
         }
         MeetingNotificationHandler mnhandler = MeetingNotificationHandler.GetInstance();
         GroupNotificationHandler gnhandler = GroupNotificationHandler.GetInstance();
-        List<Notification> result = new ArrayList<Notification>();
-        List<MeetingNotification> meetingNotifications = new ArrayList<MeetingNotification>();
-        List<GroupNotification> groupNotifications = new ArrayList<GroupNotification>();
+        List<Notification> result = new ArrayList<>();
+        List<MeetingNotification> meetingNotifications = new ArrayList<>();
+        List<GroupNotification> groupNotifications = new ArrayList<>();
         try {
             meetingNotifications = mnhandler.getAllOfUser(user.getId());
             groupNotifications = gnhandler.getAllOfUser(user.getId());
@@ -79,17 +77,22 @@ public class NotificationController extends ServerController {
             Response res = Response.GetFailResponse("User did not have ID");
             connection.sendTCP(res);
         }
-        if (r.includeRead) result.addAll(meetingNotifications);
+
+        if (r.includeRead)
+            result.addAll(meetingNotifications);
         else {
             for (Notification notification : meetingNotifications) {
-                if (notification.isRead()) result.remove(notification);
+                if (!notification.isRead())
+                    result.add(notification);
             }
         }
 
-        if (r.includeRead) result.addAll(groupNotifications);
+        if (r.includeRead)
+            result.addAll(groupNotifications);
         else {
             for (Notification notification : groupNotifications) {
-                if (notification.isRead()) result.remove(notification);
+                if (!notification.isRead())
+                    result.add(notification);
             }
         }
 

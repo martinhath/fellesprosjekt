@@ -16,35 +16,40 @@
                 <ColumnConstraints />
             </columnConstraints>
             <children>
-                <Label text="Beskrivelse:" styleClass="meeting-label"
+                <Label text="Møtenavn:" 
                             GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-                <TextArea
+                <TextField fx:id="fieldName"
                             GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
-                <Label text="Rom:" styleClass="meeting-label"
+                <Label text="Beskrivelse:" styleClass="meeting-label"
                             GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                <TextField fx:id="fieldRoom"
+                <TextArea
                             GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-                <Label text="Dato:" styleClass="meeting-label"
+                <Label text="Rom:" styleClass="meeting-label"
                             GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-                <DatePicker fx:id="datePicker"
+                <ChoiceBox fx:id="fieldRoom"
                             GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
-                <Label text="Fra kl.:" styleClass="meeting-label"
+                <Label text="Dato:" styleClass="meeting-label"
                             GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-                <TextField fx:id="fieldFromTime"
+                <DatePicker fx:id="datePicker"
                             GridPane.columnIndex="1" GridPane.rowIndex="3"/>
 
-                <Label text="Til kl.:" styleClass="meeting-label"
+                <Label text="Fra kl.:" styleClass="meeting-label"
                             GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-                <TextField fx:id="fieldToTime"
+                <TextField fx:id="fieldFromTime"
                             GridPane.columnIndex="1" GridPane.rowIndex="4"/>
 
-                <Label text="Deltagere: " styleClass="meeting-label"
+                <Label text="Til kl.:" styleClass="meeting-label"
                             GridPane.columnIndex="0" GridPane.rowIndex="5"/>
-                <CheckComboBox fx:id="dropdownParticipants"
+                <TextField fx:id="fieldToTime"
                             GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+
+                <Label text="Deltagere: " styleClass="meeting-label"
+                            GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+                <CheckComboBox fx:id="dropdownParticipants"
+                            GridPane.columnIndex="1" GridPane.rowIndex="6"/>
             </children>
         </GridPane>
     </center>

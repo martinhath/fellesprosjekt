@@ -17,10 +17,8 @@ import org.fellesprosjekt.gruppe24.client.components.MeetingPane;
 import org.fellesprosjekt.gruppe24.client.Layout;
 import org.fellesprosjekt.gruppe24.client.listeners.ClientListener;
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
-import org.fellesprosjekt.gruppe24.common.models.net.AuthRequest;
-import org.fellesprosjekt.gruppe24.common.models.net.MeetingRequest;
-import org.fellesprosjekt.gruppe24.common.models.net.Request;
-import org.fellesprosjekt.gruppe24.common.models.net.Response;
+import org.fellesprosjekt.gruppe24.common.models.Notification;
+import org.fellesprosjekt.gruppe24.common.models.net.*;
 
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -34,7 +32,6 @@ public class CalendarController extends ClientController {
 
     private Logger logger = Logger.getLogger(getClass().getName());
 
-    @FXML private Button meetingButton;
     @FXML private Label labelMon;
     @FXML private Label labelTue;
     @FXML private Label labelWed;
@@ -45,6 +42,8 @@ public class CalendarController extends ClientController {
     @FXML private Label labelWeek;
     @FXML private Label labelMonth;
     @FXML private Text textBruker;
+
+    @FXML private Button buttonNotification;
     
     @FXML private GridPane calendarGrid;
     @FXML private ScrollPane scrollPane;
@@ -52,6 +51,7 @@ public class CalendarController extends ClientController {
     private LocalDateTime date;
 
     private List<Meeting> meetings;
+    private List<Notification> notifications;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -63,6 +63,7 @@ public class CalendarController extends ClientController {
         double kl8 = (scrollPane.getVmax() - scrollPane.getVmin()) * 8 / 13;
         scrollPane.setVvalue(kl8);
 
+        showNotificationCount();
     }
 
     @Override
@@ -81,14 +82,49 @@ public class CalendarController extends ClientController {
                 try {
                     meetings = (List<Meeting>) res.payload;
                 } catch (ClassCastException e) {
-                    logger.info("Wrong response: " +  res.payload);
+                    logger.info("Wrong response: " + res.payload);
                     return;
                 }
-                showMeetings();
+                Platform.runLater(() -> {
+                    showMeetings();
+                });
                 getClient().removeListener(this);
             }
 
         });
+
+        req = new NotificationRequest(Request.Type.LIST, getApplication().getUser());
+        getClient().sendTCP(req);
+        getClient().addListener(new ClientListener() {
+            @Override
+            public void receivedResponse(Connection conn, Response res) {
+                if (!(res.payload instanceof List))
+                    return;
+
+                try {
+                    notifications = (List<Notification>) res.payload;
+                } catch (ClassCastException e) {
+                    logger.info("Wrong response: " + res.payload);
+                    return;
+                }
+                Platform.runLater(() -> {
+                    showNotificationCount();
+                    getClient().removeListener(this);
+                });
+            }
+
+        });
+    }
+
+    private void showNotificationCount() {
+        if (notifications == null) {
+            buttonNotification.setText("Ingen nye meldinger");
+            return;
+        }
+        if (notifications.isEmpty())
+            buttonNotification.setText("Ingen nye meldinger");
+        else
+            buttonNotification.setText(String.format("Nye meldinger (%s)", notifications.size()));
     }
 
     /**
