@@ -17,7 +17,7 @@
         <Button fx:id="logoutButton" layoutX="860.0" layoutY="595.0" mnemonicParsing="false" onAction="#logout"
                 text="Logge ut"/>
         <Button fx:id="buttonNotification" layoutX="797.0" layoutY="35.0" mnemonicParsing="false"
-                text="Nye meldinger (3)"/>
+                onAction="#seeNotifications" text="Nye meldinger (3)"/>
         <Button fx:id="meetingButton" layoutX="865.0" layoutY="82.0" mnemonicParsing="false" onAction="#newMeeting"
                 text="Nytt møte"/>
         <HBox layoutX="59.0" layoutY="174.0" styleClass="labels-container">
