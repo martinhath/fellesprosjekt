@@ -1,4 +1,4 @@
-package org.fellesprosjekt.gruppe24.common;
+package org.fellesprosjekt.gruppe24.common.Kryo;
 
 import com.esotericsoftware.kryo.Kryo;
 
@@ -42,6 +42,9 @@ public class KryoUtils {
         k.register(Calendar.class);
         k.register(Meeting.class);
         k.register(Room.class);
+        k.register(Notification.class);
+        k.register(GroupNotification.class);
+        k.register(MeetingNotification.class);
 
         // Java ting
         k.register(LocalDateTime.class, new LocalDateTimeSerializer());

@@ -2,6 +2,7 @@ package org.fellesprosjekt.gruppe24.server.controllers;
 
 import org.fellesprosjekt.gruppe24.common.models.*;
 import org.fellesprosjekt.gruppe24.common.models.net.*;
+import org.fellesprosjekt.gruppe24.database.GroupDatabaseHandler;
 import org.fellesprosjekt.gruppe24.database.GroupNotificationHandler;
 import org.fellesprosjekt.gruppe24.database.MeetingDatabaseHandler;
 import org.fellesprosjekt.gruppe24.database.MeetingNotificationHandler;
@@ -67,27 +68,22 @@ public class NotificationController extends ServerController {
             Response res = Response.GetFailResponse("Payload was null");
             connection.sendTCP(res);
         }
-        MeetingNotificationHandler mnhandler = MeetingNotificationHandler.GetInstance();
-        GroupNotificationHandler gnhandler = GroupNotificationHandler.GetInstance();
         List<Notification> result = new ArrayList<Notification>();
         List<MeetingNotification> meetingNotifications = new ArrayList<MeetingNotification>();
         List<GroupNotification> groupNotifications = new ArrayList<GroupNotification>();
         try {
-            meetingNotifications = mnhandler.getAllOfUser(user.getId());
-            groupNotifications = gnhandler.getAllOfUser(user.getId());
+            meetingNotifications = MeetingNotificationHandler.GetInstance().getAllOfUser(user.getId());
+            groupNotifications = GroupDatabaseHandler.GetInstance().getAllGroupInvites(user);
         } catch (NullPointerException ex) {
             Response res = Response.GetFailResponse("User did not have ID");
             connection.sendTCP(res);
         }
-        if (r.includeRead) result.addAll(meetingNotifications);
-        else {
+        result.addAll(meetingNotifications);
+        result.addAll(groupNotifications);
+        if(!r.includeRead) {
             for (Notification notification : meetingNotifications) {
                 if (notification.isRead()) result.remove(notification);
             }
-        }
-
-        if (r.includeRead) result.addAll(groupNotifications);
-        else {
             for (Notification notification : groupNotifications) {
                 if (notification.isRead()) result.remove(notification);
             }
@@ -101,6 +97,7 @@ public class NotificationController extends ServerController {
         }
 
         Response res = new Response(Response.Type.OK, result);
+        System.out.println(((List) res.payload).size());
         connection.sendTCP(res);
     }
 }

@@ -10,15 +10,17 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.text.Text;
-
 import javafx.scene.layout.GridPane;
+
 import org.fellesprosjekt.gruppe24.client.Formatters;
 import org.fellesprosjekt.gruppe24.client.components.MeetingPane;
 import org.fellesprosjekt.gruppe24.client.Layout;
 import org.fellesprosjekt.gruppe24.client.listeners.ClientListener;
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
+import org.fellesprosjekt.gruppe24.common.models.Notification;
 import org.fellesprosjekt.gruppe24.common.models.net.AuthRequest;
 import org.fellesprosjekt.gruppe24.common.models.net.MeetingRequest;
+import org.fellesprosjekt.gruppe24.common.models.net.NotificationRequest;
 import org.fellesprosjekt.gruppe24.common.models.net.Request;
 import org.fellesprosjekt.gruppe24.common.models.net.Response;
 
@@ -46,12 +48,15 @@ public class CalendarController extends ClientController {
     @FXML private Label labelMonth;
     @FXML private Text textBruker;
     
+    @FXML private Button buttonNotification;
+    
     @FXML private GridPane calendarGrid;
     @FXML private ScrollPane scrollPane;
 
     private LocalDateTime date;
 
     private List<Meeting> meetings;
+    private List<Notification> notifications;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -84,8 +89,32 @@ public class CalendarController extends ClientController {
                     logger.info("Wrong response: " +  res.payload);
                     return;
                 }
-                showMeetings();
-                getClient().removeListener(this);
+                Platform.runLater(() -> {
+                	showMeetings();
+                	getClient().removeListener(this);
+                });
+            }
+
+        });
+        // Får tak i alle notifications
+        req = new NotificationRequest(Request.Type.LIST, getApplication().getUser());
+        getClient().sendTCP(req);
+        getClient().addListener(new ClientListener() {
+            @Override
+            public void receivedResponse(Connection conn, Response res) {
+                if (!(res.payload instanceof List))
+                    return;
+
+                try {
+                    notifications = (List<Notification>) res.payload;
+                } catch (ClassCastException e) {
+                    logger.info("Wrong response: " +  res.payload);
+                    return;
+                }
+                Platform.runLater(() -> {
+                	showNotificationCount();
+                	getClient().removeListener(this);
+                });
             }
 
         });
@@ -135,6 +164,18 @@ public class CalendarController extends ClientController {
         GridPane.setRowSpan(pane, duration);
     }
 
+    private void showNotificationCount() {
+    	System.out.println(notifications.size());
+    	if(notifications == null) {
+    		buttonNotification.setText("Ingen nye meldinger");
+    		return;
+    	}
+    	if(notifications.isEmpty())
+    		buttonNotification.setText("Ingen nye meldinger");
+    	else
+    		buttonNotification.setText(String.format("Nye meldinger (%s)",notifications.size()));
+    }
+    
     /**
      * Setter alle lablene til uken som begynner med `date` datoen.
      * @param date Datoen som uken begynner på.
