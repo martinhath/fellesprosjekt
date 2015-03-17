@@ -94,7 +94,20 @@ public class UserController extends ServerController{
 
 	@Override
 	public void delete(Request req) {
-		// TODO Auto-generated method stub
-		
+		if (!(req.payload instanceof User)) {
+            connection.sendTCP(new Response(Response.Type.FAIL,
+                    "Wrong payload: not User"));
+            return;
+        }
+		User user = (User) req.payload;
+		Response res = new Response();
+		UserDatabaseHandler handler = UserDatabaseHandler.GetInstance();
+		if(handler.delete(user)) {
+			res.type = Response.Type.OK;
+		} else {
+			res.type = Response.Type.FAIL;
+			res.payload = "Something went wrong.";
+		}
+		connection.sendTCP(res);
 	}
 }
