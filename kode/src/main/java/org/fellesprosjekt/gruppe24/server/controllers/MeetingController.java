@@ -119,11 +119,19 @@ public class MeetingController extends ServerController {
 
     @Override
     public void list(Request req) {
-        // TODO støtte for å ta med møtene til en bruker eller gruppe
+        System.out.println("Henter alle møter");
         MeetingDatabaseHandler handler = MeetingDatabaseHandler.GetInstance();
+
         Response res = new Response();
         res.type = Response.Type.OK;
-        res.payload = handler.getAll();
+        if (req.payload instanceof User) {
+            res.payload = handler.getAll((User) req.payload);
+        } else if (req.payload instanceof Group) {
+            res.payload = handler.getAll((Group) req.payload);
+        } else {
+            res.payload = handler.getAll();
+        }
+
         connection.sendTCP(res);
     }
 
