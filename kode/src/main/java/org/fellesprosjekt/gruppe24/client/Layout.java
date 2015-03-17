@@ -14,5 +14,5 @@ public class Layout {
 
     public static final String NewMeeting = "/layout/NewMeeting.fxml";
 
-
+    public static final String MeetingDetail = "/layout/MeetingDetail.fxml";
 }

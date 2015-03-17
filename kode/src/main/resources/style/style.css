@@ -50,6 +50,26 @@
 	-fx-padding: 8;
 }
 
+/* root container */
+.root {
+    -fx-padding: 24px;
+}
+
+/* Felles stil for alle titler på sider */
+.label-title {
+    -fx-font-size: 40px;
+    -fx-font-weight: 200;
+    -fx-alignment: top-left;
+    -fx-text-fill: #333;
+}
+
+/* kan brukes til viktige ting som ikke er tittel*/
+.label-subtitle {
+    -fx-font-size: 18px;
+    -fx-font-style: italic;
+    -fx-text-fill: #555;
+}
+
 .month-label {
 	-fx-font-family: "Helvetica";
 	-fx-font-size: 40;
