@@ -27,27 +27,20 @@ public class MeetingPane extends VBox {
 
         // Styling mm. til selve boksen
         getStyleClass().add("meeting-box");
-        for (String s : getStyleClass()){
-            System.out.println(s);
-        }
         String s_0 = getStyle();
         String style = String.format(
                         "-fx-background-color: #%s;",
                 getColor());
         setStyle(s_0 + style);
-
-        hoverProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
-                String style = String.format(
-                        "-fx-background-color: derive(#%s, %d%s);",
-                        getColor(), isHover() ? +20 : 0, "%");
-                setStyle(s_0 + style);
-            }
+        hoverProperty().addListener((observableValue, aBoolean, t1) -> {
+            String style1 = String.format(
+                    "-fx-background-color: derive(#%s, %d%s);",
+                    getColor(), isHover() ? +20 : 0, "%");
+            setStyle(s_0 + style1);
         });
 
         setOnMouseClicked((MouseEvent e) -> {
-            System.out.println("halla");
+            System.out.println("Trykk på " + meeting.getName());
         });
 
 

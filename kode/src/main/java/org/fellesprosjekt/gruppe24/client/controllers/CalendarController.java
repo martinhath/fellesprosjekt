@@ -178,6 +178,7 @@ public class CalendarController extends ClientController {
     public void clickCurrentWeek(ActionEvent e) {
         date = LocalDateTime.now();
         setCalendarLabels(date);
+        showMeetings();
     }
 
     @FXML
