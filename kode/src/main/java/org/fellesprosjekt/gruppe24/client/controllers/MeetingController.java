@@ -6,16 +6,20 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
+import org.controlsfx.control.CheckComboBox;
 import org.fellesprosjekt.gruppe24.client.listeners.ClientListener;
 import org.fellesprosjekt.gruppe24.common.Regexes;
+import org.fellesprosjekt.gruppe24.common.models.Entity;
+import org.fellesprosjekt.gruppe24.common.models.Group;
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
-import org.fellesprosjekt.gruppe24.common.models.net.MeetingRequest;
-import org.fellesprosjekt.gruppe24.common.models.net.Request;
-import org.fellesprosjekt.gruppe24.common.models.net.Response;
+import org.fellesprosjekt.gruppe24.common.models.User;
+import org.fellesprosjekt.gruppe24.common.models.net.*;
 
 import java.net.URL;
 import java.text.ParseException;
@@ -23,6 +27,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -40,7 +46,7 @@ public class MeetingController extends ClientController {
     @FXML
     private TextField fieldToTime;
     @FXML
-    private ComboBox dropdownParticipants;
+    private CheckComboBox<Entity> dropdownParticipants;
     @FXML
     private DatePicker datePicker;
     @FXML
@@ -51,11 +57,67 @@ public class MeetingController extends ClientController {
     private LocalTime fromtime;
     private LocalTime totime;
 
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
-        init();
+
+        getAllUsers();
+        getAllGroups();
+    }
+
+    private void getAllUsers() {
+        UserRequest req = new UserRequest(Request.Type.LIST, null);
+        getClient().sendTCP(req);
+        getClient().addListener(new ClientListener(){
+            public void receivedResponse(Connection conn, Response res) {
+                if (res.type == Response.Type.FAIL) {
+                    logger.info((String) res.payload);
+                    return;
+                }
+                List<Entity> participants = new LinkedList<Entity>();
+                try{
+                    participants.addAll((List<User>) res.payload);
+                } catch (ClassCastException e){
+                    logger.warning("Payload was of wrong type: " + res.payload);
+                    return;
+                }
+                dropdownParticipants.getItems().addAll(participants);
+                getClient().removeListener(this);
+            }
+        });
+    }
+
+    private void getAllGroups() {
+        GroupRequest req = new GroupRequest(Request.Type.LIST, null);
+        getClient().sendTCP(req);
+        getClient().addListener(new ClientListener(){
+            public void receivedResponse(Connection conn, Response res) {
+                if (res.type == Response.Type.FAIL) {
+                    logger.info((String) res.payload);
+                    return;
+                }
+                List<Entity> participants = new LinkedList<Entity>();
+                try{
+                    participants.addAll((List<Group>) res.payload);
+                } catch (ClassCastException e){
+                    logger.warning("Payload was of wrong type: " + res.payload);
+                    return;
+                }
+                dropdownParticipants.getItems().addAll(participants);
+                getClient().removeListener(this);
+            }
+        });
+    }
+
+    private void populateUsersBox() {
+    }
+
+    private void setOKText(Node n) {
+        n.setStyle("-fx-text-fill: #333333;");
+    }
+
+    private void setErrText(Node n) {
+        n.setStyle("-fx-text-fill: #ff4444;");
     }
 
     public void init() {
@@ -64,11 +126,26 @@ public class MeetingController extends ClientController {
         hver gang fokus for tekstboksene (ol.) endres.
          */
         fieldRoom.focusedProperty().addListener(
-                (FocusChangeListener) -> validateRoom());
+                (FocusChangeListener) -> {
+                    if (validateRoom())
+                        setOKText(fieldRoom);
+                    else
+                        setErrText(fieldRoom);
+                });
         fieldFromTime.focusedProperty().addListener(
-                (FocusChangeListener) -> validateFromTime());
+                (FocusChangeListener) -> {
+                    if (validateFromTime())
+                        setOKText(fieldFromTime);
+                    else
+                        setErrText(fieldFromTime);
+                });
         fieldToTime.focusedProperty().addListener(
-                (FocusChangeListener) -> validateToTime());
+                (FocusChangeListener) -> {
+                    if (validateToTime())
+                        setOKText(fieldToTime);
+                    else
+                        setErrText(fieldToTime);
+                });
 
         meeting = new Meeting();
     }
@@ -144,6 +221,12 @@ public class MeetingController extends ClientController {
 
         mins = fromtime.getHour() * 60 + fromtime.getMinute();
         meeting.getTo().plusMinutes(mins);
+
+        List<Entity> participants = new LinkedList<>();
+        for (Entity e : dropdownParticipants.getItems()){
+            participants.add(e);
+        }
+        meeting.setParticipants(participants);
         return true;
     }
 
@@ -151,6 +234,7 @@ public class MeetingController extends ClientController {
         if (!validateFields())
             return;
 
+        System.out.println(meeting);
         Request req = new MeetingRequest(Request.Type.POST, meeting);
         getClient().sendTCP(req);
         getClient().addListener(new ClientListener() {

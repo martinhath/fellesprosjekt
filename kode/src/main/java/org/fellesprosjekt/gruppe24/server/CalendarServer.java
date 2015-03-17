@@ -3,11 +3,12 @@ package org.fellesprosjekt.gruppe24.server;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 
-import org.fellesprosjekt.gruppe24.common.KryoUtils;
+import org.fellesprosjekt.gruppe24.common.Kryo.KryoUtils;
 import org.fellesprosjekt.gruppe24.database.DatabaseManager;
 import org.fellesprosjekt.gruppe24.server.listeners.InvitationListener;
 import org.fellesprosjekt.gruppe24.server.listeners.AuthListener;
 import org.fellesprosjekt.gruppe24.server.listeners.MeetingListener;
+import org.fellesprosjekt.gruppe24.server.listeners.UserListener;
 
 import java.io.IOException;
 
@@ -22,7 +23,7 @@ public class CalendarServer {
         this.portTCP = portTCP;
         this.portUDP = portUDP;
 
-        server = new Server() {
+        server = new Server(65536, 8096) {
             protected Connection newConnection(){
                 return new ServerConnection();
             }
@@ -33,6 +34,7 @@ public class CalendarServer {
         server.addListener(new AuthListener());
         server.addListener(new InvitationListener());
         server.addListener(new MeetingListener());
+        server.addListener(new UserListener());
     }
 
     public void start() throws IOException {

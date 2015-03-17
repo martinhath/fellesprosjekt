@@ -5,18 +5,14 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
 import org.fellesprosjekt.gruppe24.TestInitRunner;
-import org.fellesprosjekt.gruppe24.common.KryoUtils;
 import org.fellesprosjekt.gruppe24.common.models.LoginInfo;
 import org.fellesprosjekt.gruppe24.common.models.User;
 import org.fellesprosjekt.gruppe24.common.models.net.AuthRequest;
 import org.fellesprosjekt.gruppe24.common.models.net.Request;
 import org.fellesprosjekt.gruppe24.common.models.net.Response;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-import java.time.format.TextStyle;
 import java.util.logging.Logger;
 
 import static org.junit.Assert.*;

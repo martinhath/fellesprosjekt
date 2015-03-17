@@ -23,7 +23,7 @@ public class CalendarClient {
     }
 
     public void init(){
-        client = new com.esotericsoftware.kryonet.Client();
+        client = new com.esotericsoftware.kryonet.Client(32768, 16384);
 
         client.addListener(new ClientListener());
     }
