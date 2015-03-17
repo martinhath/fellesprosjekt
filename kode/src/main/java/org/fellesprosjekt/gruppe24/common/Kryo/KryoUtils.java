@@ -2,7 +2,6 @@ package org.fellesprosjekt.gruppe24.common.Kryo;
 
 import com.esotericsoftware.kryo.Kryo;
 
-import org.fellesprosjekt.gruppe24.common.Kryo.LocalDateTimeSerializer;
 import org.fellesprosjekt.gruppe24.common.models.*;
 import org.fellesprosjekt.gruppe24.common.models.net.*;
 
@@ -63,6 +62,7 @@ public class KryoUtils {
         k.register(MeetingRequest.class);
         k.register(MeetingRequest.Handler.class);
         k.register(NotificationRequest.class);
+        k.register(NotificationRequest.Handler.class);
         k.register(RoomRequest.class);
         k.register(UserRequest.class);
 

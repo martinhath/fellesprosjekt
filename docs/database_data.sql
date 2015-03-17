@@ -42,7 +42,9 @@ INSERT INTO `User_group` (`groupid`, `name`, `owner_id`, `create_time`, `update_
 INSERT INTO `Meeting` (`meetingid`, `name`, `description`, `start_time`, `end_time`, `Room_roomid`, `location`, `owner_id`, `Group_groupid`, `create_time`, `update_time`) VALUES
 (1, 'Fredagspils', 'På fredag skal vi drikke en god del pils, og så klart litt sambuca.', '2015-05-08 18:00:00', '2015-05-09 00:00:00', 2, 'Trondheim Torg', 4, 1, '2015-03-12 12:22:40', '2015-03-12 11:31:32'),
 (2, 'Gruppemøte', 'Obligatorisk møte for alle gruppemedlemmer!', '2015-04-26 12:00:00', '2015-04-26 15:30:00', 1, 'Gløshaugen', 3, 2, '2015-03-12 12:30:36', '2015-03-12 11:30:36'),
-(3, 'Fresh fest', 'Sick/10 fest der vi skal chillen, høre på smud musikk, og spise Grandis (med stor G!). Obligatorisk oppmøte i Bergljots Date 5.', '2015-03-19 15:00:00', '2015-03-19 19:30:00', 2, 'Bergljots', 3, 2, '2015-03-12 12:30:36', '2015-03-12 11:30:36');
+(3, 'Fresh fest', 'Sick/10 fest der vi skal chillen, høre på smud musikk, og spise Grandis (med stor G!). Obligatorisk oppmøte i Bergljots Gate 5.', '2015-03-19 15:00:00', '2015-03-19 19:30:00', 2, 'Bergljots', 3, 2, '2015-03-12 12:30:36', '2015-03-12 11:30:36'),
+(4, 'Grill&Chill', 'Vi tar livet med ro, og spiser grillmat i høyskoleparken.', '2015-03-20 12:00:00', '2015-03-20 16:00:00', 2, 'Høyskoleparken', 3, 2, '2015-03-12 12:30:36', '2015-03-12 11:30:36'),
+(5, 'lel', 'top lel top lel top lel top lel', '2015-03-21 10:00:00', '2015-03-20 21:00:00', 2, 'lel lellesen', 3, 2, '2015-03-12 12:30:36', '2015-03-12 11:30:36');
 
 --
 -- Dumping data for table `User_group_has_User`

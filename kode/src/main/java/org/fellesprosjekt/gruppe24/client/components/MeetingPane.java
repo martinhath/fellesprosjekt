@@ -1,6 +1,10 @@
 package org.fellesprosjekt.gruppe24.client.components;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import org.fellesprosjekt.gruppe24.client.Formatters;
@@ -9,8 +13,7 @@ import org.fellesprosjekt.gruppe24.common.models.Meeting;
 public class MeetingPane extends VBox {
 
     private final String[] Colors = {
-            "51, 181, 229, .5", "170, 102, 204, .5",
-            "153, 204, 0, .5", "255, 187, 51, .5", "255, 68, 68, .5"
+            "33b5e5", "aa66cc", "669900", "ffbb33", "ff4444"
     };
 
     private Meeting meeting;
@@ -20,10 +23,35 @@ public class MeetingPane extends VBox {
     }
 
     public MeetingPane(Meeting meeting) {
-        getStyleClass().add("meeting-box");
-
         this.meeting = meeting;
 
+        // Styling mm. til selve boksen
+        getStyleClass().add("meeting-box");
+        for (String s : getStyleClass()){
+            System.out.println(s);
+        }
+        String s_0 = getStyle();
+        String style = String.format(
+                        "-fx-background-color: #%s;",
+                getColor());
+        setStyle(s_0 + style);
+
+        hoverProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+                String style = String.format(
+                        "-fx-background-color: derive(#%s, %d%s);",
+                        getColor(), isHover() ? +20 : 0, "%");
+                setStyle(s_0 + style);
+            }
+        });
+
+        setOnMouseClicked((MouseEvent e) -> {
+            System.out.println("halla");
+        });
+
+
+        // Legger inn ting som skal vises
         Label title = new Label();
         title.getStyleClass().add("meeting-box-title");
         title.setText(meeting.getName());
@@ -42,11 +70,6 @@ public class MeetingPane extends VBox {
         descLabel.setText(desc);
         descLabel.setWrapText(true);
         getChildren().add(descLabel);
-
-        String style = String.format("%s" +
-                "-fx-border-color: rgba(%s);",
-                getStyle(), getColor());
-        setStyle(style);
     }
 
 }

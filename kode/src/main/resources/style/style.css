@@ -10,6 +10,7 @@
 	-fx-border-style: dashed;
 	-fx-pref-height: 400px;
 	-fx-pref-width: 800px;
+    -fx-hgap: 4px;
 }
 
 .scroll-pane {
@@ -68,26 +69,27 @@
 	-fx-font-weight:200;
 }
 
+/* Boksene som er møtene i kalenderen. */
 .meeting-box {
     -fx-padding: 4px;
-}
-
-.meeting-box:hover {
 }
 
 .meeting-box-title {
     -fx-font-size: 12px;
     -fx-alignment: center;
     -fx-font-weight: bold;
+    -fx-text-fill: #fff;
 }
 
 .meeting-box-time {
     -fx-font-size: 10px;
     -fx-alignment: center;
     -fx-font-style: italic;
+    -fx-text-fill: #fff;
 }
 
 .meeting-box-desc {
     -fx-font-size: 10px;
+    -fx-text-fill: #fff;
 }
 
