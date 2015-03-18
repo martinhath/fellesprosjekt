@@ -21,23 +21,27 @@
                                text="Beskrivelse beskrivelse beskrivelse beskrivelse beskrievelse halla hva skjer a"
                                styleClass="label-subtitle"
                                GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
-                        <Label text="Rom:" styleClass="label"
+                        <Label text="Møteleder:" styleClass="label"
                                GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                        <Label text="Dato:" styleClass="label"
+                        <Label text="Rom:" styleClass="label"
                                GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                        <Label text="Fra kl.:" styleClass="label"
+                        <Label text="Dato:" styleClass="label"
                                GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-                        <Label text="Til kl.:" styleClass="label"
+                        <Label text="Fra kl.:" styleClass="label"
                                GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                        <Label text="Til kl.:" styleClass="label"
+                               GridPane.rowIndex="5" GridPane.columnIndex="0"/>
 
-                        <TextField fx:id="textRoom" text="hvilket rom?"
+                        <ComboBox fx:id="comboOwner"
                                    GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-                        <DatePicker fx:id="datePicker"
+                        <TextField fx:id="textRoom" text="hvilket rom?"
                                    GridPane.rowIndex="2" GridPane.columnIndex="1"/>
-                        <TextField fx:id="textFrom" text="hvilket rom?"
+                        <DatePicker fx:id="datePicker"
                                    GridPane.rowIndex="3" GridPane.columnIndex="1"/>
-                        <TextField fx:id="textTo" text="hvilket rom?"
+                        <TextField fx:id="textFrom" text="Fra når?"
                                    GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+                        <TextField fx:id="textTo" text="Til når?"
+                                   GridPane.rowIndex="5" GridPane.columnIndex="1"/>
                     </children>
                 </GridPane>
                 <VBox styleClass="meeting-detail-participants-box">
@@ -57,10 +61,10 @@
         <HBox BorderPane.alignment="CENTER">
             <children>
                 <Pane HBox.hgrow="ALWAYS">
-                    <Button onAction="#clickEdit" text="Rediger"/>
+                    <Button fx:id="buttonEdit" onAction="#clickEdit" text="Rediger"/>
                 </Pane>
                 <Pane HBox.hgrow="ALWAYS" nodeOrientation="RIGHT_TO_LEFT">
-                    <Button onAction="#clickBack" text="Tilbake"/>
+                    <Button fx:id="buttonBack" onAction="#clickBack" text="Tilbake"/>
                 </Pane>
             </children>
         </HBox>
