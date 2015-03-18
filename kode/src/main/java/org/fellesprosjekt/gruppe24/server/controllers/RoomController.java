@@ -40,11 +40,13 @@ public class RoomController extends ServerController {
 
     @Override
     public void list(Request req) {
-        Meeting meeting = (Meeting) req.payload;
-        if (meeting == null) Response.GetFailResponse("Meeting was null.");
-        RoomDatabaseHandler rhandler = RoomDatabaseHandler.GetInstance();
-
-        List<Room> rooms = rhandler.getAvailableRooms(meeting);
+        // Meeting meeting = (Meeting) req.payload;
+        // if (meeting == null) Response.GetFailResponse("Meeting was null.");
+        // RoomDatabaseHandler rhandler = RoomDatabaseHandler.GetInstance();
+        //
+        // List<Room> rooms = rhandler.getAvailableRooms(meeting);
+        List<Room> rooms = RoomDatabaseHandler.GetInstance().getAll();
+        System.out.println(rooms);
 
         Response res = new Response(Response.Type.OK, rooms);
         connection.sendTCP(res);

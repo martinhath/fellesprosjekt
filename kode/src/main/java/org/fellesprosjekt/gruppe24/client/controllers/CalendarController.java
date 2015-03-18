@@ -76,18 +76,12 @@ public class CalendarController extends ClientController {
         getClient().addListener(new ClientListener() {
             @Override
             public void receivedResponse(Connection conn, Response res) {
-                if (!(res.payload instanceof List))
-                    return;
+                if (res.type == Response.Type.FAIL) return;
+                if (!listInstanceOf(res.payload, Meeting.class)) return;
 
-                try {
-                    meetings = (List<Meeting>) res.payload;
-                } catch (ClassCastException e) {
-                    logger.info("Wrong response: " + res.payload);
-                    return;
-                }
-                Platform.runLater(() -> {
-                    showMeetings();
-                });
+                meetings = (List<Meeting>) res.payload;
+                Platform.runLater(CalendarController.this::showMeetings);
+                getClient().removeListener(this);
                 getClient().removeListener(this);
             }
 
@@ -98,20 +92,13 @@ public class CalendarController extends ClientController {
         getClient().addListener(new ClientListener() {
             @Override
             public void receivedResponse(Connection conn, Response res) {
-                if (!(res.payload instanceof List))
-                    return;
+                if (res.type == Response.Type.FAIL) return;
+                if (!listInstanceOf(res.payload, Notification.class)) return;
 
-                if (!listInstanceOf(res.payload, Notification.class)){
-                    getClient().removeListener(this);
-                    return;
-                }
                 notifications = (List<Notification>) res.payload;
-
                 Platform.runLater(CalendarController.this::showNotificationCount);
-
                 getClient().removeListener(this);
             }
-
         });
     }
 

@@ -27,8 +27,9 @@ public final class RoomDatabaseHandler extends DatabaseHandler<Room> {
      * @return Objektet.
      */
     public static RoomDatabaseHandler GetInstance() {
-        if (instance == null) return new RoomDatabaseHandler();
-        else return instance;
+        if (instance == null)
+            instance = new RoomDatabaseHandler();
+        return instance;
     }
 
     public ArrayList<Room> getAll() {

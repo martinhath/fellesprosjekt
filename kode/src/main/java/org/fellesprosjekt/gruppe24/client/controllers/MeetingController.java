@@ -49,6 +49,7 @@ public class MeetingController extends ClientController {
 
         getAllUsers();
         getAllGroups();
+        getAllRooms();
     }
 
     private void getAllUsers() {
@@ -62,10 +63,8 @@ public class MeetingController extends ClientController {
                     return;
                 }
 
-                if (!listInstanceOf(res.payload, User.class)) {
-                    getClient().removeListener(this);
-                    return;
-                }
+                if (!listInstanceOf(res.payload, User.class)) return;
+
                 List<User> list = (List<User>) res.payload;
                 dropdownParticipants.getItems().addAll(list);
                 getClient().removeListener(this);
@@ -84,10 +83,8 @@ public class MeetingController extends ClientController {
                     return;
                 }
 
-                if (!listInstanceOf(res.payload, Group.class)) {
-                    getClient().removeListener(this);
-                    return;
-                }
+                if (!listInstanceOf(res.payload, Group.class)) return;
+
                 List<Group> list = (List<Group>) res.payload;
                 dropdownParticipants.getItems().addAll(list);
                 getClient().removeListener(this);
@@ -95,7 +92,25 @@ public class MeetingController extends ClientController {
         });
     }
 
-    private void populateUsersBox() {
+    private void getAllRooms() {
+        Request req = new RoomRequest(Request.Type.LIST, null);
+        getClient().sendTCP(req);
+        getClient().addListener(new ClientListener(){
+            @Override
+            public void receivedResponse(Connection conn, Response res) {
+                if (res.type == Response.Type.FAIL) {
+                    getClient().removeListener(this);
+                    logger.info((String) res.payload);
+                    return;
+                }
+
+                if (!listInstanceOf(res.payload, Room.class)) return;
+
+                List<Room> list = (List<Room>) res.payload;
+                fieldRoom.getItems().addAll(list);
+                getClient().removeListener(this);
+            }
+        });
     }
 
     private void setOKText(Node n) {
@@ -216,6 +231,8 @@ public class MeetingController extends ClientController {
 
         int mins = totime.getHour()*60 + totime.getMinute();
         meeting.getFrom().plusMinutes(mins);
+
+        meeting.setRoom(fieldRoom.getValue());
 
         mins = fromtime.getHour() * 60 + fromtime.getMinute();
         meeting.getTo().plusMinutes(mins);
