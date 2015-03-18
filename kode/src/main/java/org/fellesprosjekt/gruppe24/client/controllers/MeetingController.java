@@ -82,14 +82,15 @@ public class MeetingController extends ClientController {
                     logger.info((String) res.payload);
                     return;
                 }
-                List<Entity> participants = new LinkedList<Entity>();
                 try{
-                    participants.addAll((List<Group>) res.payload);
+                	List<Group> list = (List<Group>) res.payload;
+                	if (list != null && list.get(0) instanceof Group) {
+                        dropdownParticipants.getItems().addAll(list);
+                	}
                 } catch (ClassCastException e){
                     logger.warning("Payload was of wrong type: " + res.payload);
-                    return;
+                } catch (IndexOutOfBoundsException e){
                 }
-                dropdownParticipants.getItems().addAll(participants);
                 getClient().removeListener(this);
             }
         });
