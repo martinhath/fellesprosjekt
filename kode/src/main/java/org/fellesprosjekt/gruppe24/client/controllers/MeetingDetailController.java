@@ -1,6 +1,7 @@
 package org.fellesprosjekt.gruppe24.client.controllers;
 
 import com.esotericsoftware.kryonet.Connection;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -12,10 +13,7 @@ import org.fellesprosjekt.gruppe24.client.Layout;
 import org.fellesprosjekt.gruppe24.client.listeners.ClientListener;
 import org.fellesprosjekt.gruppe24.common.Regexes;
 import org.fellesprosjekt.gruppe24.common.models.*;
-import org.fellesprosjekt.gruppe24.common.models.net.GroupRequest;
-import org.fellesprosjekt.gruppe24.common.models.net.Request;
-import org.fellesprosjekt.gruppe24.common.models.net.Response;
-import org.fellesprosjekt.gruppe24.common.models.net.UserRequest;
+import org.fellesprosjekt.gruppe24.common.models.net.*;
 
 import java.awt.event.FocusListener;
 import java.net.URL;
@@ -48,7 +46,8 @@ public class MeetingDetailController extends ClientController {
     @FXML public ListView<Entity> listInvited;
 
     @FXML public Button buttonEdit;
-    @FXML public Button buttonBack;
+    @FXML public Button buttonSave;
+    @FXML public Button buttonDelete;
 
     private LocalTime totime;
     private LocalTime fromtime;
@@ -125,9 +124,12 @@ public class MeetingDetailController extends ClientController {
         if (getApplication().getUser().getId() == meeting.getOwner().getId()){
             isOwner = true;
             buttonEdit.setVisible(true);
+            buttonDelete.setVisible(true);
         } else {
             buttonEdit.setVisible(false);
+            buttonDelete.setVisible(false);
         }
+        buttonSave.setVisible(false);
     }
 
     public void setMeeting(Meeting m) {
@@ -236,15 +238,15 @@ public class MeetingDetailController extends ClientController {
 
     public void clickEdit(ActionEvent actionEvent) {
         if (editMode){
-            if (!validateFields())
-                return;
+            setMeeting(meeting);
             editMode = false;
             buttonEdit.setText("Rediger");
-            buttonBack.setDisable(false);
+            buttonSave.setVisible(false);
         } else {
             editMode = true;
-            buttonEdit.setText("Ferdig");
-            buttonBack.setDisable(true);
+            buttonEdit.setText("Avbryt");
+            buttonSave.setVisible(true);
+
             getRooms();
             getUsers();
         }
@@ -253,6 +255,25 @@ public class MeetingDetailController extends ClientController {
 
     public void clickBack(ActionEvent actionEvent) {
         // Må sende PUT request til server, for å oppdatere møtet.
-        getApplication().setScene(getStage(), Layout.Calendar);
+        Platform.runLater(() -> getApplication().setScene(getStage(), Layout.Calendar));
+    }
+
+    public void clickDelete(ActionEvent actionEvent) {
+        // verifiser
+        Request req = new MeetingRequest(Request.Type.DELETE, meeting);
+        getClient().sendTCP(req);
+        getClient().addListener(new ClientListener() {
+            @Override
+            public void receivedResponse(Connection conn, Response res) {
+                if (res.type == Response.Type.FAIL)
+                    return;
+                Platform.runLater(() -> getApplication().setScene(getStage(), Layout.Calendar));
+                getClient().removeListener(this);
+            }
+        });
+    }
+
+    public void clickSave(ActionEvent actionEvent) {
+        if (!validateFields()) return;
     }
 }

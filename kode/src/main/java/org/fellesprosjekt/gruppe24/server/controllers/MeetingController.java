@@ -72,7 +72,8 @@ public class MeetingController extends ServerController {
                 handler.addUserToMeeting(
                         meeting,
                         (User) participant,
-                        String.format("Du er invitert til %s av %s", meeting, meeting.getOwner()));
+                        String.format("Du er invitert til %s av %s",
+                                meeting, meeting.getOwner()));
             }
         }
         // fjerner de som ikke lenger er med fra databasen
@@ -100,7 +101,8 @@ public class MeetingController extends ServerController {
 
         Meeting meeting = handler.get(id);
         if (meeting == null) {
-            connection.sendTCP(Response.GetFailResponse(String.format("could not find meeting with id %d", id)));
+            connection.sendTCP(Response.GetFailResponse(
+                    String.format("could not find meeting with id %d", id)));
             return;
         }
         Response res = new Response();
@@ -121,6 +123,14 @@ public class MeetingController extends ServerController {
 
 	@Override
 	public void delete(Request req) {
-        throw new RuntimeException("Not implemented!");
+		// TODO Auto-generated method stub
+		MeetingDatabaseHandler mhandler = MeetingDatabaseHandler.GetInstance();
+        Meeting m = (Meeting) req.payload;
+        if (!mhandler.delete(m)){
+            connection.sendTCP(Response.GetFailResponse(
+                    "Could not delete meeting " + m.getName()));
+            return;
+        }
+        connection.sendTCP(new Response(Response.Type.OK, null));
 	}
 }
