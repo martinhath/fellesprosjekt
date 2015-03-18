@@ -34,7 +34,7 @@
         </HBox>
         <ScrollPane fx:id="scrollPane" layoutX="59.0" layoutY="193.0" styleClass="scroll-pane">
             <content>
-                <GridPane fx:id="calendarGrid" styleClass="calendar-grid">
+                <GridPane fx:id="calendarGrid" styleClass="calendar-grid-">
                     <columnConstraints>
                         <ColumnConstraints prefWidth="100"/>
                         <ColumnConstraints prefWidth="100"/>
