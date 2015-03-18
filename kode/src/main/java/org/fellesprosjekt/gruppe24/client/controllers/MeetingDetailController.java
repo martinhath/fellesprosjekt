@@ -1,5 +1,6 @@
 package org.fellesprosjekt.gruppe24.client.controllers;
 
+import com.esotericsoftware.kryonet.Connection;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -8,20 +9,27 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import org.fellesprosjekt.gruppe24.client.Formatters;
 import org.fellesprosjekt.gruppe24.client.Layout;
+import org.fellesprosjekt.gruppe24.client.listeners.ClientListener;
 import org.fellesprosjekt.gruppe24.common.Regexes;
-import org.fellesprosjekt.gruppe24.common.models.Entity;
-import org.fellesprosjekt.gruppe24.common.models.Meeting;
-import org.fellesprosjekt.gruppe24.common.models.Room;
+import org.fellesprosjekt.gruppe24.common.models.*;
+import org.fellesprosjekt.gruppe24.common.models.net.GroupRequest;
+import org.fellesprosjekt.gruppe24.common.models.net.Request;
+import org.fellesprosjekt.gruppe24.common.models.net.Response;
+import org.fellesprosjekt.gruppe24.common.models.net.UserRequest;
 
 import java.awt.event.FocusListener;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 
 public class MeetingDetailController extends ClientController {
+    private Logger logger = Logger.getLogger(getClass().getName());
 
     private Meeting meeting;
 
@@ -62,6 +70,52 @@ public class MeetingDetailController extends ClientController {
                 setOKText(textTo);
             else
                 setErrText(textTo);
+        });
+    }
+
+    private void getRooms() {
+        Request groupReq = new GroupRequest(Request.Type.LIST, null);
+        getClient().sendTCP(groupReq);
+        getClient().addListener(new ClientListener() {
+            @Override
+            public void receivedResponse(Connection conn, Response res) {
+                if (res.type == Response.Type.FAIL) {
+                    logger.info((String) res.payload);
+                    return;
+                }
+                List<Room> rooms = new LinkedList<>();
+                try{
+                    rooms.addAll((List<Room>) res.payload);
+                } catch (ClassCastException e){
+                    logger.warning("Payload was of wrong type: " + res.payload);
+                    return;
+                }
+                comboRoom.getItems().addAll(rooms);
+                getClient().removeListener(this);
+            }
+        });
+    }
+
+    private void getUsers() {
+        Request userReq = new UserRequest(Request.Type.LIST, null);
+        getClient().sendTCP(userReq);
+        getClient().addListener(new ClientListener() {
+            @Override
+            public void receivedResponse(Connection conn, Response res) {
+                if (res.type == Response.Type.FAIL) {
+                    logger.info((String) res.payload);
+                    return;
+                }
+                List<User> users = new LinkedList<>();
+                try{
+                    users.addAll((List<User>) res.payload);
+                } catch (ClassCastException e){
+                    logger.warning("Payload was of wrong type: " + res.payload);
+                    return;
+                }
+                comboOwner.getItems().addAll(users);
+                getClient().removeListener(this);
+            }
         });
     }
 
@@ -187,6 +241,9 @@ public class MeetingDetailController extends ClientController {
         } else {
             editMode = true;
             buttonEdit.setText("Ferdig");
+
+            getRooms();
+            getUsers();
         }
         setFields();
     }
