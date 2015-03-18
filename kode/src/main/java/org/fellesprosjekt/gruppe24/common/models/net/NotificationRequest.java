@@ -1,6 +1,5 @@
 package org.fellesprosjekt.gruppe24.common.models.net;
 
-import org.fellesprosjekt.gruppe24.common.models.Entity;
 
 public class NotificationRequest extends Request{
 
@@ -12,6 +11,7 @@ public class NotificationRequest extends Request{
     public NotificationRequest() {
         super();
         includeRead = false;
+        handler = Handler.BOTH;
     }
 
     public NotificationRequest(Type t, Object o) {

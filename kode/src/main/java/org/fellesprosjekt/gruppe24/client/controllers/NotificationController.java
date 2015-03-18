@@ -38,11 +38,9 @@ public class NotificationController extends ClientController {
     }
 
     public void init() {
-
         // får notifications fra server
-        Request req = new NotificationRequest();
-        req.type = Request.Type.LIST;
-        req.payload = not;
+        NotificationRequest req = new NotificationRequest(Request.Type.LIST,
+                true, getApplication().getUser());
         getClient().sendTCP(req);
         getClient().addListener(new ClientListener() {
             @Override
@@ -58,9 +56,6 @@ public class NotificationController extends ClientController {
                     return;
                 }
                 List<Notification> list = (List<Notification>) res.payload;
-                // alt var good.
-                System.out.println("good");
-                System.out.println(list);
                 listView.getItems().addAll(list);
                 getClient().removeListener(this);
             }

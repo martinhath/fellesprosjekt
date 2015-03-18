@@ -30,6 +30,7 @@ public class ClientListener extends Listener{
         // sketchy, men la gå
         if (list.size() == 0) return false;
         Object o = list.get(0);
+        if (o == null) return false;
         return o.getClass() == c;
     }
 
