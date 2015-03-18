@@ -33,7 +33,8 @@
 
 .label {
 	-fx-font-family: "Helvetica";
-	-fx-font-size: 15;
+	-fx-font-size: 14px;
+    -fx-padding: 4px;
 }
 
 .label-day {

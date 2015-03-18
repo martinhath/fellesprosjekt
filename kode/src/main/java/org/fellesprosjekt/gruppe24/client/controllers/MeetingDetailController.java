@@ -83,14 +83,16 @@ public class MeetingDetailController extends ClientController {
                     logger.info((String) res.payload);
                     return;
                 }
-                List<Room> rooms = new LinkedList<>();
                 try{
-                    rooms.addAll((List<Room>) res.payload);
+                    List<Room> rooms = (List<Room>) res.payload;
+                    if (rooms != null && rooms.get(0) instanceof Room) {
+                        comboRoom.getItems().addAll(rooms);
+                    }
                 } catch (ClassCastException e){
                     logger.warning("Payload was of wrong type: " + res.payload);
                     return;
+                } catch (IndexOutOfBoundsException e){
                 }
-                comboRoom.getItems().addAll(rooms);
                 getClient().removeListener(this);
             }
         });
@@ -113,6 +115,7 @@ public class MeetingDetailController extends ClientController {
                     logger.warning("Payload was of wrong type: " + res.payload);
                     return;
                 }
+                System.out.println("users: " + users.size());
                 comboOwner.getItems().addAll(users);
                 getClient().removeListener(this);
             }
@@ -138,7 +141,7 @@ public class MeetingDetailController extends ClientController {
         textDesc.setEditable(editMode);
         comboOwner.setEditable(editMode);
         comboRoom.setEditable(editMode);
-        datePicker.setEditable(editMode);
+        datePicker.setDisable(!editMode);
         textFrom.setEditable(editMode);
         textTo.setEditable(editMode);
 

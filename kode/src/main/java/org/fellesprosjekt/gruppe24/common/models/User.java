@@ -64,8 +64,4 @@ public class User extends Entity {
     	this.password = password;
     }
     
-    public String toString() {
-    	return String.format("[User] username: %s Id: %s", getUsername(), getId());
-
-    }
 }
