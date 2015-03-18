@@ -57,17 +57,17 @@ public class MeetingController extends ClientController {
         getClient().addListener(new ClientListener(){
             public void receivedResponse(Connection conn, Response res) {
                 if (res.type == Response.Type.FAIL) {
+                    getClient().removeListener(this);
                     logger.info((String) res.payload);
                     return;
                 }
-                List<Entity> participants = new LinkedList<Entity>();
-                try{
-                    participants.addAll((List<User>) res.payload);
-                } catch (ClassCastException e){
-                    logger.warning("Payload was of wrong type: " + res.payload);
+
+                if (!listInstanceOf(res.payload, User.class)) {
+                    getClient().removeListener(this);
                     return;
                 }
-                dropdownParticipants.getItems().addAll(participants);
+                List<User> list = (List<User>) res.payload;
+                dropdownParticipants.getItems().addAll(list);
                 getClient().removeListener(this);
             }
         });
@@ -79,21 +79,17 @@ public class MeetingController extends ClientController {
         getClient().addListener(new ClientListener(){
             public void receivedResponse(Connection conn, Response res) {
                 if (res.type == Response.Type.FAIL) {
+                    getClient().removeListener(this);
                     logger.info((String) res.payload);
                     return;
                 }
-                if (!(res.payload instanceof List)) return;
 
-                List payload = (List) res.payload;
-                try{
-                	List<Group> list = (List<Group>) payload;
-                	if (list.get(0) instanceof Group) {
-                        dropdownParticipants.getItems().addAll(list);
-                	}
-                } catch (ClassCastException e){
-                    logger.warning("Payload was of wrong type: " + res.payload);
-                } catch (IndexOutOfBoundsException e){
+                if (!listInstanceOf(res.payload, Group.class)) {
+                    getClient().removeListener(this);
+                    return;
                 }
+                List<Group> list = (List<Group>) res.payload;
+                dropdownParticipants.getItems().addAll(list);
                 getClient().removeListener(this);
             }
         });
