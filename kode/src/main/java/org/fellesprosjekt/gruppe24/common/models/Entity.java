@@ -53,4 +53,8 @@ public abstract class Entity {
         this.id = id;
     }
 
+    @Override
+    public String toString() {
+        return getName();
+    }
 }

@@ -165,7 +165,7 @@ public class CalendarController extends ClientController {
          * møtene halvparten så store i bredden
          */
 
-        MeetingPane pane = new MeetingPane(m);
+        MeetingPane pane = new MeetingPane(this, m);
         calendarGrid.add(pane, col, row);
         int duration = m.getTo().getHour() - m.getFrom().getHour() + 1;
         GridPane.setRowSpan(pane, duration);

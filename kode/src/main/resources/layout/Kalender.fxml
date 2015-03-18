@@ -3,23 +3,23 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="664.0"
-            prefWidth="1027.0" styleClass="anchor-pane" stylesheets="@../style/style.css"
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650"
+            prefWidth="1000" styleClass="anchor-pane" stylesheets="@../style/style.css"
             xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="org.fellesprosjekt.gruppe24.client.controllers.CalendarController">
 
     <children>
         <Button fx:id="buttonPrev" layoutX="303.0" layoutY="87.0" mnemonicParsing="false" onAction="#clickPrevWeek"
-                text="Forrige"/>
+                text="Forrige" styleClass="button-"/>
         <Button layoutX="396.0" layoutY="87.0" mnemonicParsing="false" onAction="#clickCurrentWeek" text="Idag"/>
         <Button fx:id="buttonNext" layoutX="469.0" layoutY="87.0" mnemonicParsing="false" onAction="#clickNextWeek"
-                text="Neste"/>
+                text="Neste" styleClass="button-"/>
         <Button fx:id="logoutButton" layoutX="860.0" layoutY="595.0" mnemonicParsing="false" onAction="#logout"
-                text="Logge ut"/>
+                text="Logge ut" styleClass="button-"/>
         <Button fx:id="buttonNotification" layoutX="797.0" layoutY="35.0" mnemonicParsing="false"
                 onAction="#seeNotifications" text="Nye meldinger (3)"/>
         <Button fx:id="meetingButton" layoutX="865.0" layoutY="82.0" mnemonicParsing="false" onAction="#newMeeting"
-                text="Nytt møte"/>
+                text="Nytt møte" styleClass="button-"/>
         <HBox layoutX="59.0" layoutY="174.0" styleClass="labels-container">
             <children>
                 <Label layoutX="128.0" layoutY="174.0" styleClass="label-day" text="Klokkeslett"/>
@@ -34,7 +34,7 @@
         </HBox>
         <ScrollPane fx:id="scrollPane" layoutX="59.0" layoutY="193.0" styleClass="scroll-pane">
             <content>
-                <GridPane fx:id="calendarGrid" styleClass="calendar-grid">
+                <GridPane fx:id="calendarGrid" styleClass="calendar-grid-">
                     <columnConstraints>
                         <ColumnConstraints prefWidth="100"/>
                         <ColumnConstraints prefWidth="100"/>

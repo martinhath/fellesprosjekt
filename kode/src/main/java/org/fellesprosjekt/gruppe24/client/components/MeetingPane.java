@@ -1,13 +1,12 @@
 package org.fellesprosjekt.gruppe24.client.components;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import org.fellesprosjekt.gruppe24.client.Formatters;
+import org.fellesprosjekt.gruppe24.client.Layout;
+import org.fellesprosjekt.gruppe24.client.controllers.ClientController;
+import org.fellesprosjekt.gruppe24.client.controllers.MeetingDetailController;
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
 
 public class MeetingPane extends VBox {
@@ -17,12 +16,14 @@ public class MeetingPane extends VBox {
     };
 
     private Meeting meeting;
+    private ClientController controller;
 
     private String getColor() {
         return Colors[meeting.hashCode() % Colors.length];
     }
 
-    public MeetingPane(Meeting meeting) {
+    public MeetingPane(ClientController controller, Meeting meeting) {
+        this.controller = controller;
         this.meeting = meeting;
 
         // Styling mm. til selve boksen
@@ -40,7 +41,10 @@ public class MeetingPane extends VBox {
         });
 
         setOnMouseClicked((MouseEvent e) -> {
-            System.out.println("Trykk på " + meeting.getName());
+            MeetingDetailController c = (MeetingDetailController)
+                    controller.getApplication().setScene(controller.getStage(),
+                    Layout.MeetingDetail);
+            c.setMeeting(meeting);
         });
 
 

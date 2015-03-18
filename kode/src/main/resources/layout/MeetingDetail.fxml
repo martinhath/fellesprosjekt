@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefWidth="1000" prefHeight="650"
+            xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="root" stylesheets="@../style/style.css"
+            fx:controller="org.fellesprosjekt.gruppe24.client.controllers.MeetingDetailController">
+    <top>
+        <Label fx:id="labelTitle" text="Tittel" styleClass="label-title"/>
+    </top>
+    <center>
+        <HBox styleClass="meeting-detail-hbox" BorderPane.alignment="CENTER">
+            <children>
+                <GridPane styleClass="meeting-grid">
+                    <children>
+                        <TextArea fx:id="textDesc"
+                               text="Beskrivelse beskrivelse beskrivelse beskrivelse beskrievelse halla hva skjer a"
+                               styleClass="label-subtitle"
+                               GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
+                        <Label text="Møteleder:" styleClass="label"
+                               GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                        <Label text="Rom:" styleClass="label"
+                               GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                        <Label text="Dato:" styleClass="label"
+                               GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                        <Label text="Fra kl.:" styleClass="label"
+                               GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                        <Label text="Til kl.:" styleClass="label"
+                               GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+
+                        <ComboBox fx:id="comboOwner"
+                                   GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                        <ComboBox fx:id="comboRoom"
+                                   GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                        <DatePicker fx:id="datePicker"
+                                   GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+                        <TextField fx:id="textFrom" text="Fra når?"
+                                   GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+                        <TextField fx:id="textTo" text="Til når?"
+                                   GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+                    </children>
+                </GridPane>
+                <VBox styleClass="meeting-detail-participants-box">
+                    <children>
+                        <Label styleClass="label"
+                               text="Deltagere"/>
+                        <ListView fx:id="listParticipants" />
+                        <Label styleClass="label"
+                               text="Inviterte" />
+                        <ListView fx:id="listInvited"/>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+    </center>
+    <bottom>
+        <HBox styleClass="meeting-detail-bottom" BorderPane.alignment="CENTER">
+            <children>
+                <Pane HBox.hgrow="ALWAYS">
+                    <Button fx:id="buttonEdit" onAction="#clickEdit" text="Rediger"/>
+                </Pane>
+                <Pane HBox.hgrow="ALWAYS" nodeOrientation="RIGHT_TO_LEFT">
+                    <Button fx:id="buttonBack" onAction="#clickBack" text="Tilbake"/>
+                </Pane>
+            </children>
+        </HBox>
+    </bottom>
+</BorderPane>

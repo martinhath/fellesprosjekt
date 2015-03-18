@@ -60,6 +60,15 @@ public final class DatabaseManager {
         cpds.setAcquireIncrement(5);
         cpds.setMaxPoolSize(20); // klikka under tester da den bare var 20
         cpds.setMaxIdleTime(1);
+
+        try {
+            Connection c = cpds.getConnection();
+            c.close();
+        } catch (SQLException e) {
+            lgr.severe("Failed to get an initial connection");
+            System.exit(69);
+        }
+        lgr.info("Init done.");
     }
 
     public static void init_test() {

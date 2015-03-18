@@ -1,21 +1,10 @@
-.button {
-    -fx-background-color:
-        #c3c4c4,
-        linear-gradient(#d6d6d6 50%, white 100%),
-        radial-gradient(center 50% -40%, radius 200%, #e6e6e6 45%, rgba(230,230,230,0) 50%);
-    -fx-background-radius: 30;
-    -fx-background-insets: 0,1,1;
-    -fx-text-fill: black;
-    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 );
-    -fx-font-family: "Helvetica";
-    -fx-font-size: 17;
+.button- {
+	-fx-padding: 4px;
 }
 
-.anchor-pane {
-    -fx-background-color:linear-gradient(white,#DDDDDD);
-}
-
-.calendar-grid {
+/* må ha postfix - for å ikke kollidere
+med JavaFX kalenderen .... */
+.calendar-grid- {
 	-fx-background-color: white;
 	-fx-border-color: white;
 	-fx-opacity: 0.9;
@@ -25,6 +14,7 @@
     -fx-hgap: 4px;
 }
 
+
 .scroll-pane {
 	-fx-pref-height: 400px;
 	-fx-pref-width: 820px;
@@ -32,7 +22,8 @@
 
 .label {
 	-fx-font-family: "Helvetica";
-	-fx-font-size: 15;
+	-fx-font-size: 14px;
+    -fx-padding: 4px;
 }
 
 .label-day {
@@ -48,6 +39,26 @@
 	-fx-opacity: 0.4;
 	-fx-max-height: 100;
 	-fx-padding: 8;
+}
+
+/* root container */
+.root {
+    -fx-padding: 24px;
+}
+
+/* Felles stil for alle titler på sider */
+.label-title {
+    -fx-font-size: 40px;
+    -fx-font-weight: 200;
+    -fx-alignment: top-left;
+    -fx-text-fill: #333;
+}
+
+/* kan brukes til viktige ting som ikke er tittel*/
+.label-subtitle {
+    -fx-font-size: 18px;
+    -fx-font-style: italic;
+    -fx-text-fill: #555;
 }
 
 .month-label {
@@ -66,6 +77,7 @@
 
 .meeting-grid {
 	-fx-vgap: 10px;
+    -fx-hgap: 10px;
 }
 
 .meeting-label {
@@ -105,3 +117,14 @@
     -fx-text-fill: #fff;
 }
 
+.meeting-detail-participants-box {
+    -fx-pref-width: 300px;
+}
+
+.meeting-detail-hbox {
+    -fx-spacing: 20px;
+}
+
+.meeting-detail-bottom {
+	-fx-padding: 10px 0 0 0;
+}

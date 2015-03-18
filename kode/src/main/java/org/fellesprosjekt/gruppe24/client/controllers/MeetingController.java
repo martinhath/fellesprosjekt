@@ -112,13 +112,6 @@ public class MeetingController extends ClientController {
         Gjør det slik at validateASD() funksjonene kjøres
         hver gang fokus for tekstboksene (ol.) endres.
          */
-        fieldRoom.focusedProperty().addListener(
-                (FocusChangeListener) -> {
-                    if (validateRoom())
-                        setOKText(fieldRoom);
-                    else
-                        setErrText(fieldRoom);
-                });
         fieldFromTime.focusedProperty().addListener(
                 (FocusChangeListener) -> {
                     if (validateFromTime())
