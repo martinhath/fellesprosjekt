@@ -1,6 +1,10 @@
 package org.fellesprosjekt.gruppe24;
 
 import com.esotericsoftware.kryonet.Client;
+<<<<<<< HEAD
+=======
+import org.fellesprosjekt.gruppe24.client.CalendarClient;
+>>>>>>> Fikset Kryo-package imports
 import org.fellesprosjekt.gruppe24.common.Kryo.KryoUtils;
 import org.fellesprosjekt.gruppe24.database.DatabaseManager;
 import org.fellesprosjekt.gruppe24.server.CalendarServer;

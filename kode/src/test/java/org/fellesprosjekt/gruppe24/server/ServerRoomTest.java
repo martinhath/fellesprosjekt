@@ -5,6 +5,8 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import junit.framework.TestCase;
 import org.fellesprosjekt.gruppe24.TestInitRunner;
+import org.fellesprosjekt.gruppe24.common.Kryo.KryoUtils;
+import org.fellesprosjekt.gruppe24.common.models.LoginInfo;
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
 import org.fellesprosjekt.gruppe24.common.models.Room;
 import org.fellesprosjekt.gruppe24.common.models.User;
