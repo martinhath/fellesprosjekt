@@ -6,10 +6,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
-import javax.management.Notification;
-
 import org.fellesprosjekt.gruppe24.client.listeners.ClientListener;
-import org.fellesprosjekt.gruppe24.common.models.net.MeetingRequest;
+import org.fellesprosjekt.gruppe24.common.models.Notification;
 import org.fellesprosjekt.gruppe24.common.models.net.NotificationRequest;
 import org.fellesprosjekt.gruppe24.common.models.net.Request;
 import org.fellesprosjekt.gruppe24.common.models.net.Response;
@@ -28,7 +26,7 @@ public class NotificationController extends ClientController {
 	private Notification not;
 	
 	@FXML
-	ListView listView;
+	ListView<Notification> listView;
 	@FXML
 	Button abortButton;
 	
@@ -36,7 +34,6 @@ public class NotificationController extends ClientController {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		super.initialize(location, resources);
-		init();
 	}
 
 	public void init() {

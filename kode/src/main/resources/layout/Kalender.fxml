@@ -9,16 +9,16 @@
             fx:controller="org.fellesprosjekt.gruppe24.client.controllers.CalendarController">
 
     <children>
-        <Button fx:id="buttonPrev" layoutX="303.0" layoutY="87.0" mnemonicParsing="false" onAction="#clickPrevWeek"
+        <Button layoutX="303.0" layoutY="87.0" mnemonicParsing="false" onAction="#clickPrevWeek"
                 text="Forrige" styleClass="button-"/>
         <Button layoutX="396.0" layoutY="87.0" mnemonicParsing="false" onAction="#clickCurrentWeek" text="Idag"/>
-        <Button fx:id="buttonNext" layoutX="469.0" layoutY="87.0" mnemonicParsing="false" onAction="#clickNextWeek"
+        <Button layoutX="469.0" layoutY="87.0" mnemonicParsing="false" onAction="#clickNextWeek"
                 text="Neste" styleClass="button-"/>
-        <Button fx:id="logoutButton" layoutX="860.0" layoutY="595.0" mnemonicParsing="false" onAction="#logout"
+        <Button layoutX="860.0" layoutY="595.0" mnemonicParsing="false" onAction="#logout"
                 text="Logge ut" styleClass="button-"/>
         <Button fx:id="buttonNotification" layoutX="797.0" layoutY="35.0" mnemonicParsing="false"
-                onAction="#seeNotifications" text="Nye meldinger (3)"/>
-        <Button fx:id="meetingButton" layoutX="865.0" layoutY="82.0" mnemonicParsing="false" onAction="#newMeeting"
+                onAction="#seeNotifications" text="Nye meldinger (IKKE SATT)"/>
+        <Button layoutX="865.0" layoutY="82.0" mnemonicParsing="false" onAction="#newMeeting"
                 text="Nytt møte" styleClass="button-"/>
         <HBox layoutX="59.0" layoutY="174.0" styleClass="labels-container">
             <children>

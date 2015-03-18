@@ -109,8 +109,8 @@ public class CalendarController extends ClientController {
                 }
                 Platform.runLater(() -> {
                     showNotificationCount();
-                    getClient().removeListener(this);
                 });
+                getClient().removeListener(this);
             }
 
         });
