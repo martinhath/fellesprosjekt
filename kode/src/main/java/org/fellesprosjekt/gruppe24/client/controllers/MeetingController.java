@@ -1,61 +1,47 @@
 package org.fellesprosjekt.gruppe24.client.controllers;
 
 import com.esotericsoftware.kryonet.Connection;
-import com.sun.org.apache.xerces.internal.impl.xpath.regex.Match;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
+import javafx.scene.control.*;
 import org.controlsfx.control.CheckComboBox;
+
 import org.fellesprosjekt.gruppe24.client.listeners.ClientListener;
 import org.fellesprosjekt.gruppe24.common.Regexes;
-import org.fellesprosjekt.gruppe24.common.models.Entity;
-import org.fellesprosjekt.gruppe24.common.models.Group;
-import org.fellesprosjekt.gruppe24.common.models.Meeting;
-import org.fellesprosjekt.gruppe24.common.models.User;
+import org.fellesprosjekt.gruppe24.common.models.*;
 import org.fellesprosjekt.gruppe24.common.models.net.*;
 
 import java.net.URL;
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class MeetingController extends ClientController {
     private Logger logger = Logger.getLogger(getClass().getName());
 
     private Meeting meeting;
-
-    @FXML
-    private TextField fieldRoom;
-    @FXML
-    private TextField fieldFromTime;
-    @FXML
-    private TextField fieldToTime;
-    @FXML
-    private CheckComboBox<Entity> dropdownParticipants;
-    @FXML
-    private DatePicker datePicker;
-    @FXML
-    private Button buttonOk;
-    @FXML
-    private Button buttonAbort;
+    
+    //FXML-fält
+    @FXML private TextField fieldName;
+    @FXML private ChoiceBox<Room> fieldRoom;
+    @FXML private TextField fieldFromTime;
+    @FXML private TextField fieldToTime;
+    @FXML private CheckComboBox<Entity> dropdownParticipants;
+    @FXML private DatePicker datePicker;
+    @FXML private Button buttonOk;
+    @FXML private Button buttonAbort;
 
     private LocalTime fromtime;
     private LocalTime totime;
+    
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -96,14 +82,15 @@ public class MeetingController extends ClientController {
                     logger.info((String) res.payload);
                     return;
                 }
-                List<Entity> participants = new LinkedList<Entity>();
                 try{
-                    participants.addAll((List<Group>) res.payload);
+                	List<Group> list = (List<Group>) res.payload;
+                	if (list != null && list.get(0) instanceof Group) {
+                        dropdownParticipants.getItems().addAll(list);
+                	}
                 } catch (ClassCastException e){
                     logger.warning("Payload was of wrong type: " + res.payload);
-                    return;
+                } catch (IndexOutOfBoundsException e){
                 }
-                dropdownParticipants.getItems().addAll(participants);
                 getClient().removeListener(this);
             }
         });
@@ -161,8 +148,22 @@ public class MeetingController extends ClientController {
      * Håndterer validaring av tekstfeltet for Room.
      * @return `true` om tekstfeltet er gyldig.
      */
+    
+    private boolean validateMeetingName() {
+    	String string = fieldName.getText().trim();
+    	Matcher matcher = Regexes.Text.matcher(string);
+    	if (!matcher.matches()) {
+    		//vis felmeddelande
+    		return false;
+    	}
+    	return true;
+    }    
+    
     private boolean validateRoom() {
-        // TODO: room regex
+        // Kanskje det er default valg på første rom?
+        if (fieldRoom.getItems() == null) {
+        	return false;
+        } 
         return true;
     }
 
@@ -206,16 +207,21 @@ public class MeetingController extends ClientController {
     }
 
     private boolean validateParticipants() {
-        // TODO: denne
+        if (dropdownParticipants.getCheckModel().getCheckedItems().size() == 0)
+            return false;
         return true;
     }
 
     private boolean validateFields() {
-        boolean b =  validateRoom() && validateDate() &&
-                validateFromTime() && validateToTime() &&
-                validateParticipants();
+        boolean b =  validateMeetingName() && validateRoom() &&
+                validateDate() && validateFromTime() &&
+                validateToTime() && validateParticipants();
         if (!b)
             return false;
+        meeting.setName(fieldName.getText());
+
+        meeting.setOwner(getApplication().getUser());
+
         int mins = totime.getHour()*60 + totime.getMinute();
         meeting.getFrom().plusMinutes(mins);
 
@@ -245,7 +251,9 @@ public class MeetingController extends ClientController {
                     // vis noe på skjermen om at det skjedde en feil
                     return;
                 }
-                getApplication().removeStage(getStage());
+                Platform.runLater(() -> {
+                    getApplication().removeStage(getStage());
+                });
                 getClient().removeListener(this);
             }
         });
