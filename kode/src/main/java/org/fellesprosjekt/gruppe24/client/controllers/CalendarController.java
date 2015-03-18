@@ -64,10 +64,12 @@ public class CalendarController extends ClientController {
         date = LocalDateTime.now();
         setCalendarLabels(date);
 
-        // 08:00 er øverst
-        double kl8 = (scrollPane.getVmax() - scrollPane.getVmin()) * 8 / 13;
+    }
+    
+    private void setScrollPosition() {
+    	// 08:00 er øverst
+        double kl8 = (scrollPane.getVmax() - scrollPane.getVmin()) * 9 / 13;
         scrollPane.setVvalue(kl8);
-
     }
 
     @Override
@@ -97,7 +99,7 @@ public class CalendarController extends ClientController {
 
         });
         // Får tak i alle notifications
-        req = new NotificationRequest(Request.Type.LIST, getApplication().getUser());
+        req = new NotificationRequest(Request.Type.LIST, false, getApplication().getUser());
         getClient().sendTCP(req);
         getClient().addListener(new ClientListener() {
             @Override
@@ -136,6 +138,7 @@ public class CalendarController extends ClientController {
         for (Meeting m : meetings) {
             showMeeting(m);
         }
+        setScrollPosition();
     }
 
     private void showMeeting(Meeting m) {

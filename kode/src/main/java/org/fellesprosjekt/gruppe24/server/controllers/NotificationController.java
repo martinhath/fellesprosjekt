@@ -95,7 +95,7 @@ public class NotificationController extends ServerController {
             case GROUP:
                 result.removeAll(meetingNotifications);
         }
-
+        System.out.println(meetingNotifications.size());
         Response res = new Response(Response.Type.OK, result);
         System.out.println(((List) res.payload).size());
         connection.sendTCP(res);
