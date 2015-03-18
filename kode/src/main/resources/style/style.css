@@ -1,3 +1,6 @@
+.button- {
+	-fx-padding: 4px;
+}
 
 /* må ha postfix - for å ikke kollidere
 med JavaFX kalenderen .... */
@@ -120,4 +123,8 @@ med JavaFX kalenderen .... */
 
 .meeting-detail-hbox {
     -fx-spacing: 20px;
+}
+
+.meeting-detail-bottom {
+	-fx-padding: 10px 0 0 0;
 }

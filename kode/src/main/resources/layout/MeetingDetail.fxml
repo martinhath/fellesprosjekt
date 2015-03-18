@@ -58,7 +58,7 @@
         </HBox>
     </center>
     <bottom>
-        <HBox BorderPane.alignment="CENTER">
+        <HBox styleClass="meeting-detail-bottom" BorderPane.alignment="CENTER">
             <children>
                 <Pane HBox.hgrow="ALWAYS">
                     <Button fx:id="buttonEdit" onAction="#clickEdit" text="Rediger"/>

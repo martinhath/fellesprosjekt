@@ -108,15 +108,13 @@ public class MeetingDetailController extends ClientController {
                     logger.info((String) res.payload);
                     return;
                 }
-                List<User> users = new LinkedList<>();
                 try{
-                    users.addAll((List<User>) res.payload);
+                    comboOwner.getItems().clear();
+                    List<User> liste = (List<User>) res.payload;
+                    comboOwner.getItems().addAll(liste);
                 } catch (ClassCastException e){
                     logger.warning("Payload was of wrong type: " + res.payload);
-                    return;
                 }
-                System.out.println("users: " + users.size());
-                comboOwner.getItems().addAll(users);
                 getClient().removeListener(this);
             }
         });
