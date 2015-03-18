@@ -82,9 +82,12 @@ public class MeetingController extends ClientController {
                     logger.info((String) res.payload);
                     return;
                 }
+                if (!(res.payload instanceof List)) return;
+
+                List payload = (List) res.payload;
                 try{
-                	List<Group> list = (List<Group>) res.payload;
-                	if (list != null && list.get(0) instanceof Group) {
+                	List<Group> list = (List<Group>) payload;
+                	if (list.get(0) instanceof Group) {
                         dropdownParticipants.getItems().addAll(list);
                 	}
                 } catch (ClassCastException e){

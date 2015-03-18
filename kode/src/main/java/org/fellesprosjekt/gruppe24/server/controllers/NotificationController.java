@@ -82,7 +82,7 @@ public class NotificationController extends ServerController {
             result.addAll(meetingNotifications);
         else {
             for (Notification notification : meetingNotifications) {
-                if (!notification.isRead())
+                if (notification != null && !notification.isRead())
                     result.add(notification);
             }
         }
@@ -91,7 +91,7 @@ public class NotificationController extends ServerController {
             result.addAll(groupNotifications);
         else {
             for (Notification notification : groupNotifications) {
-                if (!notification.isRead())
+                if (notification != null && !notification.isRead())
                     result.add(notification);
             }
         }

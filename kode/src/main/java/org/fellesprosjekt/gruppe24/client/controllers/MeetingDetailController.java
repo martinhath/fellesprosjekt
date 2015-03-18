@@ -48,6 +48,7 @@ public class MeetingDetailController extends ClientController {
     @FXML public ListView<Entity> listInvited;
 
     @FXML public Button buttonEdit;
+    @FXML public Button buttonBack;
 
     private LocalTime totime;
     private LocalTime fromtime;
@@ -239,10 +240,11 @@ public class MeetingDetailController extends ClientController {
                 return;
             editMode = false;
             buttonEdit.setText("Rediger");
+            buttonBack.setDisable(false);
         } else {
             editMode = true;
             buttonEdit.setText("Ferdig");
-
+            buttonBack.setDisable(true);
             getRooms();
             getUsers();
         }

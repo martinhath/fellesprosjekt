@@ -101,15 +101,14 @@ public class CalendarController extends ClientController {
                 if (!(res.payload instanceof List))
                     return;
 
-                try {
-                    notifications = (List<Notification>) res.payload;
-                } catch (ClassCastException e) {
-                    logger.info("Wrong response: " + res.payload);
+                if (!listInstanceOf(res.payload, Notification.class)){
+                    getClient().removeListener(this);
                     return;
                 }
-                Platform.runLater(() -> {
-                    showNotificationCount();
-                });
+                notifications = (List<Notification>) res.payload;
+
+                Platform.runLater(CalendarController.this::showNotificationCount);
+
                 getClient().removeListener(this);
             }
 
