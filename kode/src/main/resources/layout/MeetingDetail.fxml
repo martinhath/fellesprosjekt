@@ -34,7 +34,7 @@
 
                         <ComboBox fx:id="comboOwner"
                                    GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-                        <TextField fx:id="textRoom" text="hvilket rom?"
+                        <ComboBox fx:id="comboRoom"
                                    GridPane.rowIndex="2" GridPane.columnIndex="1"/>
                         <DatePicker fx:id="datePicker"
                                    GridPane.rowIndex="3" GridPane.columnIndex="1"/>
