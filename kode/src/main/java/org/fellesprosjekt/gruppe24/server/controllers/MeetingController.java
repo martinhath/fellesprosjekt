@@ -68,7 +68,7 @@ public class MeetingController extends ServerController {
         handler.update(meeting);
         // finner de som var med i møtet, men kanskje skal fjernes
         List<User> toBeRemoved = handler.getUsersOfMeeting(meeting);
-        toBeRemoved.removeAll(meeting.getParticipants()); // remove all er differanseoperatoren i mengdelære
+        toBeRemoved.removeAll(meeting.getParticipants());
         // legger til evt nye deltakere
         for (Entity participant : meeting.getParticipants()) {
             if (participant.getClass() == Group.class) {
@@ -130,7 +130,7 @@ public class MeetingController extends ServerController {
         } else {
             res.payload = handler.getAll();
         }
-
+        System.out.println(String.format("Fant %d møter", ((List<Meeting>) res.payload).size()));
         connection.sendTCP(res);
     }
 

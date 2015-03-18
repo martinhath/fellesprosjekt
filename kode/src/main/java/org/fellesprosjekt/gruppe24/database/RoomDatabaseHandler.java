@@ -137,6 +137,7 @@ public final class RoomDatabaseHandler extends DatabaseHandler<Room> {
         for (HashMap<String, String> hm : rooms) {
             result.add(generateRoom(hm));
         }
+        System.out.println("Skal hente rom");
 
         // filtrerer rom som er opptatte
         for (Room room : result) {
