@@ -27,6 +27,9 @@ public class MeetingListener extends ServerListener{
                 case LIST:
                     controller.list(req);
                     break;
+                case DELETE:
+                	controller.delete(req);
+                	break;
             }
         } catch (ClassCastException e){
             logger.warning(e.toString());

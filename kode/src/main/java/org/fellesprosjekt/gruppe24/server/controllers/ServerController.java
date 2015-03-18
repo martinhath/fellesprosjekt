@@ -38,6 +38,13 @@ public abstract class ServerController {
      * @param req Requesten fra klienten
      */
     public abstract void get(Request req);
+    
+    /**
+     * Brukes når vi skal slette et objekt (en rad)
+     * fra databasen.
+     * @param req Requesten fra klienten
+     */
+    public abstract void delete(Request req);
 
     /**
      * Brukes når vi skal få alt av noe.

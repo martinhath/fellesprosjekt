@@ -118,4 +118,10 @@ public class MeetingController extends ServerController {
         res.payload = handler.getAll();
         connection.sendTCP(res);
     }
+
+	@Override
+	public void delete(Request req) {
+		// TODO Auto-generated method stub
+		
+	}
 }

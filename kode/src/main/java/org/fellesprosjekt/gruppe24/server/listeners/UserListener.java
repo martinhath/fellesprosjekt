@@ -25,6 +25,9 @@ public class UserListener extends ServerListener {
             case LIST:
                 controller.list(req);
                 break;
+            case DELETE:
+            	controller.delete(req);
+            	break;
         }
     }
 }

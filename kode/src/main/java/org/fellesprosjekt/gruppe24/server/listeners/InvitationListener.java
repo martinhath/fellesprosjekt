@@ -22,6 +22,9 @@ public class InvitationListener extends ServerListener {
                 case GET:
                     controller.get(req);
                     break;
+                case DELETE:
+                	controller.delete(req);
+                	break;
             }
         }
     }
