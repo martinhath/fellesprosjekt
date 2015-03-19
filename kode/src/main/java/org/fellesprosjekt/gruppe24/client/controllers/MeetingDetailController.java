@@ -45,6 +45,7 @@ public class MeetingDetailController extends ClientController {
     @FXML public ListView<Entity> listParticipants;
     @FXML public ListView<Entity> listInvited;
 
+    @FXML public Button buttonBack;
     @FXML public Button buttonEdit;
     @FXML public Button buttonSave;
     @FXML public Button buttonDelete;
@@ -108,13 +109,10 @@ public class MeetingDetailController extends ClientController {
                     logger.info((String) res.payload);
                     return;
                 }
-                try{
-                    comboOwner.getItems().clear();
-                    List<User> liste = (List<User>) res.payload;
-                    comboOwner.getItems().addAll(liste);
-                } catch (ClassCastException e){
-                    logger.warning("Payload was of wrong type: " + res.payload);
-                }
+                if (!listInstanceOf(res.payload, User.class))
+                    return;
+                comboOwner.getItems().clear();
+                comboOwner.getItems().addAll((List<User>) res.payload);
                 getClient().removeListener(this);
             }
         });
@@ -124,12 +122,11 @@ public class MeetingDetailController extends ClientController {
         if (getApplication().getUser().getId() == meeting.getOwner().getId()){
             isOwner = true;
             buttonEdit.setVisible(true);
-            buttonDelete.setVisible(true);
         } else {
             buttonEdit.setVisible(false);
-            buttonDelete.setVisible(false);
         }
         buttonSave.setVisible(false);
+        buttonDelete.setVisible(false);
     }
 
     public void setMeeting(Meeting m) {
@@ -238,14 +235,20 @@ public class MeetingDetailController extends ClientController {
 
     public void clickEdit(ActionEvent actionEvent) {
         if (editMode){
+            // Vi er ferdig å redigere
             setMeeting(meeting);
             editMode = false;
             buttonEdit.setText("Rediger");
             buttonSave.setVisible(false);
+            buttonDelete.setVisible(false);
+            buttonBack.setDisable(false);
         } else {
+            // Vi skal redigere
             editMode = true;
             buttonEdit.setText("Avbryt");
             buttonSave.setVisible(true);
+            buttonDelete.setVisible(true);
+            buttonBack.setDisable(true);
 
             getRooms();
             getUsers();
