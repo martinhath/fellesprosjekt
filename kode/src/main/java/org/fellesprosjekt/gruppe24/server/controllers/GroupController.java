@@ -1,5 +1,6 @@
 package org.fellesprosjekt.gruppe24.server.controllers;
 
+import org.fellesprosjekt.gruppe24.common.models.Entity;
 import org.fellesprosjekt.gruppe24.common.models.Group;
 import org.fellesprosjekt.gruppe24.common.models.User;
 import org.fellesprosjekt.gruppe24.common.models.net.Request;
@@ -77,15 +78,21 @@ public class GroupController extends ServerController{
     	Object pl = req.payload;
     	List<Group> groups = null;
     	if(pl instanceof User) {
-    		handler.getAllGroupsForUser((User) pl);
+    		groups = handler.getAllGroupsForUser((User) pl);
     	} else {
     		groups = handler.getAll();
     	}
         Response res = new Response();
-        if(groups == null)
+        if(groups == null) {
+        	res.type = Response.Type.FAIL;
+        	res.payload = "Fant ingen grupper for '" + ((Entity) req.payload).getName() + "'";
+        }
+        else {
+        	for(Group g : groups) {
+        		g.setMembers(handler.getAllUsersInGroup(g));
+        	}
         	res.type = Response.Type.OK;
-        else
-        	res.type = Response.Type.OK;
+        }
         res.payload = groups;
         connection.sendTCP(res);
     }

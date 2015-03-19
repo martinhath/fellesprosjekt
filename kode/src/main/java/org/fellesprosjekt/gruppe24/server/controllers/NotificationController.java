@@ -2,7 +2,9 @@ package org.fellesprosjekt.gruppe24.server.controllers;
 
 import org.fellesprosjekt.gruppe24.common.models.*;
 import org.fellesprosjekt.gruppe24.common.models.net.*;
+import org.fellesprosjekt.gruppe24.database.GroupDatabaseHandler;
 import org.fellesprosjekt.gruppe24.database.GroupNotificationHandler;
+import org.fellesprosjekt.gruppe24.database.MeetingDatabaseHandler;
 import org.fellesprosjekt.gruppe24.database.MeetingNotificationHandler;
 import org.fellesprosjekt.gruppe24.server.ServerConnection;
 
@@ -69,58 +71,71 @@ public class NotificationController extends ServerController {
      */
     @Override
     public void list(Request req) {
-        NotificationRequest r = (NotificationRequest) req;
-        if (req.payload == null) {
-            Response res = Response.GetFailResponse("Payload was null");
+        NotificationRequest nr = (NotificationRequest) req;
+        if(nr.payload == null) {
+        	Response res = Response.GetFailResponse("Payload was null!");
+            connection.sendTCP(res);
+            return;
+        }
+        if(req.payload instanceof User) {
+        	getAllNotifications(nr, (User) nr.payload);
+        } else if(req.payload instanceof Meeting) {
+        	getAllNotifications(nr, (Meeting) nr.payload);
+        } else {
+        	Response res = Response.GetFailResponse("Payload was invalid!");
             connection.sendTCP(res);
         }
+    }
+    
+    private void getAllNotifications(NotificationRequest nr, User user) {
         List<Notification> result = new ArrayList<Notification>();
         List<MeetingNotification> meetingNotifications = new ArrayList<MeetingNotification>();
         List<GroupNotification> groupNotifications = new ArrayList<GroupNotification>();
 
         MeetingNotificationHandler mnhandler = MeetingNotificationHandler.GetInstance();
-        GroupNotificationHandler gnhandler = GroupNotificationHandler.GetInstance();
+        GroupDatabaseHandler ghandler = GroupDatabaseHandler.GetInstance();
 
-        if (req.payload instanceof User) { // User in payload
-            User user = (User) req.payload;
-            try {
-                meetingNotifications = mnhandler.getAllOfUser(user.getId());
-                groupNotifications = gnhandler.getAllOfUser(user.getId());
-            } catch (NullPointerException ex) {
-                Response res = Response.GetFailResponse("User did not have ID");
-                connection.sendTCP(res);
-            }
-            if (r.includeRead)
-                result.addAll(meetingNotifications);
-            else {
-                for (Notification notification : meetingNotifications) {
+        try {
+            meetingNotifications = mnhandler.getAllOfUser(user.getId());
+            groupNotifications = ghandler.getAllGroupInvites(user);
+        } catch (NullPointerException ex) {
+            Response res = Response.GetFailResponse("User did not have ID");
+            connection.sendTCP(res);
+        }
+        
+        for (Notification notification : meetingNotifications) {
+        	if (notification != null) {
+        		if(nr.includeRead || (!nr.includeRead && !notification.isRead()))
+        			result.add(notification);
+        	}
+        }
+        for (Notification notification : groupNotifications) {
+        	if (notification != null) {
+        		if(nr.includeRead || (!nr.includeRead && !notification.isRead()))
+        			result.add(notification);
+        	}
+        }
 
-                    if (notification != null && notification.isRead())
-                        result.remove(notification);
-                }
-            }
-            if (r.includeRead) result.addAll(groupNotifications);
-            else {
-                for (Notification notification : groupNotifications) {
-                    if (notification != null && notification.isRead())
-                        result.remove(notification);
-                }
-            }
-
-            switch (r.handler) {
-                case MEETING:
-                    result.removeAll(groupNotifications);
-                case GROUP:
-                    result.removeAll(meetingNotifications);
-            }
-        } else if (req.payload instanceof Meeting) { // Meeting in payload
-            Meeting meeting = (Meeting) req.payload;
-            result.addAll(mnhandler.getAllOfMeeting(meeting.getId()));
-        } else { // Nothing in payload
-            Response res = Response.GetFailResponse("Payload was not User or Meeting.");
+        switch (nr.handler) {
+            case MEETING:
+                result.removeAll(groupNotifications);
+            case GROUP:
+                result.removeAll(meetingNotifications);
         }
 
         Response res = new Response(Response.Type.OK, result);
+        connection.sendTCP(res);
+    }
+    
+    private void getAllNotifications(NotificationRequest nr, Meeting meeting) {
+    	if(meeting == null) {
+    		Response res = Response.GetFailResponse("Payload was null");
+    		connection.sendTCP(res);
+    		return;
+    	}
+    	MeetingNotificationHandler mnHandler = MeetingNotificationHandler.GetInstance();
+    	List<MeetingNotification> result = mnHandler.getAllOfMeeting(meeting.getId());
+    	Response res = new Response(Response.Type.OK, result);
         connection.sendTCP(res);
     }
 

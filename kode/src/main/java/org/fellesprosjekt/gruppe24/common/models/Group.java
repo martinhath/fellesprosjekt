@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Group extends Entity{
 
-    private List<Entity> members;
+    private List<User> members;
     private int ownerId;
 
     @SuppressWarnings("unused")
@@ -23,18 +23,30 @@ public class Group extends Entity{
     	this.ownerId = ownerId;
     }
 
-    public void addMember(Entity e){
+    public void addMember(User e){
         if (members.contains(e))
             return;
         members.add(e);
     }
+    
+    public void setMembers(List<User> l) {
+    	members = l;
+    }
 
-    public List<Entity> getMembers(){
+    public List<User> getMembers(){
         return members;
     }
 
     public int getOwnerId() {
     	return ownerId;
+    }
+    
+    public void printMembers() {
+    	String s = "";
+    	for(Entity e : members) {
+    		s += e.getName() + ", ";
+    	}
+    	System.out.println(s);
     }
     
 }

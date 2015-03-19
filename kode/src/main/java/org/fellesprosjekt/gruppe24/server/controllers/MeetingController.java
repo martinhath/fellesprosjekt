@@ -32,10 +32,9 @@ public class MeetingController extends ServerController {
 
         MeetingDatabaseHandler handler = MeetingDatabaseHandler.GetInstance();
         Meeting resMeeting = handler.insert(meeting);
-        System.out.println(meeting.getParticipants().size());
         Set<User> uniques = new HashSet<User>();
         for (Entity participant : meeting.getParticipants()) {
-            if (participant.getClass() == Group.class) {
+            if (participant instanceof Group) {
             	Group group = (Group) participant;
             	for (Entity e : group.getMembers()) {
             		uniques.add((User) e);
@@ -45,10 +44,16 @@ public class MeetingController extends ServerController {
             }
         }
         for(User u : uniques) {
+        	//System.out.println(u.getName());
+        	String s;
+        	if(resMeeting.getOwner().equals(u))
+        		s = "Du opprettet møtet '" + resMeeting.getName() + "'";
+        	else
+        		s = String.format("Du er invitert til '%s' av %s", resMeeting.getName(), meeting.getOwner().getName());
         	handler.addUserToMeeting(
                     resMeeting,
                     u,
-                    String.format("Du er invitert til '%s' av %s", resMeeting.getName(), meeting.getOwner().getName()));
+                    s);
         }
         Response res = new Response();
         res.type = Response.Type.OK;

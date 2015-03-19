@@ -64,9 +64,15 @@ public class User extends Entity {
     	this.password = password;
     }
     
+    @Override
     public boolean equals(Object obj) {
         if (obj == null) return false;
     	return getId() == ((User) obj).getId();
     }
+    @Override
+    public int hashCode() {
+    	return new Integer(getId()).hashCode();
+    }
+    
     
 }
