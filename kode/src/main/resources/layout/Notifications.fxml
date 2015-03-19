@@ -1,44 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.*?>
 
-
-<BorderPane prefHeight="283.0" prefWidth="254.0" styleClass="anchor-pane" stylesheets="@../style/style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.fellesprosjekt.gruppe24.client.controllers.NotificationController">
-   <top>
-      <Label fx:id="newMessageLabel" text="Nye meldinger:" BorderPane.alignment="TOP_LEFT">
-         <font>
-            <Font size="15.0" />
-         </font>
-         <BorderPane.margin>
-            <Insets bottom="10.0" left="20.0" right="20.0" top="20.0" />
-         </BorderPane.margin>
-      </Label>
-   </top>
-   <center>
-      <ScrollPane prefViewportHeight="112.0" prefViewportWidth="40.0">
-         <content>
-            <ListView fx:id="listView" prefHeight="356.0" prefWidth="278.0" BorderPane.alignment="CENTER">
-               <padding>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-               </padding>
-               <BorderPane.margin>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-               </BorderPane.margin>
-            </ListView>
-         </content>
-         <BorderPane.margin>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-         </BorderPane.margin>
-      </ScrollPane>
-   </center>
-   <bottom>
-      <Button fx:id="abortButton" onAction="#clickAbort" mnemonicParsing="false" text="Avbryt" BorderPane.alignment="BOTTOM_RIGHT">
-         <BorderPane.margin>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="10.0" />
-         </BorderPane.margin>
-      </Button>
-   </bottom>
+<BorderPane prefHeight="300" prefWidth="250" stylesheets="@../style/style.css"
+            xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="root"
+            fx:controller="org.fellesprosjekt.gruppe24.client.controllers.NotificationController">
+    <top>
+        <Label fx:id="newMessageLabel" styleClass="label"
+               text="Nye meldinger:" BorderPane.alignment="TOP_LEFT" />
+    </top>
+    <center>
+        <ScrollPane>
+            <content>
+                <ListView fx:id="listView" BorderPane.alignment="CENTER"/>
+            </content>
+        </ScrollPane>
+    </center>
+    <bottom>
+        <Pane styleClass="meeting-detail-bottom" >
+            <Button fx:id="abortButton" onAction="#clickAbort" mnemonicParsing="false" text="Avbryt"
+                    alignment="BOTTOM_RIGHT" styleClass="button-"  />
+        </Pane>
+    </bottom>
 </BorderPane>

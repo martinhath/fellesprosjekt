@@ -90,7 +90,7 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
         ps.setInt(6, ownerId);
         if (groupId == 0) ps.setNull(7, groupId);
         else ps.setInt(7, groupId);
-        ps.setString(8, location);
+        ps.setString(8, " "); // vi har ikke location ?
 
         int newId = DatabaseManager.executePS(ps);
         return new Meeting(
@@ -162,7 +162,7 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
     }
 
     private void insertUserInvitedToMeeting(int meetingid, int userid, String message) throws SQLException {
-        String query = "INSERT INTO user_invited_to_meeting " +
+        String query = "INSERT INTO User_invited_to_meeting " +
                 "(user_userid, meeting_meetingid, notification_message) " +
                 "VALUES (?, ?, ?)";
         PreparedStatement ps = DatabaseManager.getPreparedStatement(query);
@@ -187,7 +187,7 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
 
     private List<Integer> selectUserIDsOfMeeting(int meetingid) throws SQLException {
         List<Integer> result = new ArrayList<>();
-        String query = String.format("SELECT user_userid FROM user_invited_to_meeting WHERE meeting_meetingid=%d", meetingid);
+        String query = String.format("SELECT user_userid FROM User_invited_to_meeting WHERE meeting_meetingid=%d", meetingid);
         ArrayList<HashMap<String, String>> resultSet = DatabaseManager.getList(query);
         for (HashMap<String, String> row: resultSet) {
             result.add(Integer.parseInt(row.get("user_userid")));
@@ -205,7 +205,7 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
     }
 
     private boolean deleteUserInvitedToMeeting(int meetingid, int userid) throws SQLException {
-        return DatabaseManager.deleteRow("user_invited_to_meeting", "meeting", "user", meetingid, userid);
+        return DatabaseManager.deleteRow("User_invited_to_meeting", "meeting", "user", meetingid, userid);
     }
 
 }

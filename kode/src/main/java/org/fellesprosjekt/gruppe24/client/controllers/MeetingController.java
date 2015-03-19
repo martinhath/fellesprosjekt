@@ -49,6 +49,7 @@ public class MeetingController extends ClientController {
 
         getAllUsers();
         getAllGroups();
+        getAllRooms();
     }
 
     private void getAllUsers() {
@@ -57,17 +58,15 @@ public class MeetingController extends ClientController {
         getClient().addListener(new ClientListener(){
             public void receivedResponse(Connection conn, Response res) {
                 if (res.type == Response.Type.FAIL) {
+                    getClient().removeListener(this);
                     logger.info((String) res.payload);
                     return;
                 }
-                List<Entity> participants = new LinkedList<Entity>();
-                try{
-                    participants.addAll((List<User>) res.payload);
-                } catch (ClassCastException e){
-                    logger.warning("Payload was of wrong type: " + res.payload);
-                    return;
-                }
-                dropdownParticipants.getItems().addAll(participants);
+
+                if (!listInstanceOf(res.payload, User.class)) return;
+
+                List<User> list = (List<User>) res.payload;
+                dropdownParticipants.getItems().addAll(list);
                 getClient().removeListener(this);
             }
         });
@@ -79,24 +78,39 @@ public class MeetingController extends ClientController {
         getClient().addListener(new ClientListener(){
             public void receivedResponse(Connection conn, Response res) {
                 if (res.type == Response.Type.FAIL) {
+                    getClient().removeListener(this);
                     logger.info((String) res.payload);
                     return;
                 }
-                try{
-                	List<Group> list = (List<Group>) res.payload;
-                	if (list != null && list.get(0) instanceof Group) {
-                        dropdownParticipants.getItems().addAll(list);
-                	}
-                } catch (ClassCastException e){
-                    logger.warning("Payload was of wrong type: " + res.payload);
-                } catch (IndexOutOfBoundsException e){
-                }
+
+                if (!listInstanceOf(res.payload, Group.class)) return;
+
+                List<Group> list = (List<Group>) res.payload;
+                dropdownParticipants.getItems().addAll(list);
                 getClient().removeListener(this);
             }
         });
     }
 
-    private void populateUsersBox() {
+    private void getAllRooms() {
+        Request req = new RoomRequest(Request.Type.LIST, null);
+        getClient().sendTCP(req);
+        getClient().addListener(new ClientListener(){
+            @Override
+            public void receivedResponse(Connection conn, Response res) {
+                if (res.type == Response.Type.FAIL) {
+                    getClient().removeListener(this);
+                    logger.info((String) res.payload);
+                    return;
+                }
+
+                if (!listInstanceOf(res.payload, Room.class)) return;
+
+                List<Room> list = (List<Room>) res.payload;
+                fieldRoom.getItems().addAll(list);
+                getClient().removeListener(this);
+            }
+        });
     }
 
     private void setOKText(Node n) {
@@ -137,34 +151,32 @@ public class MeetingController extends ClientController {
      * så må validate returnere `true` hvis det er tomt.
      */
 
-    /**
-     * Håndterer validaring av tekstfeltet for Room.
-     * @return `true` om tekstfeltet er gyldig.
-     */
-    
+    /*
     private boolean validateMeetingName() {
     	String string = fieldName.getText().trim();
     	Matcher matcher = Regexes.Text.matcher(string);
     	if (!matcher.matches()) {
     		//vis felmeddelande
-    		return false;
+            System.out.println("name fails");
+            return false;
     	}
     	return true;
-    }    
+    }
+    */
     
     private boolean validateRoom() {
         // Kanskje det er default valg på første rom?
-        if (fieldRoom.getItems() == null) {
-        	return false;
+        if (fieldRoom.getSelectionModel().getSelectedItem() == null) {
+            return false;
         } 
         return true;
     }
 
     private boolean validateDate() {
         // Skal man kunne registrere møter i fortiden?
-        if ( datePicker.getValue() == null)
+        if ( datePicker.getValue() == null){
             return false;
-        try {
+        } try {
             // antar at et møte bare kan vare i én dag.
             LocalDate date = datePicker.getValue();
             LocalDateTime ldt = LocalDateTime.from(date.atStartOfDay());
@@ -200,13 +212,14 @@ public class MeetingController extends ClientController {
     }
 
     private boolean validateParticipants() {
-        if (dropdownParticipants.getCheckModel().getCheckedItems().size() == 0)
+        if (dropdownParticipants.getCheckModel().getCheckedItems().size() == 0){
             return false;
+        }
         return true;
     }
 
     private boolean validateFields() {
-        boolean b =  validateMeetingName() && validateRoom() &&
+        boolean b =  /*validateMeetingName() &&*/ validateRoom() &&
                 validateDate() && validateFromTime() &&
                 validateToTime() && validateParticipants();
         if (!b)
@@ -217,6 +230,8 @@ public class MeetingController extends ClientController {
 
         int mins = totime.getHour()*60 + totime.getMinute();
         meeting.getFrom().plusMinutes(mins);
+
+        meeting.setRoom(fieldRoom.getValue());
 
         mins = fromtime.getHour() * 60 + fromtime.getMinute();
         meeting.getTo().plusMinutes(mins);
