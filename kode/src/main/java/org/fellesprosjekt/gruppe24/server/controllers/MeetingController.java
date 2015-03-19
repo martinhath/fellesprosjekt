@@ -58,7 +58,8 @@ public class MeetingController extends ServerController {
          */
         broadcast(new LinkedList<>(uniques),
                 new NotificationController(connection).list(
-                new NotificationRequest(Request.Type.LIST, resMeeting)
+                new NotificationRequest(Request.Type.LIST, false,
+                        NotificationRequest.Handler.BOTH, resMeeting)
                 ));
         broadcast(new LinkedList<>(uniques),
                 new MeetingController(connection).list(

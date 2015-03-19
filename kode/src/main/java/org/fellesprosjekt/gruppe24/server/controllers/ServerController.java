@@ -18,9 +18,8 @@ public abstract class ServerController {
     public ServerController(ServerConnection conn){
         if (conn != null) {
             connection = conn;
-            synchronized (connections) {
+            if (connections.indexOf(connection) == -1)
                 connections.add(conn);
-            }
         }
     }
 
@@ -45,8 +44,9 @@ public abstract class ServerController {
                 continue;
             if (!con.isConnected())
                 it.remove();
-            else
+            else {
                 con.sendTCP(res);
+            }
         }
     }
 

@@ -67,6 +67,28 @@ public class CalendarController extends ClientController {
         setDefaultScrollPosition();
 
         showNotificationCount();
+        getClient().addListener(new ClientListener() {
+            @Override
+            public void receivedResponse(Connection conn, Response res) {
+                if (res.type == Response.Type.FAIL) return;
+                if (!listInstanceOf(res.payload, Meeting.class)) return;
+
+                meetings = (List<Meeting>) res.payload;
+                Platform.runLater(CalendarController.this::showMeetings);
+            }
+        });
+        getClient().addListener(new ClientListener() {
+            @Override
+            public void receivedResponse(Connection conn, Response res) {
+                if (res.type == Response.Type.FAIL) return;
+                if (!listInstanceOf(res.payload, MeetingNotification.class) &&
+                        !listInstanceOf(res.payload, GroupNotification.class)){
+                    return;
+                }
+                notifications = (List<Notification>) res.payload;
+                Platform.runLater(CalendarController.this::showNotificationCount);
+            }
+        });
     }
     
     private void setDefaultScrollPosition() {
@@ -82,32 +104,9 @@ public class CalendarController extends ClientController {
         // Får tak i alle møter
         Request req = new MeetingRequest(Request.Type.LIST, getApplication().getUser());
         getClient().sendTCP(req);
-        getClient().addListener(new ClientListener() {
-            @Override
-            public void receivedResponse(Connection conn, Response res) {
-                if (res.type == Response.Type.FAIL) return;
-                if (!listInstanceOf(res.payload, Meeting.class)) return;
-
-                meetings = (List<Meeting>) res.payload;
-                Platform.runLater(CalendarController.this::showMeetings);
-            }
-        });
-
         req = new NotificationRequest(Request.Type.LIST,
                 false, NotificationRequest.Handler.BOTH, getApplication().getUser());
         getClient().sendTCP(req);
-        getClient().addListener(new ClientListener() {
-            @Override
-            public void receivedResponse(Connection conn, Response res) {
-                if (res.type == Response.Type.FAIL) return;
-                if (!listInstanceOf(res.payload, MeetingNotification.class) &&
-                        !listInstanceOf(res.payload, GroupNotification.class)){
-                    return;
-                }
-                notifications = (List<Notification>) res.payload;
-                Platform.runLater(CalendarController.this::showNotificationCount);
-            }
-        });
     }
 
     private void showNotificationCount() {

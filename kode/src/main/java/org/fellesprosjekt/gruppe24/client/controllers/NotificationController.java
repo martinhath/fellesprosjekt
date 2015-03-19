@@ -101,6 +101,8 @@ public class NotificationController extends ClientController {
         notifications.add(not);
         Label label = new Label();
         label.setText(not.getMessage());
+        if (not.isRead())
+            label.setStyle("-fx-text-fill: #aaa");
         listView.getItems().add(label);
     }
 
@@ -112,6 +114,8 @@ public class NotificationController extends ClientController {
         not.setRead(true);
         Request req = new NotificationRequest(Request.Type.PUT, not);
         getClient().sendTCP(req);
+        int i = notifications.indexOf(not);
+        listView.getItems().get(i).setStyle("-fx-text-fill: #aaa");
     }
 
     public void deny(ActionEvent actionEvent) {
