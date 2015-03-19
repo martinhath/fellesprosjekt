@@ -1,5 +1,17 @@
 .button- {
-	-fx-padding: 4px;
+}
+.button-warning {
+    -fx-background-color: rgba(255, 70, 70, 0.8);
+    -fx-text-fill: #fff;
+}
+
+.button-success {
+    -fx-background-color: rgba(100, 150, 0, 0.8);
+    -fx-text-fill: #fff;
+}
+
+.button-warning:hover {
+    -fx-background-color: #000;
 }
 
 /* må ha postfix - for å ikke kollidere
@@ -127,4 +139,5 @@ med JavaFX kalenderen .... */
 
 .meeting-detail-bottom {
 	-fx-padding: 10px 0 0 0;
+    -fx-spacing: 20px;
 }

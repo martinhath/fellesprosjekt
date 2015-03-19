@@ -60,12 +60,15 @@
     <bottom>
         <HBox styleClass="meeting-detail-bottom" BorderPane.alignment="CENTER">
             <children>
-                <Pane HBox.hgrow="ALWAYS">
-                    <Button fx:id="buttonEdit" onAction="#clickEdit" text="Rediger"/>
-                </Pane>
-                <Pane HBox.hgrow="ALWAYS" nodeOrientation="RIGHT_TO_LEFT">
-                    <Button fx:id="buttonBack" onAction="#clickBack" text="Tilbake"/>
-                </Pane>
+                <Button fx:id="buttonEdit" styleClass="button-"
+                        onAction="#clickEdit" text="Rediger"/>
+                <Button fx:id="buttonSave" styleClass="button-success, button-"
+                        onAction="#clickSave" text="Lagre"/>
+                <Pane HBox.hgrow="ALWAYS" />
+                <Button styleClass="button-, button-warning" fx:id="buttonDelete"
+                        onAction="#clickDelete" text="Slett" />
+                <Button fx:id="buttonBack" styleClass="button-"
+                        onAction="#clickBack" text="Tilbake"/>
             </children>
         </HBox>
     </bottom>
