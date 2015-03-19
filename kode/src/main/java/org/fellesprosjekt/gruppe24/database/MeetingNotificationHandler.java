@@ -41,9 +41,9 @@ public class MeetingNotificationHandler extends DatabaseHandler<MeetingNotificat
                     uhandler.get(Integer.parseInt(info.get("user_userid"))),
                     info.get("notification_message"),
                     info.get("notification_read").equals("1"),
-                    Boolean.parseBoolean(info.get("confirmed")),
+                    info.get("confirmed").equals("1"),
                     mhandler.get(Integer.parseInt(info.get("meeting_meetingid"))),
-                    Boolean.parseBoolean(info.get("hide")),
+                    info.get("hide").equals("1"),
                     time == null || time.equals("") ?
                             null :
                             DatabaseManager.stringToTime(time)

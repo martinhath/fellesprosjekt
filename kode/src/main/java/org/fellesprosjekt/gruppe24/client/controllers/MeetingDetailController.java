@@ -90,6 +90,7 @@ public class MeetingDetailController extends ClientController {
                 try{
                     List<Room> rooms = (List<Room>) res.payload;
                     if (rooms != null && rooms.get(0) instanceof Room) {
+                        comboRoom.getItems().clear();
                         comboRoom.getItems().addAll(rooms);
                     }
                 } catch (ClassCastException e){
@@ -114,8 +115,11 @@ public class MeetingDetailController extends ClientController {
                 }
                 if (!listInstanceOf(res.payload, User.class))
                     return;
-                comboOwner.getItems().clear();
-                comboOwner.getItems().addAll((List<User>) res.payload);
+
+                Platform.runLater(() -> {
+                    comboOwner.getItems().clear();
+                    comboOwner.getItems().addAll((List<User>) res.payload);
+                });
                 getClient().removeListener(this);
             }
         });
@@ -133,14 +137,20 @@ public class MeetingDetailController extends ClientController {
 
                 List<Notification> notifications = (List<Notification>) res.payload;
 
-                for (Notification not : notifications) {
-                    User u = not.getUser();
-                    if (not.isConfirmed()) {
-                        listParticipants.getItems().add(u);
-                    } else {
-                        listInvited.getItems().add(u);
+                Platform.runLater(() -> {
+                    listInvited.getItems().clear();
+                    listParticipants.getItems().clear();
+                    for (Notification not : notifications) {
+                        System.out.println(not);
+                        System.out.println(not.isConfirmed());
+                        User u = not.getUser();
+                        if (not.isConfirmed()) {
+                            listParticipants.getItems().add(u);
+                        } else {
+                            listInvited.getItems().add(u);
+                        }
                     }
-                }
+                });
                 getClient().removeListener(this);
             }
         });
