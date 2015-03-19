@@ -9,6 +9,16 @@ import org.fellesprosjekt.gruppe24.server.controllers.ServerController;
 
 public class AuthListener extends ServerListener {
 
+    private static AuthListener instance;
+
+    public static AuthListener GetInstance() {
+        if (instance == null)
+            instance = new AuthListener();
+        return instance;
+    }
+
+    private AuthListener(){}
+
     public void receivedRequest(ServerConnection conn, Request req) {
         if (!(req instanceof AuthRequest))
             return;

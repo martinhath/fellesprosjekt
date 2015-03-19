@@ -6,6 +6,7 @@ import com.esotericsoftware.kryonet.Server;
 import org.fellesprosjekt.gruppe24.common.Kryo.KryoUtils;
 import org.fellesprosjekt.gruppe24.database.DatabaseManager;
 import org.fellesprosjekt.gruppe24.server.listeners.*;
+import sun.security.krb5.internal.rcache.AuthList;
 
 import java.io.IOException;
 
@@ -28,13 +29,13 @@ public class CalendarServer {
     }
 
     public void init(){
-        server.addListener(new AuthListener());
-        server.addListener(new GroupListener());
-        server.addListener(new InvitationListener());
-        server.addListener(new MeetingListener());
-        server.addListener(new NotificationListener());
-        server.addListener(new RoomListener());
-        server.addListener(new UserListener());
+        server.addListener(AuthListener.GetInstance());
+        server.addListener(GroupListener.GetInstance());
+        server.addListener(InvitationListener.GetInstance());
+        server.addListener(MeetingListener.GetInstance());
+        server.addListener(NotificationListener.GetInstance());
+        server.addListener(RoomListener.GetInstance());
+        server.addListener(UserListener.GetInstance());
     }
 
     public void start() throws IOException {

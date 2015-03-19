@@ -8,7 +8,17 @@ import org.fellesprosjekt.gruppe24.server.controllers.InvitationController;
 import org.fellesprosjekt.gruppe24.server.controllers.ServerController;
 
 public class InvitationListener extends ServerListener {
-	
+
+    private static InvitationListener instance;
+
+    public static InvitationListener GetInstance() {
+        if (instance == null)
+            instance = new InvitationListener();
+        return instance;
+    }
+
+    private InvitationListener(){}
+
 	public void receivedRequest(ServerConnection conn, Request req) {
         ServerController controller;
         if (!(req instanceof InvitationRequest))

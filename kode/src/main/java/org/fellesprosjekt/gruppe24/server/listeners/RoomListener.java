@@ -7,6 +7,17 @@ import org.fellesprosjekt.gruppe24.server.ServerConnection;
 import org.fellesprosjekt.gruppe24.server.controllers.RoomController;
 
 public class RoomListener extends ServerListener {
+
+    private static RoomListener instance;
+
+    public static RoomListener GetInstance() {
+        if (instance == null)
+            instance = new RoomListener();
+        return instance;
+    }
+
+    private RoomListener(){}
+
     @Override
     public void receivedRequest(ServerConnection conn, Request req) {
         if (!(req instanceof RoomRequest))

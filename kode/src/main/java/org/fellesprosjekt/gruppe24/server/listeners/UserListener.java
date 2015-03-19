@@ -8,6 +8,16 @@ import org.fellesprosjekt.gruppe24.server.controllers.UserController;
 
 public class UserListener extends ServerListener {
 
+    private static UserListener instance;
+
+    public static UserListener GetInstance() {
+        if (instance == null)
+            instance = new UserListener();
+        return instance;
+    }
+
+    private UserListener(){}
+
     @Override
     public void receivedRequest(ServerConnection conn, Request req) {
         if (!(req instanceof UserRequest))

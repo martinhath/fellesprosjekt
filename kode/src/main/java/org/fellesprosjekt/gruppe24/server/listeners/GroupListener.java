@@ -9,6 +9,16 @@ import org.fellesprosjekt.gruppe24.server.controllers.ServerController;
 
 public class GroupListener extends ServerListener {
 
+    private static GroupListener instance;
+
+    public static GroupListener GetInstance() {
+        if (instance == null)
+            instance = new GroupListener();
+        return instance;
+    }
+
+    private GroupListener(){}
+
     @Override
     public void receivedRequest(ServerConnection conn, Request req) {
         if (!(req instanceof GroupRequest))

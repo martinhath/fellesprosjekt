@@ -8,6 +8,16 @@ import org.fellesprosjekt.gruppe24.server.controllers.NotificationController;
 
 public class NotificationListener extends ServerListener{
 
+    private static NotificationListener instance;
+
+    public static NotificationListener GetInstance() {
+        if (instance == null)
+            instance = new NotificationListener();
+        return instance;
+    }
+
+    private NotificationListener(){}
+
     @Override
     public void receivedRequest(ServerConnection conn, Request req) {
         if (!(req instanceof NotificationRequest))

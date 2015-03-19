@@ -8,6 +8,17 @@ import org.fellesprosjekt.gruppe24.server.controllers.MeetingController;
 import org.fellesprosjekt.gruppe24.server.controllers.ServerController;
 
 public class MeetingListener extends ServerListener{
+
+    private static MeetingListener instance;
+
+    public static MeetingListener GetInstance() {
+        if (instance == null)
+            instance = new MeetingListener();
+        return instance;
+    }
+
+    private MeetingListener(){}
+
     @Override
     public void receivedRequest(ServerConnection conn, Request req) {
         if (!(req instanceof MeetingRequest))
