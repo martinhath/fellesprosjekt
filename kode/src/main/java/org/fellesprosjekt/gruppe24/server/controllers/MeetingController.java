@@ -57,8 +57,11 @@ public class MeetingController extends ServerController {
         }
         Response res = new Response();
         res.type = Response.Type.OK;
-        res.payload = resMeeting;
         connection.sendTCP(res);
+
+        Response r = new Response(Response.Type.OK,
+                MeetingDatabaseHandler.GetInstance().getAll());
+        broadcast(r);
     }
 
     @Override
