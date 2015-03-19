@@ -141,14 +141,16 @@ public class MeetingController extends ClientController {
         hver gang fokus for tekstboksene (ol.) endres.
          */
         fieldFromTime.focusedProperty().addListener(
-                (FocusChangeListener) -> {
+                (observable, notFocus, focus) -> {
+                    if (focus) return;
                     if (validateFromTime())
                         setOKText(fieldFromTime);
                     else
                         setErrText(fieldFromTime);
                 });
         fieldToTime.focusedProperty().addListener(
-                (FocusChangeListener) -> {
+                (observable, notFocus, focus) -> {
+                    if (focus) return;
                     if (validateToTime())
                         setOKText(fieldToTime);
                     else
@@ -273,15 +275,20 @@ public class MeetingController extends ClientController {
         getClient().addListener(new ClientListener() {
             @Override
             public void receivedResponse(Connection conn, Response res) {
+                System.out.println("en");
                 if (res.type == Response.Type.FAIL){
                     logger.info((String) res.payload);
                     // vis noe på skjermen om at det skjedde en feil
                     return;
                 }
+                System.out.println("to");
                 Platform.runLater(() -> {
+                    System.out.println("tre");
                     getApplication().removeStage(getStage());
+                    System.out.println("fire");
                 });
                 getClient().removeListener(this);
+                System.out.println("fem");
             }
         });
     }

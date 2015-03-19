@@ -5,6 +5,7 @@ import org.fellesprosjekt.gruppe24.common.models.net.Request;
 import org.fellesprosjekt.gruppe24.common.models.net.Response;
 import org.fellesprosjekt.gruppe24.server.ServerConnection;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,7 +18,9 @@ public abstract class ServerController {
     public ServerController(ServerConnection conn){
         if (conn != null) {
             connection = conn;
-            connections.add(conn);
+            synchronized (connections) {
+                connections.add(conn);
+            }
         }
     }
 
@@ -35,11 +38,13 @@ public abstract class ServerController {
      * @param res Responsen som skal sendes.
      */
     public void broadcast(List<User> users, Response res) {
-        for (ServerConnection con : connections) {
+        for (Iterator<ServerConnection> it = connections.iterator();
+                it.hasNext();) {
+            ServerConnection con = it.next();
             if (!users.contains(con.getUser()))
-                    continue;
+                continue;
             if (!con.isConnected())
-                connections.remove(con);
+                it.remove();
             else
                 con.sendTCP(res);
         }
