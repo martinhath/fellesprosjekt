@@ -69,6 +69,10 @@ public class Room implements Comparable<Room> {
 
 	@Override
 	public String toString() {
+		return getName() + " (kapasitet: " + capacity + " personer)";
+	}
+	
+	public String toString2() {
 		return "Room{" +
 				"id=" + id +
 				", capacity=" + capacity +
