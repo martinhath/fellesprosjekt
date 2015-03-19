@@ -51,6 +51,7 @@ public class MeetingNotificationHandler extends DatabaseHandler<MeetingNotificat
             return notification;
         } catch (Exception ex) {
             lgr.severe(ex.toString());
+            ex.printStackTrace();
             return null;
         }
     }
@@ -80,7 +81,7 @@ public class MeetingNotificationHandler extends DatabaseHandler<MeetingNotificat
 
     public MeetingNotification get(int userId, int meetingId) {
         String query = String.format(
-                "SELECT * FROM %s WHERE User_userid = %s AND Meeting_meetingid = %s;", fromTable, userId, meetingId);
+                "SELECT * FROM %s WHERE user_userid = %s AND meeting_meetingid = %s;", fromTable, userId, meetingId);
         try {
             HashMap<String, String> info = DatabaseManager.getRow(String.format(query));
             return generateMeetingNotification(info);
@@ -103,7 +104,7 @@ public class MeetingNotificationHandler extends DatabaseHandler<MeetingNotificat
 
     public List<MeetingNotification> getAllOfUser(int userId) {
         List<MeetingNotification> result = new ArrayList<MeetingNotification>();
-        String query = String.format("SELECT * FROM %s WHERE User_userid = %s", fromTable, userId);
+        String query = String.format("SELECT * FROM %s WHERE user_userid = %s", fromTable, userId);
         ArrayList<HashMap<String, String>> resultSet = DatabaseManager.getList(query);
         for (HashMap<String, String> row : resultSet) {
             MeetingNotification n = generateMeetingNotification(row);
@@ -115,7 +116,7 @@ public class MeetingNotificationHandler extends DatabaseHandler<MeetingNotificat
 
     public List<MeetingNotification> getAllOfMeeting(int meetingId) {
         List<MeetingNotification> result = new ArrayList<MeetingNotification>();
-        String query = String.format("SELECT * FROM %s WHERE Meeting_meetingid = %s", fromTable, meetingId);
+        String query = String.format("SELECT * FROM %s WHERE meeting_meetingid = %s", fromTable, meetingId);
         ArrayList<HashMap<String, String>> resultSet = DatabaseManager.getList(query);
         for (HashMap<String, String> row : resultSet) {
             MeetingNotification m = generateMeetingNotification(row);
