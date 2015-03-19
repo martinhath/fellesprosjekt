@@ -31,6 +31,7 @@ public class MeetingController extends ClientController {
     
     //FXML-fält
     @FXML private TextField fieldName;
+    @FXML private TextArea fieldDesc;
     @FXML private ChoiceBox<Room> fieldRoom;
     @FXML private TextField fieldFromTime;
     @FXML private TextField fieldToTime;
@@ -224,17 +225,22 @@ public class MeetingController extends ClientController {
                 validateToTime() && validateParticipants();
         if (!b)
             return false;
+        if (fromtime.isAfter(totime))
+            return false;
+
         meeting.setName(fieldName.getText());
+
+        meeting.setDescription(fieldDesc.getText());
 
         meeting.setOwner(getApplication().getUser());
 
-        int mins = totime.getHour()*60 + totime.getMinute();
-        meeting.getFrom().plusMinutes(mins);
-
         meeting.setRoom(fieldRoom.getValue());
 
-        mins = fromtime.getHour() * 60 + fromtime.getMinute();
-        meeting.getTo().plusMinutes(mins);
+        int mins = fromtime.getHour()*60 + fromtime.getMinute();
+        meeting.setFrom(meeting.getFrom().plusMinutes(mins));
+
+        mins = totime.getHour() * 60 + totime.getMinute();
+        meeting.setTo(meeting.getTo().plusMinutes(mins));
 
         List<Entity> participants = new LinkedList<>();
         for (Entity e : dropdownParticipants.getItems()){

@@ -23,7 +23,7 @@
 
                 <Label text="Beskrivelse:" styleClass="meeting-label"
                             GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                <TextArea
+                <TextArea fx:id="fieldDesc"
                             GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
                 <Label text="Rom:" styleClass="meeting-label"
