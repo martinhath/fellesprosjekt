@@ -90,9 +90,7 @@ public class CalendarController extends ClientController {
 
                 meetings = (List<Meeting>) res.payload;
                 Platform.runLater(CalendarController.this::showMeetings);
-                getClient().removeListener(this);
             }
-
         });
 
         req = new NotificationRequest(Request.Type.LIST,
