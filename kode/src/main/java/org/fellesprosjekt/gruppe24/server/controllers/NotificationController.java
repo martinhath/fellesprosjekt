@@ -20,19 +20,19 @@ public class NotificationController extends ServerController {
     }
 
     @Override
-    public void post(Request req) {
+    public Response post(Request req) {
         // TODO: implement
         throw new RuntimeException("Not implemented");
     }
 
     @Override
-    public void put(Request req) {
+    public Response put(Request req) {
         MeetingNotificationHandler mnhandler = MeetingNotificationHandler.GetInstance();
         GroupNotificationHandler gnhandler = GroupNotificationHandler.GetInstance();
         NotificationRequest r = (NotificationRequest) req;
         Notification notification = (Notification) req.payload;
         if (notification == null) {
-            connection.sendTCP(Response.GetFailResponse("Payload was null."));
+            return Response.GetFailResponse("Payload was null.");
         }
         boolean success = false;
         if (notification instanceof MeetingNotification) {
@@ -41,8 +41,6 @@ public class NotificationController extends ServerController {
         } else if (notification instanceof GroupNotification) {
             GroupNotification groupNotification = (GroupNotification) req.payload;
             success = gnhandler.update(groupNotification);
-        } else {
-            logger.warning("HVA VIL DU !??!? ");
         }
         Response res = new Response();
         if (success) {
@@ -50,12 +48,12 @@ public class NotificationController extends ServerController {
         } else {
             res.type = Response.Type.FAIL;
         }
-        connection.sendTCP(res);
+        return res;
     }
 
     // trenger man noen gang å hente en notification?
     @Override
-    public void get(Request req) {
+    public Response get(Request req) {
         // TODO: implement
         throw new RuntimeException("Not implemented");
     }
@@ -71,24 +69,23 @@ public class NotificationController extends ServerController {
      * @param req Requetsen fra klienten
      */
     @Override
-    public void list(Request req) {
+    public Response list(Request req) {
         NotificationRequest nr = (NotificationRequest) req;
         if(nr.payload == null) {
-        	Response res = Response.GetFailResponse("Payload was null!");
-            connection.sendTCP(res);
-            return;
+        	return Response.GetFailResponse("Payload was null!");
         }
+        Response res;
         if(req.payload instanceof User) {
-        	getAllNotifications(nr, (User) nr.payload);
+        	res = getAllNotifications(nr, (User) nr.payload);
         } else if(req.payload instanceof Meeting) {
-        	getAllNotifications(nr, (Meeting) nr.payload);
+        	res = getAllNotifications(nr, (Meeting) nr.payload);
         } else {
-        	Response res = Response.GetFailResponse("Payload was invalid!");
-            connection.sendTCP(res);
+        	res = Response.GetFailResponse("Payload was invalid!");
         }
+        return res;
     }
     
-    private void getAllNotifications(NotificationRequest nr, User user) {
+    private Response getAllNotifications(NotificationRequest nr, User user) {
         List<Notification> result = new ArrayList<Notification>();
         List<MeetingNotification> meetingNotifications = new ArrayList<MeetingNotification>();
         List<GroupNotification> groupNotifications = new ArrayList<GroupNotification>();
@@ -100,8 +97,7 @@ public class NotificationController extends ServerController {
             meetingNotifications = mnhandler.getAllOfUser(user.getId());
             groupNotifications = ghandler.getAllGroupInvites(user);
         } catch (NullPointerException ex) {
-            Response res = Response.GetFailResponse("User did not have ID");
-            connection.sendTCP(res);
+            return Response.GetFailResponse("User did not have ID");
         }
         
         for (Notification notification : meetingNotifications) {
@@ -125,23 +121,21 @@ public class NotificationController extends ServerController {
         }
 
         Response res = new Response(Response.Type.OK, result);
-        connection.sendTCP(res);
+        return res;
     }
     
-    private void getAllNotifications(NotificationRequest nr, Meeting meeting) {
+    private Response getAllNotifications(NotificationRequest nr, Meeting meeting) {
     	if(meeting == null) {
-    		Response res = Response.GetFailResponse("Payload was null");
-    		connection.sendTCP(res);
-    		return;
+    		return Response.GetFailResponse("Payload was null");
     	}
     	MeetingNotificationHandler mnHandler = MeetingNotificationHandler.GetInstance();
     	List<MeetingNotification> result = mnHandler.getAllOfMeeting(meeting.getId());
     	Response res = new Response(Response.Type.OK, result);
-        connection.sendTCP(res);
+        return res;
     }
 
 	@Override
-	public void delete(Request req) {
+	public Response delete(Request req) {
         throw new RuntimeException("Not implemented!");
 	}
 }

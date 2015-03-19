@@ -19,24 +19,17 @@ public class GroupController extends ServerController{
     }
 
     @Override
-    public void post(Request req) {
+    public Response post(Request req) {
         // TODO: implement
         throw new RuntimeException("Not implemented");
     }
 
     @Override
-    public void put(Request req) {
+    public Response put(Request req) {
     	if (!(req.payload instanceof Group)) {
-            connection.sendTCP(new Response(Response.Type.FAIL,
-                    "Wrong payload: not Group"));
-            return;
+            return Response.GetFailResponse("Wrong payload: not Group");
         }
     	Group g = (Group) req.payload;
-    	if(g == null) {
-    		connection.sendTCP(new Response(Response.Type.FAIL,
-    				"Payload error: null"));
-            return;
-    	}
     	GroupDatabaseHandler handler = GroupDatabaseHandler.GetInstance();
     	handler.insert(g);
     	g = handler.getGroupFromName(g.getName());
@@ -48,11 +41,11 @@ public class GroupController extends ServerController{
     		res.type = Response.Type.OK;
     		res.payload = g;
     	}
-    	connection.sendTCP(res);
+        return res;
     }
 
     @Override
-    public void get(Request req) {
+    public Response get(Request req) {
     	Response res = new Response();
     	GroupDatabaseHandler handler = GroupDatabaseHandler.GetInstance();
         if (req.payload instanceof Integer) {
@@ -69,11 +62,11 @@ public class GroupController extends ServerController{
             res.type = Response.Type.FAIL;
             res.payload = "Unknown payload type.";
         }
-        connection.sendTCP(res);
+        return res;
     }
 
     @Override
-    public void list(Request req) {
+    public Response list(Request req) {
     	GroupDatabaseHandler handler = GroupDatabaseHandler.GetInstance();
     	Object pl = req.payload;
     	List<Group> groups = null;
@@ -84,8 +77,8 @@ public class GroupController extends ServerController{
     	}
         Response res = new Response();
         if(groups == null) {
-        	res.type = Response.Type.FAIL;
-        	res.payload = "Fant ingen grupper for '" + ((Entity) req.payload).getName() + "'";
+            return Response.GetFailResponse("Fant ingen grupper for '"
+                    + ((Entity) req.payload).getName() + "'");
         }
         else {
         	for(Group g : groups) {
@@ -94,11 +87,11 @@ public class GroupController extends ServerController{
         	res.type = Response.Type.OK;
         }
         res.payload = groups;
-        connection.sendTCP(res);
+        return res;
     }
 
 	@Override
-	public void delete(Request req) {
+	public Response delete(Request req) {
 		Response res = new Response();
     	GroupDatabaseHandler handler = GroupDatabaseHandler.GetInstance();
         if (req.payload instanceof Integer) {
@@ -115,5 +108,6 @@ public class GroupController extends ServerController{
             res.type = Response.Type.FAIL;
             res.payload = "Unknown payload type.";
         }
+        return res;
 	}
 }

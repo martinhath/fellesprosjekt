@@ -22,38 +22,39 @@ public class AuthController extends ServerController{
     }
 
     @Override
-    public void post(Request r) {
+    public Response post(Request r) {
         AuthRequest req = (AuthRequest) r;
         logger.log(Level.INFO, "POST User");
         LoginInfo loginInfo = (LoginInfo) req.payload;
 
         if (req.action == AuthRequest.Action.LOGIN) {
-            login(loginInfo);
+            return login(loginInfo);
         } else if (req.action == AuthRequest.Action.LOGOUT) {
-            logout();
+            return logout();
         }
+        return null;
     }
 
     @Override
-    public void put(Request req) {
+    public Response put(Request req) {
         throw new RuntimeException("Ikke implmentert!");
     }
 
     @Override
-    public void get(Request req) {
+    public Response get(Request req) {
         throw new RuntimeException("Ikke implmentert!");
     }
 
     @Override
-    public void list(Request req) {
+    public Response list(Request req) {
         throw new RuntimeException("Ikke implmentert!");
     }
 
-    private boolean login(LoginInfo loginInfo){
+    private Response login(LoginInfo loginInfo){
         Logger.getLogger(getClass().getName()).log(
                 Level.INFO, "User login: " + loginInfo);
         if (connection.getUser() != null) {
-            connection.sendTCP(Response.GetFailResponse("You are already logged in"));
+            return Response.GetFailResponse("You are already logged in");
         }
         Response res = new Response();
         User user = UserDatabaseHandler.GetInstance().authenticate(
@@ -61,9 +62,7 @@ public class AuthController extends ServerController{
         if (user == null) {
             Logger.getLogger(getClass().getName()).log(
                     Level.INFO, "Failed to log in.");
-            res = Response.GetFailResponse("Username or password was wrong.");
-            connection.sendTCP(res);
-            return false;
+            return Response.GetFailResponse("Username or password was wrong.");
         }
         connection.setUser(user);
         Logger.getLogger(getClass().getName()).log(Level.INFO, "User: " + user);
@@ -73,16 +72,12 @@ public class AuthController extends ServerController{
 
         logger.info("User " + connection.getUser() + " logged in.");
 
-        connection.sendTCP(res);
-
-        return true;
+        return res;
     }
 
-    private boolean logout() {
+    private Response logout() {
         if (connection.getUser() == null ) {
-            connection.sendTCP(
-                    Response.GetFailResponse("You are not logged in"));
-            return false;
+            return Response.GetFailResponse("You are not logged in");
         }
         User user = connection.getUser();
 
@@ -90,12 +85,11 @@ public class AuthController extends ServerController{
         Response res = new Response(Response.Type.OK, user);
         logger.info("User " + connection.getUser() + " logged out.");
         connection.setUser(null);
-        connection.sendTCP(res);
-        return true;
+        return res;
     }
 
 	@Override
-	public void delete(Request req) {
+	public Response delete(Request req) {
 		// TODO Auto-generated method stub
         throw new RuntimeException("Not implemented!");
 	}

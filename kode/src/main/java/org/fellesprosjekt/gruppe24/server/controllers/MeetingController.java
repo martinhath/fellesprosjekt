@@ -23,11 +23,10 @@ public class MeetingController extends ServerController {
     }
 
     @Override
-    public void post(Request req) {
+    public Response post(Request req) {
         Meeting meeting = (Meeting) req.payload;
         if (meeting == null) {
-            connection.sendTCP(Response.GetFailResponse("payload was null"));
-            return;
+            return Response.GetFailResponse("payload was null");
         }
 
         MeetingDatabaseHandler handler = MeetingDatabaseHandler.GetInstance();
@@ -57,19 +56,14 @@ public class MeetingController extends ServerController {
         }
         Response res = new Response();
         res.type = Response.Type.OK;
-        connection.sendTCP(res);
-
-        Response r = new Response(Response.Type.OK,
-                MeetingDatabaseHandler.GetInstance().getAll());
-        broadcast(r);
+        return res;
     }
 
     @Override
-    public void put(Request req) {
+    public Response put(Request req) {
         Meeting meeting = (Meeting) req.payload;
         if (meeting == null) {
-            connection.sendTCP(Response.GetFailResponse("payload was null"));
-            return;
+            return Response.GetFailResponse("payload was null");
         }
 
         MeetingDatabaseHandler handler = MeetingDatabaseHandler.GetInstance();
@@ -97,36 +91,34 @@ public class MeetingController extends ServerController {
         // lager respons
         Response res = new Response();
         res.type = Response.Type.OK;
-        connection.sendTCP(res);
+        return res;
     }
 
     @Override
-    public void get(Request req) {
+    public Response get(Request req) {
         MeetingDatabaseHandler handler = MeetingDatabaseHandler.GetInstance();
         int id = 0;
         try {
             id = (int) req.payload;
         } catch (ClassCastException ex) {
             logger.log(Level.INFO, ex.getMessage(), ex);
-            connection.sendTCP(Response.GetFailResponse(
-                    String.format("bad payload, expected Integer, got %s", req.payload)));
-            return;
+            return Response.GetFailResponse(
+                    String.format("bad payload, expected Integer, got %s", req.payload));
         }
 
         Meeting meeting = handler.get(id);
         if (meeting == null) {
-            connection.sendTCP(Response.GetFailResponse(
-                    String.format("could not find meeting with id %d", id)));
-            return;
+            return Response.GetFailResponse(
+                    String.format("could not find meeting with id %d", id));
         }
         Response res = new Response();
         res.type = Response.Type.OK;
         res.payload = meeting;
-        connection.sendTCP(res);
+        return res;
     }
 
     @Override
-    public void list(Request req) {
+    public Response list(Request req) {
         MeetingDatabaseHandler handler = MeetingDatabaseHandler.GetInstance();
 
         Response res = new Response();
@@ -138,20 +130,18 @@ public class MeetingController extends ServerController {
         } else {
             res.payload = handler.getAll();
         }
-        System.out.println(String.format("Fant %d møter", ((List<Meeting>) res.payload).size()));
-        connection.sendTCP(res);
+        return res;
     }
 
 	@Override
-	public void delete(Request req) {
+	public Response delete(Request req) {
 		// TODO Auto-generated method stub
 		MeetingDatabaseHandler mhandler = MeetingDatabaseHandler.GetInstance();
         Meeting m = (Meeting) req.payload;
         if (!mhandler.delete(m)){
-            connection.sendTCP(Response.GetFailResponse(
-                    "Could not delete meeting " + m.getName()));
-            return;
+            return Response.GetFailResponse(
+                    "Could not delete meeting " + m.getName());
         }
-        connection.sendTCP(new Response(Response.Type.OK, null));
+        return new Response(Response.Type.OK, null);
 	}
 }

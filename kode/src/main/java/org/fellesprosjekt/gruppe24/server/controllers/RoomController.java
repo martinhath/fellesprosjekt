@@ -21,25 +21,25 @@ public class RoomController extends ServerController {
     }
 
     @Override
-    public void post(Request req) {
+    public Response post(Request req) {
         // TODO: implement
         throw new RuntimeException("Not implemented");
     }
 
     @Override
-    public void put(Request req) {
+    public Response put(Request req) {
         // TODO: implement
         throw new RuntimeException("Not implemented");
     }
 
     @Override
-    public void get(Request req) {
+    public Response get(Request req) {
         // TODO: implement
         throw new RuntimeException("Not implemented");
     }
 
     @Override
-    public void list(Request req) {
+    public Response list(Request req) {
         // Meeting meeting = (Meeting) req.payload;
         // if (meeting == null) Response.GetFailResponse("Meeting was null.");
         // RoomDatabaseHandler rhandler = RoomDatabaseHandler.GetInstance();
@@ -48,11 +48,11 @@ public class RoomController extends ServerController {
         List<Room> rooms = RoomDatabaseHandler.GetInstance().getAll();
 
         Response res = new Response(Response.Type.OK, rooms);
-        connection.sendTCP(res);
+        return res;
     }
 
 	@Override
-	public void delete(Request req) {
+	public Response delete(Request req) {
         throw new RuntimeException("Not implemented!");
 	}
 }

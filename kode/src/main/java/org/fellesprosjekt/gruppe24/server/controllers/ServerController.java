@@ -14,8 +14,10 @@ public abstract class ServerController {
     protected ServerConnection connection;
 
     public ServerController(ServerConnection conn){
-        connection = conn;
-        connections.add(conn);
+        if (conn != null) {
+            connection = conn;
+            connections.add(conn);
+        }
     }
 
     public void setConnection(ServerConnection c){
@@ -59,14 +61,14 @@ public abstract class ServerController {
      * Eks, innlogging.
      * @param req Requesten fra klienten.
      */
-    public abstract void post(Request req);
+    public abstract Response post(Request req);
 
     /**
      * Brukes når klienten sender info til serveren
      * som _skal_ lagres. (kanskje vi ikke trenger denne?)
      * @param req Requesten fra klienten
      */
-    public abstract void put(Request req);
+    public abstract Response put(Request req);
 
     /**
      * Brukes når vi skal ha et eller flere objekter
@@ -75,20 +77,20 @@ public abstract class ServerController {
      * Eks, få gruppene en bruker er med i
      * @param req Requesten fra klienten
      */
-    public abstract void get(Request req);
+    public abstract Response get(Request req);
     
     /**
      * Brukes når vi skal slette et objekt (en rad)
      * fra databasen.
      * @param req Requesten fra klienten
      */
-    public abstract void delete(Request req);
+    public abstract Response delete(Request req);
 
     /**
      * Brukes når vi skal få alt av noe.
      * Eks, få alle brukere
      * @param req Requetsen fra klienten
      */
-    public abstract void list(Request req);
+    public abstract Response list(Request req);
 
 }
