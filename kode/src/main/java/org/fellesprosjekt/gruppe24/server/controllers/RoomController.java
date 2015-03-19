@@ -49,7 +49,6 @@ public class RoomController extends ServerController {
 
         Response res = new Response(Response.Type.OK, rooms);
         connection.sendTCP(res);
-
     }
 
 	@Override

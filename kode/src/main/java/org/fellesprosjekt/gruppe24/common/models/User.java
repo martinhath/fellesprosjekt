@@ -67,6 +67,7 @@ public class User extends Entity {
     @Override
     public boolean equals(Object obj) {
         if (obj == null) return false;
+        if (!(obj instanceof User)) return false;
     	return getId() == ((User) obj).getId();
     }
     @Override
