@@ -121,6 +121,31 @@ public class MeetingDetailController extends ClientController {
         });
     }
 
+    private void getParticipantsAndInvited() {
+        Request req = new NotificationRequest(Request.Type.LIST, meeting);
+        getClient().sendTCP(req);
+        getClient().addListener(new ClientListener() {
+            @Override
+            public void receivedResponse(Connection conn, Response res) {
+                if (res.type == Response.Type.FAIL) return;
+                if (res.payload == null) return;
+                if (!listInstanceOf(res.payload, Notification.class)) return;
+
+                List<Notification> notifications = (List<Notification>) res.payload;
+
+                for (Notification not : notifications) {
+                    User u = not.getUser();
+                    if (not.isConfirmed()) {
+                        listInvited.getItems().add(u);
+                    } else {
+                        listParticipants.getItems().add(u);
+                    }
+                }
+                getClient().removeListener(this);
+            }
+        });
+    }
+
     private void checkAdmin() {
         if (getApplication().getUser().getId() == meeting.getOwner().getId()){
             isOwner = true;
@@ -157,9 +182,7 @@ public class MeetingDetailController extends ClientController {
         textFrom.setText(meeting.getFrom().format(Formatters.hhmmformat));
         textTo.setText(meeting.getTo().format(Formatters.hhmmformat));
 
-        for (Entity e: meeting.getParticipants()){
-            listParticipants.getItems().add(e);
-        }
+        getParticipantsAndInvited();
     }
 
     private void setOKText(Node n) {
