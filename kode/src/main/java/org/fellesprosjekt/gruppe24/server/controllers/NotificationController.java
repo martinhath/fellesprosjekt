@@ -90,16 +90,20 @@ public class NotificationController extends ServerController {
                 Response res = Response.GetFailResponse("User did not have ID");
                 connection.sendTCP(res);
             }
-            if (r.includeRead) result.addAll(meetingNotifications);
+            if (r.includeRead)
+                result.addAll(meetingNotifications);
             else {
                 for (Notification notification : meetingNotifications) {
-                    if (notification.isRead()) result.remove(notification);
+
+                    if (notification != null && notification.isRead())
+                        result.remove(notification);
                 }
             }
             if (r.includeRead) result.addAll(groupNotifications);
             else {
                 for (Notification notification : groupNotifications) {
-                    if (notification.isRead()) result.remove(notification);
+                    if (notification != null && notification.isRead())
+                        result.remove(notification);
                 }
             }
 

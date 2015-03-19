@@ -65,6 +65,7 @@ public class User extends Entity {
     }
     
     public boolean equals(Object obj) {
+        if (obj == null) return false;
     	return getId() == ((User) obj).getId();
     }
     
