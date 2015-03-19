@@ -74,7 +74,7 @@ public class GroupController extends ServerController{
 
     @Override
     public void list(Request req) {
-    	GroupDatabaseHandler handler = GroupDatabaseHandler.GetInstance();
+        GroupDatabaseHandler handler = GroupDatabaseHandler.GetInstance();
     	Object pl = req.payload;
     	List<Group> groups = null;
     	if(pl instanceof User) {
