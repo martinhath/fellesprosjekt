@@ -13,28 +13,29 @@ public class MeetingListener extends ServerListener{
         if (!(req instanceof MeetingRequest))
             return;
         ServerController controller = new MeetingController(conn);
-        try {
-            switch (req.type) {
-                case POST:
-                    controller.post(req);
-                    break;
-                case PUT:
-                    controller.put(req);
-                    break;
-                case GET:
-                    controller.get(req);
-                    break;
-                case LIST:
-                    controller.list(req);
-                    break;
-                case DELETE:
-                	controller.delete(req);
-                	break;
-            }
-        } catch (ClassCastException e){
-            logger.warning(e.toString());
-            Response res = Response.GetFailResponse("Illegal type of payload: "
-                + req.getClass() + " " + req.payload);
+        Response res;
+        switch (req.type) {
+            case POST:
+                res = controller.post(req);
+                controller.broadcast(res);
+                break;
+            case PUT:
+                res = controller.put(req);
+                controller.broadcast(res);
+                break;
+            case GET:
+                res = controller.get(req);
+                break;
+            case LIST:
+                res = controller.list(req);
+                break;
+            case DELETE:
+                res = controller.delete(req);
+                break;
+            default:
+                logger.warning(req.toString());
+                return;
         }
+        conn.sendTCP(res);
     }
 }

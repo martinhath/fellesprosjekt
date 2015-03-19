@@ -46,7 +46,7 @@ public abstract class ServerController {
      *
      * @param res Responsen som skal sendes.
      */
-    protected void broadcast(Response res) {
+    public void broadcast(Response res) {
         for (ServerConnection con : connections) {
             if (!con.isConnected())
                 connections.remove(con);

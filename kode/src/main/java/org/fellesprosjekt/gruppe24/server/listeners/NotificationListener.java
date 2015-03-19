@@ -2,6 +2,7 @@ package org.fellesprosjekt.gruppe24.server.listeners;
 
 import org.fellesprosjekt.gruppe24.common.models.net.NotificationRequest;
 import org.fellesprosjekt.gruppe24.common.models.net.Request;
+import org.fellesprosjekt.gruppe24.common.models.net.Response;
 import org.fellesprosjekt.gruppe24.server.ServerConnection;
 import org.fellesprosjekt.gruppe24.server.controllers.NotificationController;
 
@@ -12,22 +13,27 @@ public class NotificationListener extends ServerListener{
         if (!(req instanceof NotificationRequest))
             return;
         NotificationController controller = new NotificationController(conn);
+        Response res;
         switch (req.type) {
             case POST:
-                controller.post(req);
+                res = controller.post(req);
                 break;
             case PUT:
-                controller.put(req);
+                res = controller.put(req);
                 break;
             case GET:
-                controller.get(req);
+                res = controller.get(req);
                 break;
             case LIST:
-                controller.list(req);
+                res = controller.list(req);
                 break;
             case DELETE:
-            	controller.delete(req);
+            	res = controller.delete(req);
             	break;
+            default:
+                logger.warning(req.toString());
+                return;
         }
+        conn.sendTCP(res);
     }
 }
