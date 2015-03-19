@@ -99,7 +99,7 @@ public class CalendarController extends ClientController {
         showNotificationCount();
         showMeetings();
     }
-    
+
     private void setDefaultScrollPosition() {
     	// 08:00 er øverst
         double kl8 = (scrollPane.getVmax() - scrollPane.getVmin()) * 10 / 13;

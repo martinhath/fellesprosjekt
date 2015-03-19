@@ -55,5 +55,5 @@ public abstract class ClientController implements Initializable{
         return this.application;
     }
 
-    public void focus() {};
+    public void focus() {}
 }
