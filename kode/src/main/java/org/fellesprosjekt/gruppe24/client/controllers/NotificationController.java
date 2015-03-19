@@ -7,6 +7,8 @@ import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
 import org.fellesprosjekt.gruppe24.client.listeners.ClientListener;
+import org.fellesprosjekt.gruppe24.common.models.GroupNotification;
+import org.fellesprosjekt.gruppe24.common.models.MeetingNotification;
 import org.fellesprosjekt.gruppe24.common.models.Notification;
 import org.fellesprosjekt.gruppe24.common.models.User;
 import org.fellesprosjekt.gruppe24.common.models.net.NotificationRequest;
@@ -20,6 +22,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+
+import javax.management.remote.NotificationResult;
 
 public class NotificationController extends ClientController {
 
@@ -40,19 +44,17 @@ public class NotificationController extends ClientController {
     public void init() {
         // får notifications fra server
         NotificationRequest req = new NotificationRequest(Request.Type.LIST,
-                true, getApplication().getUser());
+                true, NotificationRequest.Handler.BOTH, getApplication().getUser());
         getClient().sendTCP(req);
         getClient().addListener(new ClientListener() {
             @Override
             public void receivedResponse(Connection conn, Response res) {
                 if (res.type == Response.Type.FAIL) {
                     logger.info((String) res.payload);
-                    // vis noe på skjermen om at det skjedde en feil
-                    getClient().removeListener(this);
                     return;
                 }
-                if (!listInstanceOf(res.payload, Notification.class)){
-                    getClient().removeListener(this);
+                if (!listInstanceOf(res.payload, MeetingNotification.class) &&
+                        !listInstanceOf(res.payload, GroupNotification.class)){
                     return;
                 }
                 List<Notification> list = (List<Notification>) res.payload;

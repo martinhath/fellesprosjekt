@@ -75,10 +75,6 @@ public class AuthController extends ServerController{
 
         connection.sendTCP(res);
 
-        // Sender uleste notifications til brukeren som har logget inn.
-        Request req = new NotificationRequest(Request.Type.LIST, false, user);
-        ServerController c = new NotificationController(connection);
-        c.list(req);
         return true;
     }
 

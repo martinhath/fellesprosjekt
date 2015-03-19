@@ -105,7 +105,9 @@ public class MeetingNotificationHandler extends DatabaseHandler<MeetingNotificat
         String query = String.format("SELECT * FROM %s WHERE User_userid = %s", fromTable, userId);
         ArrayList<HashMap<String, String>> resultSet = DatabaseManager.getList(query);
         for (HashMap<String, String> row : resultSet) {
-            result.add(generateMeetingNotification(row));
+            MeetingNotification n = generateMeetingNotification(row);
+            if (n != null)
+                result.add(n);
         }
         return result;
     }
@@ -115,7 +117,9 @@ public class MeetingNotificationHandler extends DatabaseHandler<MeetingNotificat
         String query = String.format("SELECT * FROM %s WHERE Meeting_meetingid = %s", fromTable, meetingId);
         ArrayList<HashMap<String, String>> resultSet = DatabaseManager.getList(query);
         for (HashMap<String, String> row : resultSet) {
-            result.add(generateMeetingNotification(row));
+            MeetingNotification m = generateMeetingNotification(row);
+            if (m != null)
+                result.add(m);
         }
         return result;
     }
