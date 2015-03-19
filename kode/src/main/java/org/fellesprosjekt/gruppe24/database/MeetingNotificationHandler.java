@@ -35,17 +35,21 @@ public class MeetingNotificationHandler extends DatabaseHandler<MeetingNotificat
 
     public MeetingNotification generateMeetingNotification(HashMap<String, String> info) {
         try {
+            String time = info.get("alarm_time");
             MeetingNotification notification = new MeetingNotification(
-                    uhandler.get(Integer.parseInt(info.get("User_userid"))),
+                    uhandler.get(Integer.parseInt(info.get("user_userid"))),
                     info.get("notification_message"),
                     Boolean.parseBoolean(info.get("notification_read")),
                     Boolean.parseBoolean(info.get("confirmed")),
-                    mhandler.get(Integer.parseInt(info.get("Meeting_meetingid"))),
+                    mhandler.get(Integer.parseInt(info.get("meeting_meetingid"))),
                     Boolean.parseBoolean(info.get("hide")),
-                    DatabaseManager.stringToTime(info.get("alarm_time"))
+                    time == null || time.equals("") ?
+                            null :
+                            DatabaseManager.stringToTime(time)
             );
             return notification;
         } catch (Exception ex) {
+            lgr.severe(ex.toString());
             return null;
         }
     }

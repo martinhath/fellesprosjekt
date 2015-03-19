@@ -129,16 +129,16 @@ public class MeetingDetailController extends ClientController {
             public void receivedResponse(Connection conn, Response res) {
                 if (res.type == Response.Type.FAIL) return;
                 if (res.payload == null) return;
-                if (!listInstanceOf(res.payload, Notification.class)) return;
+                if (!listInstanceOf(res.payload, MeetingNotification.class)) return;
 
                 List<Notification> notifications = (List<Notification>) res.payload;
 
                 for (Notification not : notifications) {
                     User u = not.getUser();
                     if (not.isConfirmed()) {
-                        listInvited.getItems().add(u);
-                    } else {
                         listParticipants.getItems().add(u);
+                    } else {
+                        listInvited.getItems().add(u);
                     }
                 }
                 getClient().removeListener(this);
