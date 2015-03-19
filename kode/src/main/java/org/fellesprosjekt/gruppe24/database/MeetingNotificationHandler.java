@@ -133,20 +133,19 @@ public class MeetingNotificationHandler extends DatabaseHandler<MeetingNotificat
     @Override
     public boolean update(MeetingNotification notification) {
         String query = "" +
-                "UPDATE %s SET notification_message = %s, notification_read = ?, confirmed = ?, alarm_time = ? " +
-                "WHERE User_userid = %s AND Meeting_meetingid = ?;";
+                "UPDATE User_invited_to_meeting SET notification_message = ?, notification_read = ?, confirmed = ?, alarm_time = ? " +
+                "WHERE user_userid = ? AND meeting_meetingid = ?;";
         PreparedStatement ps = DatabaseManager.getPreparedStatement(query);
         try {
             LocalTime time = notification.getAlarmTime();
-            ps.setString(1, fromTable);
-            ps.setString(2, notification.getMessage());
-            ps.setBoolean(3, notification.isRead());
-            ps.setBoolean(4, notification.isConfirmed());
-            ps.setTime(5, time == null ?
+            ps.setString(1, notification.getMessage());
+            ps.setBoolean(2, notification.isRead());
+            ps.setBoolean(3, notification.isConfirmed());
+            ps.setTime(4, time == null ?
                     null :
                     java.sql.Time.valueOf(time));
-            ps.setInt(6, notification.getUser().getId());
-            ps.setInt(7, notification.getMeeting().getId());
+            ps.setInt(5, notification.getUser().getId());
+            ps.setInt(6, notification.getMeeting().getId());
             return DatabaseManager.executePS(ps) != -1;
         } catch (SQLException ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);

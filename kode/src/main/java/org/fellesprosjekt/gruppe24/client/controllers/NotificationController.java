@@ -53,6 +53,8 @@ public class NotificationController extends ClientController {
                     if (i == -1)
                         return;
                     notification = notifications.get(i);
+                    if (!notification.isRead())
+                        readNotification(notification);
                 });
     }
 
@@ -69,7 +71,7 @@ public class NotificationController extends ClientController {
     public void init() {
         // får notifications fra server
         NotificationRequest req = new NotificationRequest(Request.Type.LIST,
-                true, NotificationRequest.Handler.BOTH, getApplication().getUser());
+                false, NotificationRequest.Handler.BOTH, getApplication().getUser());
         getClient().sendTCP(req);
         getClient().addListener(new ClientListener() {
             @Override
@@ -79,7 +81,7 @@ public class NotificationController extends ClientController {
                     return;
                 }
                 if (!listInstanceOf(res.payload, MeetingNotification.class) &&
-                        !listInstanceOf(res.payload, GroupNotification.class)){
+                        !listInstanceOf(res.payload, GroupNotification.class)) {
                     return;
                 }
                 List<Notification> list = (List<Notification>) res.payload;
@@ -106,11 +108,18 @@ public class NotificationController extends ClientController {
         getApplication().removeStage(getStage());
     }
 
+    private void readNotification(Notification not) {
+        not.setRead(true);
+        Request req = new NotificationRequest(Request.Type.PUT, not);
+        getClient().sendTCP(req);
+    }
+
     public void deny(ActionEvent actionEvent) {
         int index = notifications.indexOf(notification);
         listView.getItems().remove(index);
 
         notification.setConfirmed(false);
+        notification.setRead(true);
         Request req = new NotificationRequest(Request.Type.PUT, notification);
         getClient().sendTCP(req);
 
@@ -121,6 +130,7 @@ public class NotificationController extends ClientController {
         listView.getItems().remove(index);
 
         notification.setConfirmed(true);
+        notification.setRead(true);
         Request req = new NotificationRequest(Request.Type.PUT, notification);
         getClient().sendTCP(req);
     }

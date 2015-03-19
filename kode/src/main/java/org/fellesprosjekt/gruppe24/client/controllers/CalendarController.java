@@ -94,7 +94,7 @@ public class CalendarController extends ClientController {
         });
 
         req = new NotificationRequest(Request.Type.LIST,
-                true, NotificationRequest.Handler.BOTH, getApplication().getUser());
+                false, NotificationRequest.Handler.BOTH, getApplication().getUser());
         getClient().sendTCP(req);
         getClient().addListener(new ClientListener() {
             @Override
