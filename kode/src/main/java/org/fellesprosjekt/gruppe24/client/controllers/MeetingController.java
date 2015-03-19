@@ -228,13 +228,13 @@ public class MeetingController extends ClientController {
 
         meeting.setOwner(getApplication().getUser());
 
-        int mins = totime.getHour()*60 + totime.getMinute();
-        meeting.getFrom().plusMinutes(mins);
-
         meeting.setRoom(fieldRoom.getValue());
 
+        int mins = totime.getHour()*60 + totime.getMinute();
+        meeting.setFrom(meeting.getFrom().plusMinutes(mins));
+
         mins = fromtime.getHour() * 60 + fromtime.getMinute();
-        meeting.getTo().plusMinutes(mins);
+        meeting.setTo(meeting.getTo().plusMinutes(mins));
 
         List<Entity> participants = new LinkedList<>();
         for (Entity e : dropdownParticipants.getItems()){
