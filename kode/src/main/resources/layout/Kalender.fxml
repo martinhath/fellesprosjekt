@@ -1,107 +1,105 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650"
-            prefWidth="1000" styleClass="anchor-pane" stylesheets="@../style/style.css"
-            xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.fellesprosjekt.gruppe24.client.controllers.CalendarController">
+
+<?import org.controlsfx.control.CheckComboBox?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650" prefWidth="1000" styleClass="anchor-pane" stylesheets="@../style/style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.fellesprosjekt.gruppe24.client.controllers.CalendarController">
 
     <children>
-        <Button layoutX="303.0" layoutY="87.0" mnemonicParsing="false" onAction="#clickPrevWeek"
-                text="Forrige" styleClass="button-"/>
-        <Button layoutX="396.0" layoutY="87.0" mnemonicParsing="false" onAction="#clickCurrentWeek" text="Idag"/>
-        <Button layoutX="469.0" layoutY="87.0" mnemonicParsing="false" onAction="#clickNextWeek"
-                text="Neste" styleClass="button-"/>
-        <Button layoutX="860.0" layoutY="595.0" mnemonicParsing="false" onAction="#logout"
-                text="Logge ut" styleClass="button-"/>
-        <Button fx:id="buttonNotification" layoutX="797.0" layoutY="35.0" mnemonicParsing="false"
-                onAction="#seeNotifications" text="Nye meldinger (IKKE SATT)"/>
-        <Button layoutX="865.0" layoutY="82.0" mnemonicParsing="false" onAction="#newMeeting"
-                text="Nytt møte" styleClass="button-"/>
+        <Button layoutX="303.0" layoutY="87.0" mnemonicParsing="false" onAction="#clickPrevWeek" styleClass="button-" text="Forrige" />
+        <Button layoutX="396.0" layoutY="87.0" mnemonicParsing="false" onAction="#clickCurrentWeek" text="Idag" />
+        <Button layoutX="469.0" layoutY="87.0" mnemonicParsing="false" onAction="#clickNextWeek" styleClass="button-" text="Neste" />
+        <Button layoutX="860.0" layoutY="595.0" mnemonicParsing="false" onAction="#logout" styleClass="button-" text="Logge ut" />
+        <Button fx:id="buttonNotification" layoutX="797.0" layoutY="35.0" mnemonicParsing="false" onAction="#seeNotifications" text="Nye meldinger (IKKE SATT)" />
+        <Button layoutX="865.0" layoutY="82.0" mnemonicParsing="false" onAction="#newMeeting" styleClass="button-" text="Nytt møte" />
+        <ComboBox fx:id="dropdownGroups" layoutX="612.0" layoutY="35.0" prefWidth="150.0" onAction="#groupsChanged"/>
+        <Label layoutX="612.0" layoutY="12.0" text="Grupper" />
         <HBox layoutX="59.0" layoutY="174.0" styleClass="labels-container">
             <children>
-                <Label layoutX="128.0" layoutY="174.0" styleClass="label-day" text="Klokkeslett"/>
-                <Label fx:id="labelMon" layoutX="128.0" layoutY="174.0" styleClass="label-day" text="Mandag 1"/>
-                <Label fx:id="labelTue" layoutX="230.0" layoutY="174.0" styleClass="label-day" text="Tirsdag 2"/>
-                <Label fx:id="labelWed" layoutX="328.0" layoutY="174.0" styleClass="label-day" text="Onsdag 3"/>
-                <Label fx:id="labelThu" layoutX="428.0" layoutY="174.0" styleClass="label-day" text="Torsdag 4"/>
-                <Label fx:id="labelFri" layoutX="529.0" layoutY="174.0" styleClass="label-day" text="Fredag 5"/>
-                <Label fx:id="labelSat" layoutX="626.0" layoutY="174.0" styleClass="label-day" text="Lørdag 6"/>
-                <Label fx:id="labelSun" layoutX="721.0" layoutY="174.0" styleClass="label-day" text="Søndag 7"/>
+                <Label layoutX="128.0" layoutY="174.0" styleClass="label-day" text="Klokkeslett" />
+                <Label fx:id="labelMon" layoutX="128.0" layoutY="174.0" styleClass="label-day" text="Mandag 1" />
+                <Label fx:id="labelTue" layoutX="230.0" layoutY="174.0" styleClass="label-day" text="Tirsdag 2" />
+                <Label fx:id="labelWed" layoutX="328.0" layoutY="174.0" styleClass="label-day" text="Onsdag 3" />
+                <Label fx:id="labelThu" layoutX="428.0" layoutY="174.0" styleClass="label-day" text="Torsdag 4" />
+                <Label fx:id="labelFri" layoutX="529.0" layoutY="174.0" styleClass="label-day" text="Fredag 5" />
+                <Label fx:id="labelSat" layoutX="626.0" layoutY="174.0" styleClass="label-day" text="Lørdag 6" />
+                <Label fx:id="labelSun" layoutX="721.0" layoutY="174.0" styleClass="label-day" text="Søndag 7" />
             </children>
         </HBox>
         <ScrollPane fx:id="scrollPane" layoutX="59.0" layoutY="193.0" styleClass="scroll-pane">
             <content>
                 <GridPane fx:id="calendarGrid" styleClass="calendar-grid-">
                     <columnConstraints>
-                        <ColumnConstraints prefWidth="100"/>
-                        <ColumnConstraints prefWidth="100"/>
-                        <ColumnConstraints prefWidth="100"/>
-                        <ColumnConstraints prefWidth="100"/>
-                        <ColumnConstraints prefWidth="100"/>
-                        <ColumnConstraints prefWidth="100"/>
-                        <ColumnConstraints prefWidth="100"/>
-                        <ColumnConstraints prefWidth="100"/>
+                        <ColumnConstraints prefWidth="100" />
+                        <ColumnConstraints prefWidth="100" />
+                        <ColumnConstraints prefWidth="100" />
+                        <ColumnConstraints prefWidth="100" />
+                        <ColumnConstraints prefWidth="100" />
+                        <ColumnConstraints prefWidth="100" />
+                        <ColumnConstraints prefWidth="100" />
+                        <ColumnConstraints prefWidth="100" />
                     </columnConstraints>
                     <rowConstraints>
-                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES"/>
-                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES"/>
-                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES"/>
-                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES"/>
-                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES"/>
-                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES"/>
-                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES"/>
-                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES"/>
-                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES"/>
-                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES"/>
-                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES"/>
-                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES"/>
-                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES"/>
-                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES"/>
-                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES"/>
-                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES"/>
-                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES"/>
-                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES"/>
-                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES"/>
-                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES"/>
-                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES"/>
-                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES"/>
-                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES"/>
-                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES"/>
+                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES" />
+                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES" />
+                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES" />
+                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES" />
+                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES" />
+                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES" />
+                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES" />
+                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES" />
+                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES" />
+                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES" />
+                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES" />
+                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES" />
+                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES" />
+                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES" />
+                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES" />
+                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES" />
+                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES" />
+                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES" />
+                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES" />
+                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES" />
+                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES" />
+                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES" />
+                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES" />
+                        <RowConstraints prefHeight="50.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <Label styleClass="time-label" text=" 00:00" GridPane.rowIndex="0"/>
-                        <Label styleClass="time-label" text=" 01:00" GridPane.rowIndex="1"/>
-                        <Label styleClass="time-label" text=" 02:00" GridPane.rowIndex="2"/>
-                        <Label styleClass="time-label" text=" 03:00" GridPane.rowIndex="3"/>
-                        <Label styleClass="time-label" text=" 04:00" GridPane.rowIndex="4"/>
-                        <Label styleClass="time-label" text=" 05:00" GridPane.rowIndex="5"/>
-                        <Label styleClass="time-label" text=" 06:00" GridPane.rowIndex="6"/>
-                        <Label styleClass="time-label" text=" 07:00" GridPane.rowIndex="7"/>
-                        <Label styleClass="time-label" text=" 08:00" GridPane.rowIndex="8"/>
-                        <Label styleClass="time-label" text=" 09:00" GridPane.rowIndex="9"/>
-                        <Label styleClass="time-label" text=" 10:00" GridPane.rowIndex="10"/>
-                        <Label styleClass="time-label" text=" 11:00" GridPane.rowIndex="11"/>
-                        <Label styleClass="time-label" text=" 12:00" GridPane.rowIndex="12"/>
-                        <Label styleClass="time-label" text=" 13:00" GridPane.rowIndex="13"/>
-                        <Label styleClass="time-label" text=" 14:00" GridPane.rowIndex="14"/>
-                        <Label styleClass="time-label" text=" 15:00" GridPane.rowIndex="15"/>
-                        <Label styleClass="time-label" text=" 16:00" GridPane.rowIndex="16"/>
-                        <Label styleClass="time-label" text=" 17:00" GridPane.rowIndex="17"/>
-                        <Label styleClass="time-label" text=" 18:00" GridPane.rowIndex="18"/>
-                        <Label styleClass="time-label" text=" 19:00" GridPane.rowIndex="19"/>
-                        <Label styleClass="time-label" text=" 20:00" GridPane.rowIndex="20"/>
-                        <Label styleClass="time-label" text=" 21:00" GridPane.rowIndex="21"/>
-                        <Label styleClass="time-label" text=" 22:00" GridPane.rowIndex="22"/>
-                        <Label styleClass="time-label" text=" 23:00" GridPane.rowIndex="23"/>
+                        <Label styleClass="time-label" text=" 00:00" GridPane.rowIndex="0" />
+                        <Label styleClass="time-label" text=" 01:00" GridPane.rowIndex="1" />
+                        <Label styleClass="time-label" text=" 02:00" GridPane.rowIndex="2" />
+                        <Label styleClass="time-label" text=" 03:00" GridPane.rowIndex="3" />
+                        <Label styleClass="time-label" text=" 04:00" GridPane.rowIndex="4" />
+                        <Label styleClass="time-label" text=" 05:00" GridPane.rowIndex="5" />
+                        <Label styleClass="time-label" text=" 06:00" GridPane.rowIndex="6" />
+                        <Label styleClass="time-label" text=" 07:00" GridPane.rowIndex="7" />
+                        <Label styleClass="time-label" text=" 08:00" GridPane.rowIndex="8" />
+                        <Label styleClass="time-label" text=" 09:00" GridPane.rowIndex="9" />
+                        <Label styleClass="time-label" text=" 10:00" GridPane.rowIndex="10" />
+                        <Label styleClass="time-label" text=" 11:00" GridPane.rowIndex="11" />
+                        <Label styleClass="time-label" text=" 12:00" GridPane.rowIndex="12" />
+                        <Label styleClass="time-label" text=" 13:00" GridPane.rowIndex="13" />
+                        <Label styleClass="time-label" text=" 14:00" GridPane.rowIndex="14" />
+                        <Label styleClass="time-label" text=" 15:00" GridPane.rowIndex="15" />
+                        <Label styleClass="time-label" text=" 16:00" GridPane.rowIndex="16" />
+                        <Label styleClass="time-label" text=" 17:00" GridPane.rowIndex="17" />
+                        <Label styleClass="time-label" text=" 18:00" GridPane.rowIndex="18" />
+                        <Label styleClass="time-label" text=" 19:00" GridPane.rowIndex="19" />
+                        <Label styleClass="time-label" text=" 20:00" GridPane.rowIndex="20" />
+                        <Label styleClass="time-label" text=" 21:00" GridPane.rowIndex="21" />
+                        <Label styleClass="time-label" text=" 22:00" GridPane.rowIndex="22" />
+                        <Label styleClass="time-label" text=" 23:00" GridPane.rowIndex="23" />
                     </children>
                 </GridPane>
             </content>
         </ScrollPane>
-        <Label fx:id="labelMonth" layoutX="48.0" layoutY="28.0" styleClass="month-label" text="Januar"/>
-        <Label fx:id="labelWeek" layoutX="49.0" layoutY="75.0" styleClass="week-label" text="Uke 2"/>
-        <Text fx:id="textBruker" layoutX="807.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" text="user"/>
+        <Label fx:id="labelMonth" layoutX="48.0" layoutY="28.0" styleClass="month-label" text="Januar" />
+        <Label fx:id="labelWeek" layoutX="49.0" layoutY="75.0" styleClass="week-label" text="Uke 2" />
+        <Text fx:id="textBruker" layoutX="807.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" text="user" />
     </children>
 </AnchorPane>
