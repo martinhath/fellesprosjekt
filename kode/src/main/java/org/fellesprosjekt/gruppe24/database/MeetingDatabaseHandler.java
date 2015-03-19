@@ -1,9 +1,6 @@
 package org.fellesprosjekt.gruppe24.database;
 
-import org.fellesprosjekt.gruppe24.common.models.Entity;
-import org.fellesprosjekt.gruppe24.common.models.Meeting;
-import org.fellesprosjekt.gruppe24.common.models.Room;
-import org.fellesprosjekt.gruppe24.common.models.User;
+import org.fellesprosjekt.gruppe24.common.models.*;
 
 import javax.xml.crypto.Data;
 import java.sql.*;
@@ -38,6 +35,14 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
             allMeetings.add(generateMeeting(hm));
         }
         return allMeetings;
+    }
+
+    public ArrayList<Meeting> getAll(User user) {
+        return (ArrayList<Meeting>) UserDatabaseHandler.GetInstance().getMeetingsOfUser(user);
+    }
+
+    public ArrayList<Meeting> getAll(Group group) {
+        return (ArrayList<Meeting>) GroupDatabaseHandler.GetInstance().getAllMeetingsForGroup(group.getId());
     }
 
     /**

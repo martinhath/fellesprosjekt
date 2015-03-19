@@ -23,13 +23,12 @@ import org.fellesprosjekt.gruppe24.common.models.net.*;
 
 import java.net.URL;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class CalendarController extends ClientController {
@@ -90,7 +89,6 @@ public class CalendarController extends ClientController {
                 meetings = (List<Meeting>) res.payload;
                 Platform.runLater(CalendarController.this::showMeetings);
                 getClient().removeListener(this);
-                getClient().removeListener(this);
             }
 
         });
@@ -131,19 +129,29 @@ public class CalendarController extends ClientController {
             if (node instanceof Pane)
                 toRemove.add(node);
         });
-        for (Node node:toRemove)
+        for (Node node : toRemove)
             calendarGrid.getChildren().remove(node);
         
         markToday();
         
         if (meetings == null) return;
-        for (Meeting m : meetings) {
-            showMeeting(m);
+        //for (Meeting m : meetings) {
+        //    showMeeting(m);
+        //}
+
+        // Sjekker om møtet kan bli gjemt bak andre møter i visningen og sier da ifra om det
+        for (int i = 0; i < meetings.size(); i++) {
+            boolean hidden = false;
+            if (i > 0 && i < meetings.size() - 1) {
+                hidden =
+                        meetings.get(i - 1).getTo().isAfter(meetings.get(i).getTo()) ||
+                        meetings.get(i + 1).getFrom().isBefore(meetings.get(i).getTo());
+            }
+            showMeeting(meetings.get(i), hidden);
         }
         setDefaultScrollPosition();
     }
 
-    
     private void markToday() {
 		LocalDateTime now = LocalDateTime.now();
 		WeekFields weekFields = WeekFields.of(Locale.getDefault()); 
@@ -166,39 +174,43 @@ public class CalendarController extends ClientController {
 		}					
 	}
 
-	private void showMeeting(Meeting m) {
+    /**
+     * Tegner et møte i kalenderen dersom det er i uken som vises
+     * @param m møtet som skal tegnes
+     * @param hidden om det kan skules fullstendig bak et annet møte
+     */
+    private void showMeeting(Meeting m, boolean hidden) {
         LocalDateTime from = m.getFrom();
         LocalDateTime to = m.getTo();
 
-         // Sjekker om møtet begynner i neste uke, eller sluttet i forige uke.
-        LocalDateTime mon = date.minusDays(date.getDayOfWeek().getValue()-1);
-        LocalDateTime sun = date.plusDays(7 - date.getDayOfWeek().getValue());
+        // Sjekker om møtet begynner i neste uke, eller sluttet i forige uke.
+        LocalDateTime mon = date.minusDays(date.getDayOfWeek().getValue() - 1).withHour(0);
+        LocalDateTime sun = date.plusDays(7 - date.getDayOfWeek().getValue()).withHour(23);
         if (from.isAfter(sun)) return;
         if (to.isBefore(mon)) return;
 
         int col = from.getDayOfWeek().getValue();
         int row = from.getHour();
 
-        /*
-         * TODO:
-         * Vi må sjekke om det allerede er møter i kalenderen
-         * i samme tidsrom. Hvis det er det kan vi feks gjøre begge
-         * møtene halvparten så store i bredden
-         */
 
         MeetingPane pane = new MeetingPane(this, m);
+        if (hidden) {
+            // TODO gjøre den litt breiere sånn at den er synlig uansett?
+        }
         calendarGrid.add(pane, col, row);
         int duration = m.getTo().getHour() - m.getFrom().getHour() + 1;
         GridPane.setRowSpan(pane, duration);
     }
 
+
     /**
      * Setter alle lablene til uken som begynner med `date` datoen.
+     *
      * @param date Datoen som uken begynner på.
      */
     private void setCalendarLabels(LocalDateTime date) {
         int i = date.getDayOfWeek().getValue();
-        date = date.minusDays(i-1);
+        date = date.minusDays(i - 1);
         labelMon.setText(date.plusDays(0).format(Formatters.dayformat));
         labelTue.setText(date.plusDays(1).format(Formatters.dayformat));
         labelWed.setText(date.plusDays(2).format(Formatters.dayformat));
@@ -210,7 +222,7 @@ public class CalendarController extends ClientController {
         labelWeek.setText("Uke " + date.format(Formatters.weekformat));
         labelMonth.setText(date.format(Formatters.monthformat));
     }
-    
+
     @FXML
     public void clickPrevWeek(ActionEvent e) {
         date = date.minusWeeks(1);
@@ -230,7 +242,7 @@ public class CalendarController extends ClientController {
         String path = Layout.NewMeeting;
         getApplication().newScene(path);
     }
-    
+
     @FXML
     public void clickCurrentWeek(ActionEvent e) {
         date = LocalDateTime.now();
@@ -240,8 +252,8 @@ public class CalendarController extends ClientController {
 
     @FXML
     public void seeNotifications(ActionEvent a) {
-    	String path = Layout.Notification;
-    	getApplication().newScene(path);
+        String path = Layout.Notification;
+        getApplication().newScene(path);
     }
 
     @FXML
@@ -253,9 +265,9 @@ public class CalendarController extends ClientController {
         getClient().addListener(new ClientListener() {
             @Override
             public void receivedResponse(Connection conn, Response res) {
-                if (res.type == Response.Type.OK){
+                if (res.type == Response.Type.OK) {
                     Platform.runLater(() ->
-                        getApplication().setScene(getStage(), Layout.Login)
+                                    getApplication().setScene(getStage(), Layout.Login)
                     );
                 } else {
                     logger.warning((String) res.payload);

@@ -38,6 +38,7 @@ public class MeetingPane extends VBox {
                     "-fx-background-color: derive(#%s, %d%s);",
                     getColor(), isHover() ? +20 : 0, "%");
             setStyle(s_0 + style1);
+            toFront();
         });
 
         setOnMouseClicked((MouseEvent e) -> {
