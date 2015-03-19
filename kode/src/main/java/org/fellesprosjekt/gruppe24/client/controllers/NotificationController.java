@@ -28,6 +28,7 @@ public class NotificationController extends ClientController {
     private Logger logger = Logger.getLogger(getClass().getName());
 
     private List<Notification> notifications = new LinkedList<>();
+    private Notification notification;
 
     @FXML ListView<Label> listView;
     @FXML Button abortButton;
@@ -35,7 +36,6 @@ public class NotificationController extends ClientController {
     @FXML public Button buttonAccept;
     @FXML public Button buttonDeny;
 
-    private Notification notification;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -50,6 +50,8 @@ public class NotificationController extends ClientController {
                         showButtons();
 
                     int i = listView.getItems().indexOf(newVal);
+                    if (i == -1)
+                        return;
                     notification = notifications.get(i);
                 });
     }
@@ -101,18 +103,26 @@ public class NotificationController extends ClientController {
     }
 
     public void clickAbort(ActionEvent actionEvent) {
-        // TODO: Kanskje legge inn en 'er du sikker?' hvis vi har noe data
         getApplication().removeStage(getStage());
     }
 
     public void deny(ActionEvent actionEvent) {
-        System.out.println("Oker ikke " + notification.getMessage());
+        int index = notifications.indexOf(notification);
+        listView.getItems().remove(index);
+
+        notification.setConfirmed(false);
+        Request req = new NotificationRequest(Request.Type.PUT, notification);
+        getClient().sendTCP(req);
+
     }
 
     public void accept(ActionEvent actionEvent) {
-        System.out.println("Skal lett på " + notification.getMessage());
+        int index = notifications.indexOf(notification);
+        listView.getItems().remove(index);
+
+        notification.setConfirmed(true);
+        Request req = new NotificationRequest(Request.Type.PUT, notification);
+        getClient().sendTCP(req);
     }
+
 }
-
-	
-

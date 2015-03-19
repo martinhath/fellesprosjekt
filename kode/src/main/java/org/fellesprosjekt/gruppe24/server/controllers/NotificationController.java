@@ -35,13 +35,14 @@ public class NotificationController extends ServerController {
             connection.sendTCP(Response.GetFailResponse("Payload was null."));
         }
         boolean success = false;
-        switch (r.handler) {
-            case MEETING:
-                MeetingNotification meetingNotification = (MeetingNotification) req.payload;
-                success = mnhandler.update(meetingNotification);
-            case GROUP:
-                GroupNotification groupNotification = (GroupNotification) req.payload;
-                success = gnhandler.update(groupNotification);
+        if (notification instanceof MeetingNotification) {
+            MeetingNotification meetingNotification = (MeetingNotification) req.payload;
+            success = mnhandler.update(meetingNotification);
+        } else if (notification instanceof GroupNotification) {
+            GroupNotification groupNotification = (GroupNotification) req.payload;
+            success = gnhandler.update(groupNotification);
+        } else {
+            logger.warning("HVA VIL DU !??!? ");
         }
         Response res = new Response();
         if (success) {

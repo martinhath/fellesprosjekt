@@ -7,6 +7,7 @@ import org.fellesprosjekt.gruppe24.common.models.Room;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -136,11 +137,14 @@ public class MeetingNotificationHandler extends DatabaseHandler<MeetingNotificat
                 "WHERE User_userid = %s AND Meeting_meetingid = ?;";
         PreparedStatement ps = DatabaseManager.getPreparedStatement(query);
         try {
+            LocalTime time = notification.getAlarmTime();
             ps.setString(1, fromTable);
             ps.setString(2, notification.getMessage());
             ps.setBoolean(3, notification.isRead());
             ps.setBoolean(4, notification.isConfirmed());
-            ps.setTime(5, java.sql.Time.valueOf(notification.getAlarmTime()));
+            ps.setTime(5, time == null ?
+                    null :
+                    java.sql.Time.valueOf(time));
             ps.setInt(6, notification.getUser().getId());
             ps.setInt(7, notification.getMeeting().getId());
             return DatabaseManager.executePS(ps) != -1;
