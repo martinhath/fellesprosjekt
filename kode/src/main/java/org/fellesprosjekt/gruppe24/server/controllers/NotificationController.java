@@ -89,8 +89,6 @@ public class NotificationController extends ServerController {
     }
     
     private void getAllNotifications(NotificationRequest nr, User user) {
-        System.out.println(nr);
-        System.out.println(nr.includeRead);
         List<Notification> result = new ArrayList<Notification>();
         List<MeetingNotification> meetingNotifications = new ArrayList<MeetingNotification>();
         List<GroupNotification> groupNotifications = new ArrayList<GroupNotification>();
@@ -108,20 +106,12 @@ public class NotificationController extends ServerController {
         
         for (Notification notification : meetingNotifications) {
         	if (notification != null) {
-                for(Notification not: meetingNotifications) {
-                    System.out.println(not.getMessage());
-                    System.out.println(not.isRead());
-                }
         		if(nr.includeRead || (!nr.includeRead && !notification.isRead()))
         			result.add(notification);
         	}
         }
         for (Notification notification : groupNotifications) {
         	if (notification != null) {
-                for(Notification not: groupNotifications) {
-                    System.out.println(not.getMessage());
-                    System.out.println(not.isRead());
-                }
         		if(nr.includeRead || (!nr.includeRead && !notification.isRead()))
         			result.add(notification);
         	}

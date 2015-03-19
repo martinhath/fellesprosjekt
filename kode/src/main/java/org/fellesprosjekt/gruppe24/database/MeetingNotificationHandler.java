@@ -37,7 +37,6 @@ public class MeetingNotificationHandler extends DatabaseHandler<MeetingNotificat
     public MeetingNotification generateMeetingNotification(HashMap<String, String> info) {
         try {
             String time = info.get("alarm_time");
-            System.out.println("WTF: " + info.get("notification_read"));
             MeetingNotification notification = new MeetingNotification(
                     uhandler.get(Integer.parseInt(info.get("user_userid"))),
                     info.get("notification_message"),
@@ -49,7 +48,6 @@ public class MeetingNotificationHandler extends DatabaseHandler<MeetingNotificat
                             null :
                             DatabaseManager.stringToTime(time)
             );
-            System.out.println(notification.isRead());
             return notification;
         } catch (Exception ex) {
             lgr.severe(ex.toString());
