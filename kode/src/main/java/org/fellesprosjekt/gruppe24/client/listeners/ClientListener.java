@@ -28,7 +28,7 @@ public class ClientListener extends Listener{
         if (!(obj instanceof List)) return false;
         List list = (List) obj;
         // sketchy, men la gå
-        if (list.size() == 0) return true; // går sikkert fint
+        if (list.size() == 0) return false; // går sikkert fint
         Object o = list.get(0);
         if (o == null) return false;
         return o.getClass() == c;

@@ -121,22 +121,33 @@ public class NotificationController extends ClientController {
     public void deny(ActionEvent actionEvent) {
         int index = notifications.indexOf(notification);
         listView.getItems().remove(index);
+        notifications.remove(index);
 
         notification.setConfirmed(false);
         notification.setRead(true);
         Request req = new NotificationRequest(Request.Type.PUT, notification);
         getClient().sendTCP(req);
 
+        if (index > 0)
+            notification = notifications.get(index);
+        else
+            notification = null;
     }
 
     public void accept(ActionEvent actionEvent) {
         int index = notifications.indexOf(notification);
         listView.getItems().remove(index);
+        notifications.remove(index);
 
         notification.setConfirmed(true);
         notification.setRead(true);
         Request req = new NotificationRequest(Request.Type.PUT, notification);
         getClient().sendTCP(req);
+
+        if (index > 0)
+            notification = notifications.get(index);
+        else
+            notification = null;
     }
 
 }

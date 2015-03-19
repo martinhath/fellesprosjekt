@@ -35,19 +35,27 @@ public abstract class ServerController {
      *
      * @param users Brukere som skal motta responsen.
      * @param res Responsen som skal sendes.
+     * @param userAsPayload Om brukeren til hver connection skal være payload.
      */
-    public void broadcast(List<User> users, Response res) {
+    public void broadcast(List<User> users, Response res, boolean userAsPayload) {
         for (Iterator<ServerConnection> it = connections.iterator();
-                it.hasNext();) {
+             it.hasNext();) {
             ServerConnection con = it.next();
             if (!users.contains(con.getUser()))
+                // skal ikke sendes til
                 continue;
             if (!con.isConnected())
+                // er borte
                 it.remove();
             else {
+                if (userAsPayload) res.payload = con.getUser();
                 con.sendTCP(res);
             }
         }
+    }
+
+    public void broadcast(List<User> users, Response res) {
+        broadcast(users, res, false);
     }
 
     public void broadcast(Response res){

@@ -57,14 +57,15 @@ public class MeetingController extends ServerController {
          * ny notifikasjon
          */
         broadcast(new LinkedList<>(uniques),
-                new NotificationController(connection).list(
-                new NotificationRequest(Request.Type.LIST, false,
-                        NotificationRequest.Handler.BOTH, resMeeting)
+                new NotificationController(connection)
+                        .list(new NotificationRequest(Request.Type.LIST, false,
+                                        NotificationRequest.Handler.BOTH, resMeeting)
                 ));
+
         broadcast(new LinkedList<>(uniques),
-                new MeetingController(connection).list(
-                        new MeetingRequest(Request.Type.LIST, resMeeting)
-                ));
+                new MeetingController(connection)
+                        .list(new MeetingRequest(Request.Type.LIST, null)
+                ), true);
 
         Response res = new Response();
         res.type = Response.Type.OK;
