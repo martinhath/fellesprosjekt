@@ -10,8 +10,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.text.Text;
-
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+
 import org.fellesprosjekt.gruppe24.client.Formatters;
 import org.fellesprosjekt.gruppe24.client.components.MeetingPane;
 import org.fellesprosjekt.gruppe24.client.Layout;
@@ -23,8 +24,11 @@ import org.fellesprosjekt.gruppe24.common.models.net.*;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalField;
+import java.time.temporal.WeekFields;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
@@ -124,11 +128,14 @@ public class CalendarController extends ClientController {
         // Fjerner møtene som vises nå.
         List<Node> toRemove = new LinkedList<>();
         calendarGrid.getChildren().forEach((node) -> {
-            if (node instanceof MeetingPane)
+            if (node instanceof Pane)
                 toRemove.add(node);
         });
         for (Node node:toRemove)
             calendarGrid.getChildren().remove(node);
+        
+        markToday();
+        
         if (meetings == null) return;
         for (Meeting m : meetings) {
             showMeeting(m);
@@ -136,7 +143,30 @@ public class CalendarController extends ClientController {
         setDefaultScrollPosition();
     }
 
-    private void showMeeting(Meeting m) {
+    
+    private void markToday() {
+		LocalDateTime now = LocalDateTime.now();
+		WeekFields weekFields = WeekFields.of(Locale.getDefault()); 
+		int weekNumber = now.get(weekFields.weekOfWeekBasedYear());	
+		
+		if (weekNumber == date.get(weekFields.weekOfWeekBasedYear())) {
+			int col = now.getDayOfWeek().getValue();
+			int row = now.getHour();
+			Pane day = new Pane();
+			Pane time = new Pane();
+			calendarGrid.add(day, col, 0);
+			Node n = calendarGrid.getChildren().get(row);
+			calendarGrid.add(time, 0, row);
+			n.toFront();
+			GridPane.setRowSpan(day, 24);
+			GridPane.setColumnSpan(time, 8);
+			day.setStyle("-fx-background-color: rgba(235, 251, 255, 1)");
+			time.setStyle("-fx-background-color: rgba(235, 251, 255, 1)");
+			
+		}					
+	}
+
+	private void showMeeting(Meeting m) {
         LocalDateTime from = m.getFrom();
         LocalDateTime to = m.getTo();
 

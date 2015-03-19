@@ -56,7 +56,7 @@
     <bottom>
         <FlowPane prefHeight="50.0" prefWidth="200.0" alignment="CENTER_RIGHT">
             <children>
-                <Button fx:id="buttonAbort" onAction="#clickAbort" text="Avbryt" />
+                <Button fx:id="buttonAbort" onAction="#clickAbort" text="Avbryt"/>
                 <Button fx:id="buttonOk" onAction="#clickOk" text="OK" />
             </children>
         </FlowPane>

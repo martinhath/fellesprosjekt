@@ -10,7 +10,7 @@
     -fx-text-fill: #fff;
 }
 
-.button-warning:hover {
+.button-warning:hover {
     -fx-background-color: #000;
 }
 
