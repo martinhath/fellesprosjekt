@@ -136,6 +136,7 @@ public class MeetingController extends ServerController {
             res.payload = handler.getAll();
         }
         System.out.println(String.format("Fant %d møter", ((List<Meeting>) res.payload).size()));
+        System.out.println(res.payload);
         connection.sendTCP(res);
     }
 

@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.text.Text;
@@ -18,6 +19,8 @@ import org.fellesprosjekt.gruppe24.client.components.MeetingPane;
 import org.fellesprosjekt.gruppe24.client.Layout;
 import org.fellesprosjekt.gruppe24.client.listeners.ClientListener;
 import org.fellesprosjekt.gruppe24.common.models.GroupNotification;
+import org.fellesprosjekt.gruppe24.common.models.Entity;
+import org.fellesprosjekt.gruppe24.common.models.Group;
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
 import org.fellesprosjekt.gruppe24.common.models.MeetingNotification;
 import org.fellesprosjekt.gruppe24.common.models.Notification;
@@ -49,7 +52,9 @@ public class CalendarController extends ClientController {
     @FXML private Text textBruker;
 
     @FXML private Button buttonNotification;
-    
+
+    @FXML private ComboBox<Entity> dropdownGroups;
+
     @FXML private GridPane calendarGrid;
     @FXML private ScrollPane scrollPane;
 
@@ -57,6 +62,10 @@ public class CalendarController extends ClientController {
 
     private List<Meeting> meetings;
     private List<Notification> notifications;
+    private List<Group> groups;
+
+    public CalendarController() {
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -79,21 +88,9 @@ public class CalendarController extends ClientController {
     public void init() {
         textBruker.setText("Logget inn som " + getApplication().getUser().getUsername());
 
-        // Får tak i alle møter
-        Request req = new MeetingRequest(Request.Type.LIST, getApplication().getUser());
-        getClient().sendTCP(req);
-        getClient().addListener(new ClientListener() {
-            @Override
-            public void receivedResponse(Connection conn, Response res) {
-                if (res.type == Response.Type.FAIL) return;
-                if (!listInstanceOf(res.payload, Meeting.class)) return;
+        loadMeetings(getApplication().getUser());
 
-                meetings = (List<Meeting>) res.payload;
-                Platform.runLater(CalendarController.this::showMeetings);
-            }
-        });
-
-        req = new NotificationRequest(Request.Type.LIST,
+        Request req = new NotificationRequest(Request.Type.LIST,
                 false, NotificationRequest.Handler.BOTH, getApplication().getUser());
         getClient().sendTCP(req);
         getClient().addListener(new ClientListener() {
@@ -106,6 +103,40 @@ public class CalendarController extends ClientController {
                 }
                 notifications = (List<Notification>) res.payload;
                 Platform.runLater(CalendarController.this::showNotificationCount);
+            }
+        });
+
+        // henter alle grupper
+        req = new GroupRequest(Request.Type.LIST, getApplication().getUser());
+        getClient().sendTCP(req);
+        getClient().addListener(new ClientListener() {
+            @Override
+            public void receivedResponse(Connection conn, Response res) {
+                if (res.type == Response.Type.FAIL) return;
+                if (!listInstanceOf(res.payload, Group.class)) {return;}
+
+                groups = (List<Group>) res.payload;
+                Platform.runLater(() -> {
+                    dropdownGroups.getItems().add(getApplication().getUser());
+                    dropdownGroups.getItems().addAll(groups);
+                    dropdownGroups.setValue(getApplication().getUser());
+                    getClient().removeListener(this);
+                });
+            }
+        });
+    }
+
+    private void loadMeetings(Entity entity) {
+        // Får tak i alle møter
+        Request req = new MeetingRequest(Request.Type.LIST, entity);
+        getClient().sendTCP(req);
+        getClient().addListener(new ClientListener() {
+            @Override
+            public void receivedResponse(Connection conn, Response res) {
+                if (res.type == Response.Type.FAIL) return;
+                meetings = (List<Meeting>) res.payload;
+                Platform.runLater(CalendarController.this::showMeetings);
+                getClient().removeListener(this);
             }
         });
     }
@@ -156,9 +187,9 @@ public class CalendarController extends ClientController {
 
     private void markToday() {
 		LocalDateTime now = LocalDateTime.now();
-		WeekFields weekFields = WeekFields.of(Locale.getDefault()); 
-		int weekNumber = now.get(weekFields.weekOfWeekBasedYear());	
-		
+		WeekFields weekFields = WeekFields.of(Locale.getDefault());
+		int weekNumber = now.get(weekFields.weekOfWeekBasedYear());
+
 		if (weekNumber == date.get(weekFields.weekOfWeekBasedYear())) {
 			int col = now.getDayOfWeek().getValue();
 			int row = now.getHour();
@@ -172,8 +203,8 @@ public class CalendarController extends ClientController {
 			GridPane.setColumnSpan(time, 8);
 			day.setStyle("-fx-background-color: rgba(235, 251, 255, 1)");
 			time.setStyle("-fx-background-color: rgba(235, 251, 255, 1)");
-			
-		}					
+
+		}
 	}
 
     /**
@@ -223,6 +254,10 @@ public class CalendarController extends ClientController {
 
         labelWeek.setText("Uke " + date.format(Formatters.weekformat));
         labelMonth.setText(date.format(Formatters.monthformat));
+    }
+
+    public void loadGroups() {
+
     }
 
     @FXML
@@ -278,4 +313,10 @@ public class CalendarController extends ClientController {
             }
         });
     }
+
+    @FXML
+    public void groupsChanged(ActionEvent e) {
+        loadMeetings(dropdownGroups.getValue());
+    }
+
 }

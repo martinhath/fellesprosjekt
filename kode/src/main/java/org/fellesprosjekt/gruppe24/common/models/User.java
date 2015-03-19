@@ -66,10 +66,11 @@ public class User extends Entity {
     
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) return false;
-        if (!(obj instanceof User)) return false;
-    	return getId() == ((User) obj).getId();
+        if ((obj == null) || !(obj instanceof User)) return false;
+        User rhs = (User) obj;
+    	return getId() == rhs.getId();
     }
+
     @Override
     public int hashCode() {
     	return new Integer(getId()).hashCode();
