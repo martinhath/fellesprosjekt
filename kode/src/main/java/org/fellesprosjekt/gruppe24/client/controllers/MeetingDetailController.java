@@ -141,12 +141,10 @@ public class MeetingDetailController extends ClientController {
                     listInvited.getItems().clear();
                     listParticipants.getItems().clear();
                     for (Notification not : notifications) {
-                        System.out.println(not);
-                        System.out.println(not.isConfirmed());
                         User u = not.getUser();
                         if (not.isConfirmed()) {
                             listParticipants.getItems().add(u);
-                        } else {
+                        } else if (not.isRead()) {
                             listInvited.getItems().add(u);
                         }
                     }
