@@ -151,10 +151,18 @@ public class CalendarController extends ClientController {
 		
 		if (weekNumber == date.get(weekFields.weekOfWeekBasedYear())) {
 			int col = now.getDayOfWeek().getValue();
-			Pane pane = new Pane();
-			calendarGrid.add(pane, col, 0);
-			GridPane.setRowSpan(pane, 24);
-			pane.setStyle("-fx-background-color: rgba(0,0,255,.1)");
+			int row = now.getHour();
+			Pane day = new Pane();
+			Pane time = new Pane();
+			calendarGrid.add(day, col, 0);
+			Node n = calendarGrid.getChildren().get(row);
+			calendarGrid.add(time, 0, row);
+			n.toFront();
+			GridPane.setRowSpan(day, 24);
+			GridPane.setColumnSpan(time, 8);
+			day.setStyle("-fx-background-color: rgba(235, 251, 255, 1)");
+			time.setStyle("-fx-background-color: rgba(235, 251, 255, 1)");
+			
 		}					
 	}
 
