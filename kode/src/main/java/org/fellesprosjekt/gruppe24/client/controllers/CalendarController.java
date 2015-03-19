@@ -58,12 +58,16 @@ public class CalendarController extends ClientController {
         super.initialize(location, resources);
         date = LocalDateTime.now();
         setCalendarLabels(date);
-
-        // 08:00 er øverst
-        double kl8 = (scrollPane.getVmax() - scrollPane.getVmin()) * 8 / 13;
-        scrollPane.setVvalue(kl8);
+        
+        setDefaultScrollPosition();
 
         showNotificationCount();
+    }
+    
+    private void setDefaultScrollPosition() {
+    	// 08:00 er øverst
+        double kl8 = (scrollPane.getVmax() - scrollPane.getVmin()) * 10 / 13;
+        scrollPane.setVvalue(kl8);
     }
 
     @Override
@@ -129,6 +133,7 @@ public class CalendarController extends ClientController {
         for (Meeting m : meetings) {
             showMeeting(m);
         }
+        setDefaultScrollPosition();
     }
 
     private void showMeeting(Meeting m) {

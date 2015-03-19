@@ -9,7 +9,9 @@ import org.fellesprosjekt.gruppe24.common.models.net.Response;
 import org.fellesprosjekt.gruppe24.database.MeetingDatabaseHandler;
 import org.fellesprosjekt.gruppe24.server.ServerConnection;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,21 +30,25 @@ public class MeetingController extends ServerController {
             return;
         }
 
-        System.out.println("Nytt møte:");
-        System.out.println(meeting);
-
         MeetingDatabaseHandler handler = MeetingDatabaseHandler.GetInstance();
         Meeting resMeeting = handler.insert(meeting);
+        System.out.println(meeting.getParticipants().size());
+        Set<User> uniques = new HashSet<User>();
         for (Entity participant : meeting.getParticipants()) {
             if (participant.getClass() == Group.class) {
-                // TODO add group to meeting
-
+            	Group group = (Group) participant;
+            	for (Entity e : group.getMembers()) {
+            		uniques.add((User) e);
+            	}
             } else {
-                handler.addUserToMeeting(
-                        meeting,
-                        (User) participant,
-                        String.format("Du er invitert til %s av %s", meeting, meeting.getOwner()));
+                uniques.add((User) participant);
             }
+        }
+        for(User u : uniques) {
+        	handler.addUserToMeeting(
+                    resMeeting,
+                    u,
+                    String.format("Du er invitert til '%s' av %s", resMeeting.getName(), meeting.getOwner().getName()));
         }
         Response res = new Response();
         res.type = Response.Type.OK;

@@ -68,6 +68,7 @@ public class MeetingController extends ClientController {
 
                 List<User> list = (List<User>) res.payload;
                 dropdownParticipants.getItems().addAll(list);
+                setCurrentSelected();
                 getClient().removeListener(this);
             }
         });
@@ -112,6 +113,18 @@ public class MeetingController extends ClientController {
                 getClient().removeListener(this);
             }
         });
+    }
+    
+    private void setCurrentSelected() {
+    	for(Entity e : dropdownParticipants.getItems()) {
+    		if(e instanceof User) {
+    			if(getApplication().getUser().equals(e)) {
+    				Platform.runLater(() -> {
+    					dropdownParticipants.checkModelProperty().getValue().check(e);
+    				});
+    			}
+    		}
+    	}
     }
 
     private void setOKText(Node n) {
@@ -243,7 +256,7 @@ public class MeetingController extends ClientController {
         meeting.setTo(meeting.getTo().plusMinutes(mins));
 
         List<Entity> participants = new LinkedList<>();
-        for (Entity e : dropdownParticipants.getItems()){
+        for (Entity e : dropdownParticipants.getCheckModel().getCheckedItems()){
             participants.add(e);
         }
         meeting.setParticipants(participants);
