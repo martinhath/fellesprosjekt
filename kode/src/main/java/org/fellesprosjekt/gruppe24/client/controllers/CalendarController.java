@@ -128,7 +128,7 @@ public class CalendarController extends ClientController {
         // Fjerner møtene som vises nå.
         List<Node> toRemove = new LinkedList<>();
         calendarGrid.getChildren().forEach((node) -> {
-            if (node instanceof MeetingPane)
+            if (node instanceof Pane)
                 toRemove.add(node);
         });
         for (Node node:toRemove)
@@ -153,11 +153,9 @@ public class CalendarController extends ClientController {
 			int col = now.getDayOfWeek().getValue();
 			Pane pane = new Pane();
 			calendarGrid.add(pane, col, 0);
-			pane.setStyle("-fx-background: blue");
-			GridPane.setColumnSpan(pane, col);
-		}
-					
-		
+			GridPane.setRowSpan(pane, 24);
+			pane.setStyle("-fx-background-color: rgba(0,0,255,.1)");
+		}					
 	}
 
 	private void showMeeting(Meeting m) {
