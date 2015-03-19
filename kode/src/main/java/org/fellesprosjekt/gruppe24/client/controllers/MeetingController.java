@@ -151,34 +151,32 @@ public class MeetingController extends ClientController {
      * så må validate returnere `true` hvis det er tomt.
      */
 
-    /**
-     * Håndterer validaring av tekstfeltet for Room.
-     * @return `true` om tekstfeltet er gyldig.
-     */
-    
+    /*
     private boolean validateMeetingName() {
     	String string = fieldName.getText().trim();
     	Matcher matcher = Regexes.Text.matcher(string);
     	if (!matcher.matches()) {
     		//vis felmeddelande
-    		return false;
+            System.out.println("name fails");
+            return false;
     	}
     	return true;
-    }    
+    }
+    */
     
     private boolean validateRoom() {
         // Kanskje det er default valg på første rom?
-        if (fieldRoom.getItems() == null) {
-        	return false;
+        if (fieldRoom.getSelectionModel().getSelectedItem() == null) {
+            return false;
         } 
         return true;
     }
 
     private boolean validateDate() {
         // Skal man kunne registrere møter i fortiden?
-        if ( datePicker.getValue() == null)
+        if ( datePicker.getValue() == null){
             return false;
-        try {
+        } try {
             // antar at et møte bare kan vare i én dag.
             LocalDate date = datePicker.getValue();
             LocalDateTime ldt = LocalDateTime.from(date.atStartOfDay());
@@ -214,13 +212,14 @@ public class MeetingController extends ClientController {
     }
 
     private boolean validateParticipants() {
-        if (dropdownParticipants.getCheckModel().getCheckedItems().size() == 0)
+        if (dropdownParticipants.getCheckModel().getCheckedItems().size() == 0){
             return false;
+        }
         return true;
     }
 
     private boolean validateFields() {
-        boolean b =  validateMeetingName() && validateRoom() &&
+        boolean b =  /*validateMeetingName() &&*/ validateRoom() &&
                 validateDate() && validateFromTime() &&
                 validateToTime() && validateParticipants();
         if (!b)

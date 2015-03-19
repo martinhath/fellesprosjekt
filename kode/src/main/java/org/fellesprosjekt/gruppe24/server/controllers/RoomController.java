@@ -46,7 +46,6 @@ public class RoomController extends ServerController {
         //
         // List<Room> rooms = rhandler.getAvailableRooms(meeting);
         List<Room> rooms = RoomDatabaseHandler.GetInstance().getAll();
-        System.out.println(rooms);
 
         Response res = new Response(Response.Type.OK, rooms);
         connection.sendTCP(res);
