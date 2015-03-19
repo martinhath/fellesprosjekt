@@ -4,14 +4,14 @@ import org.fellesprosjekt.gruppe24.common.models.Entity;
 import org.fellesprosjekt.gruppe24.common.models.Group;
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
 import org.fellesprosjekt.gruppe24.common.models.User;
+import org.fellesprosjekt.gruppe24.common.models.net.MeetingRequest;
+import org.fellesprosjekt.gruppe24.common.models.net.NotificationRequest;
 import org.fellesprosjekt.gruppe24.common.models.net.Request;
 import org.fellesprosjekt.gruppe24.common.models.net.Response;
 import org.fellesprosjekt.gruppe24.database.MeetingDatabaseHandler;
 import org.fellesprosjekt.gruppe24.server.ServerConnection;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,7 +43,6 @@ public class MeetingController extends ServerController {
             }
         }
         for(User u : uniques) {
-        	//System.out.println(u.getName());
         	String s;
         	if(resMeeting.getOwner().equals(u))
         		s = "Du opprettet møtet '" + resMeeting.getName() + "'";
@@ -54,6 +53,18 @@ public class MeetingController extends ServerController {
                     u,
                     s);
         }
+        /* Sender notifications på nytt til brukerene som har fått
+         * ny notifikasjon
+         */
+        broadcast(new LinkedList<>(uniques),
+                new NotificationController(connection).list(
+                new NotificationRequest(Request.Type.LIST, resMeeting)
+                ));
+        broadcast(new LinkedList<>(uniques),
+                new MeetingController(connection).list(
+                        new MeetingRequest(Request.Type.LIST, resMeeting)
+                ));
+
         Response res = new Response();
         res.type = Response.Type.OK;
         return res;
@@ -71,12 +82,12 @@ public class MeetingController extends ServerController {
         // finner de som var med i møtet, men kanskje skal fjernes
         List<User> toBeRemoved = handler.getUsersOfMeeting(meeting);
         toBeRemoved.removeAll(meeting.getParticipants());
+        List<User> users = new ArrayList<>();
+        users.addAll(toBeRemoved);
         // legger til evt nye deltakere
         for (Entity participant : meeting.getParticipants()) {
-            if (participant.getClass() == Group.class) {
-                // TODO add group to meeting
-
-            } else {
+            if (participant instanceof User) {
+                users.add((User) participant);
                 handler.addUserToMeeting(
                         meeting,
                         (User) participant,
@@ -88,6 +99,13 @@ public class MeetingController extends ServerController {
         for (User participant : toBeRemoved) {
             handler.removeUserFromMeeting(meeting, participant);
         }
+        broadcast(users, new NotificationController(connection).list(
+                        new NotificationRequest(Request.Type.LIST, meeting)
+                ));
+        broadcast(users, new MeetingController(connection).list(
+                        new MeetingRequest(Request.Type.LIST, meeting)
+                ));
+
         // lager respons
         Response res = new Response();
         res.type = Response.Type.OK;

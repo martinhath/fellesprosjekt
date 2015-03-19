@@ -1,5 +1,6 @@
 package org.fellesprosjekt.gruppe24.server.controllers;
 
+import org.fellesprosjekt.gruppe24.common.models.User;
 import org.fellesprosjekt.gruppe24.common.models.net.Request;
 import org.fellesprosjekt.gruppe24.common.models.net.Response;
 import org.fellesprosjekt.gruppe24.server.ServerConnection;
@@ -28,31 +29,24 @@ public abstract class ServerController {
     }
 
     /**
-     * Sender en request til alle tilkoblede klienter
-     *
-     * @param req Requesten som skal sendes.
-     */
-    public void broadcast(Request req) {
-        for (ServerConnection con : connections) {
-            if (!con.isConnected())
-                connections.remove(con);
-            else
-                con.sendTCP(req);
-        }
-    }
-
-    /**
      * Sender en response til alle tilkoblede klienter
      *
+     * @param users Brukere som skal motta responsen.
      * @param res Responsen som skal sendes.
      */
-    public void broadcast(Response res) {
+    public void broadcast(List<User> users, Response res) {
         for (ServerConnection con : connections) {
+            if (!users.contains(con.getUser()))
+                    continue;
             if (!con.isConnected())
                 connections.remove(con);
             else
                 con.sendTCP(res);
         }
+    }
+
+    public void broadcast(Response res){
+        broadcast(new LinkedList<>(), res);
     }
 
     /**
