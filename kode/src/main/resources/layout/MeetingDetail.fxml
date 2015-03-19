@@ -64,6 +64,7 @@
                         onAction="#clickEdit" text="Rediger"/>
                 <Button fx:id="buttonSave" styleClass="button-success, button-"
                         onAction="#clickSave" text="Lagre"/>
+                <Label fx:id="labelError" styleClass="label, label-err" />
                 <Pane HBox.hgrow="ALWAYS" />
                 <Button styleClass="button-, button-warning" fx:id="buttonDelete"
                         onAction="#clickDelete" text="Slett" />

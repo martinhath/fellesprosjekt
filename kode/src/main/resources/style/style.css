@@ -38,6 +38,10 @@ med JavaFX kalenderen .... */
     -fx-padding: 4px;
 }
 
+.label-err {
+    -fx-text-fill: #ff4444;
+}
+
 .label-day {
     -fx-font-size: 12px;
 	-fx-pref-width: 100px;

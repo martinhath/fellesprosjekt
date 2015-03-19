@@ -1,6 +1,7 @@
 package org.fellesprosjekt.gruppe24.client.controllers;
 
 import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -44,6 +45,8 @@ public class MeetingDetailController extends ClientController {
 
     @FXML public ListView<Entity> listParticipants;
     @FXML public ListView<Entity> listInvited;
+
+    @FXML public Label labelError;
 
     @FXML public Button buttonBack;
     @FXML public Button buttonEdit;
@@ -173,8 +176,10 @@ public class MeetingDetailController extends ClientController {
 
     private boolean validateDate() {
         // Skal man kunne registrere møter i fortiden?
-        if ( datePicker.getValue() == null)
+        if ( datePicker.getValue() == null){
+            labelError.setText("Dato er ikke valgt");
             return false;
+        }
         try {
             // antar at et møte bare kan vare i én dag.
             LocalDate date = datePicker.getValue();
@@ -192,7 +197,7 @@ public class MeetingDetailController extends ClientController {
         String string = textFrom.getText().trim();
         Matcher matcher = Regexes.Time.matcher(string);
         if (!matcher.matches()){
-            // Vis feilmelding
+            labelError.setText("Fra tid er ikke gyldig");
             return false;
         }
         fromtime = LocalTime.parse(string);
@@ -203,7 +208,7 @@ public class MeetingDetailController extends ClientController {
         String string = textTo.getText().trim();
         Matcher matcher = Regexes.Time.matcher(string);
         if (!matcher.matches()){
-            // Vis feilmelding
+            labelError.setText("Til tid er ikke gyldig");
             return false;
         }
         totime = LocalTime.parse(string);
@@ -213,7 +218,11 @@ public class MeetingDetailController extends ClientController {
     private boolean validateParticipants() {
         int n = listInvited.getItems().size() +
                 listParticipants.getItems().size();
-        return n != 0;
+        if (n == 0){
+            labelError.setText("Det er ingen deltakere!");
+            return false;
+        }
+        return true;
     }
 
     private boolean validateFields() {
@@ -224,6 +233,7 @@ public class MeetingDetailController extends ClientController {
                 validateParticipants();
         if (!b)
             return false;
+        labelError.setText("");
         int mins = totime.getHour()*60 + totime.getMinute();
         meeting.getFrom().plusMinutes(mins);
 
@@ -278,5 +288,22 @@ public class MeetingDetailController extends ClientController {
 
     public void clickSave(ActionEvent actionEvent) {
         if (!validateFields()) return;
+        Request req = new MeetingRequest(Request.Type.PUT, meeting);
+        getClient().sendTCP(req);
+        getClient().addListener(new ClientListener() {
+            @Override
+            public void receivedResponse(Connection conn, Response res) {
+                if (res.type == Response.Type.FAIL) return;
+
+                Platform.runLater(() -> {
+                    setMeeting(meeting);
+                    editMode = false;
+                    buttonEdit.setText("Rediger");
+                    buttonSave.setVisible(false);
+                    buttonDelete.setVisible(false);
+                    buttonBack.setDisable(false);
+                });
+            }
+        });
     }
 }
