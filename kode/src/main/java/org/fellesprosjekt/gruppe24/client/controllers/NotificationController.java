@@ -70,31 +70,11 @@ public class NotificationController extends ClientController {
 
     public void init() {
         // får notifications fra server
-        NotificationRequest req = new NotificationRequest(Request.Type.LIST,
-                false, NotificationRequest.Handler.BOTH, getApplication().getUser());
-        getClient().sendTCP(req);
-        getClient().addListener(new ClientListener() {
-            @Override
-            public void receivedResponse(Connection conn, Response res) {
-                if (res.type == Response.Type.FAIL) {
-                    logger.info((String) res.payload);
-                    return;
-                }
-                if (!listInstanceOf(res.payload, MeetingNotification.class) &&
-                        !listInstanceOf(res.payload, GroupNotification.class)) {
-                    return;
-                }
-                List<Notification> list = (List<Notification>) res.payload;
-                Platform.runLater(() -> {
-                    listView.getItems().clear();
-                    notifications.clear();
-                    for (Notification n : list) {
-                        addNotificationToList(n);
-                    }
-                });
-                getClient().removeListener(this);
-            }
-        });
+        listView.getItems().clear();
+        notifications.clear();
+        for (Notification n : CalendarController.notifications) {
+            addNotificationToList(n);
+        }
     }
 
     private void addNotificationToList(Notification not) {
@@ -128,6 +108,8 @@ public class NotificationController extends ClientController {
         Request req = new NotificationRequest(Request.Type.PUT, notification);
         getClient().sendTCP(req);
 
+        if (index == notifications.size())
+            index--;
         if (index > 0)
             notification = notifications.get(index);
         else
@@ -144,6 +126,8 @@ public class NotificationController extends ClientController {
         Request req = new NotificationRequest(Request.Type.PUT, notification);
         getClient().sendTCP(req);
 
+        if (index == notifications.size())
+            index--;
         if (index > 0)
             notification = notifications.get(index);
         else

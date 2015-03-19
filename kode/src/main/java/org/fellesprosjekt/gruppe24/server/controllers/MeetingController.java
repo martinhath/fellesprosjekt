@@ -60,12 +60,12 @@ public class MeetingController extends ServerController {
                 new NotificationController(connection)
                         .list(new NotificationRequest(Request.Type.LIST, false,
                                         NotificationRequest.Handler.BOTH, resMeeting)
-                ));
+                        ));
 
         broadcast(new LinkedList<>(uniques),
                 new MeetingController(connection)
                         .list(new MeetingRequest(Request.Type.LIST, null)
-                ), true);
+                        ), true);
 
         Response res = new Response();
         res.type = Response.Type.OK;

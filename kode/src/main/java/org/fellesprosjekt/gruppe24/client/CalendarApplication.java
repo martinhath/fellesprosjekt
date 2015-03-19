@@ -134,6 +134,7 @@ public class CalendarApplication extends Application {
             System.err.println("loader.getController() returned null!");
             return null;
         }
+        stage.focusedProperty().addListener((observable) -> controller.focus());
         controller.setApplication(this);
         controller.setStage(stage);
 		controller.init();

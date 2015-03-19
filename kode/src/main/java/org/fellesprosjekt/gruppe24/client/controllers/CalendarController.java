@@ -55,8 +55,11 @@ public class CalendarController extends ClientController {
 
     private LocalDateTime date;
 
-    private List<Meeting> meetings;
-    private List<Notification> notifications;
+    // top kek
+    public static List<Meeting> meetings = new LinkedList<>();
+    public static List<Notification> notifications = new LinkedList<>();
+
+    private static boolean isInited = false;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -82,13 +85,19 @@ public class CalendarController extends ClientController {
             public void receivedResponse(Connection conn, Response res) {
                 if (res.type == Response.Type.FAIL) return;
                 if (!listInstanceOf(res.payload, MeetingNotification.class) &&
-                        !listInstanceOf(res.payload, GroupNotification.class)){
+                        !listInstanceOf(res.payload, GroupNotification.class)) {
                     return;
                 }
                 notifications = (List<Notification>) res.payload;
                 Platform.runLater(CalendarController.this::showNotificationCount);
             }
         });
+    }
+
+    @Override
+    public void focus() {
+        showNotificationCount();
+        showMeetings();
     }
     
     private void setDefaultScrollPosition() {
@@ -102,11 +111,18 @@ public class CalendarController extends ClientController {
         textBruker.setText("Logget inn som " + getApplication().getUser().getUsername());
 
         // Får tak i alle møter
-        Request req = new MeetingRequest(Request.Type.LIST, getApplication().getUser());
-        getClient().sendTCP(req);
-        req = new NotificationRequest(Request.Type.LIST,
-                false, NotificationRequest.Handler.BOTH, getApplication().getUser());
-        getClient().sendTCP(req);
+        if (!isInited) {
+            Request req = new MeetingRequest(Request.Type.LIST, getApplication().getUser());
+            getClient().sendTCP(req);
+            req = new NotificationRequest(Request.Type.LIST,
+                    false, NotificationRequest.Handler.BOTH, getApplication().getUser());
+            getClient().sendTCP(req);
+
+            isInited = true;
+        } else {
+            showMeetings();
+            showNotificationCount();
+        }
     }
 
     private void showNotificationCount() {
@@ -114,10 +130,13 @@ public class CalendarController extends ClientController {
             buttonNotification.setText("Ingen nye meldinger");
             return;
         }
-        if (notifications.isEmpty())
+        int size = (int) notifications.stream()
+                .filter((n) -> !n.isRead())
+                .count();
+        if (size == 0)
             buttonNotification.setText("Ingen nye meldinger");
         else
-            buttonNotification.setText(String.format("Nye meldinger (%s)", notifications.size()));
+            buttonNotification.setText(String.format("Nye meldinger (%s)", size));
     }
 
     /**
@@ -135,11 +154,6 @@ public class CalendarController extends ClientController {
 
         markToday();
         
-        if (meetings == null) return;
-        //for (Meeting m : meetings) {
-        //    showMeeting(m);
-        //}
-
         // Sjekker om møtet kan bli gjemt bak andre møter i visningen og sier da ifra om det
         for (int i = 0; i < meetings.size(); i++) {
             boolean hidden = false;
