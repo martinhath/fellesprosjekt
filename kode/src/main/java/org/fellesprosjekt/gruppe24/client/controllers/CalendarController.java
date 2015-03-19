@@ -17,7 +17,9 @@ import org.fellesprosjekt.gruppe24.client.Formatters;
 import org.fellesprosjekt.gruppe24.client.components.MeetingPane;
 import org.fellesprosjekt.gruppe24.client.Layout;
 import org.fellesprosjekt.gruppe24.client.listeners.ClientListener;
+import org.fellesprosjekt.gruppe24.common.models.GroupNotification;
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
+import org.fellesprosjekt.gruppe24.common.models.MeetingNotification;
 import org.fellesprosjekt.gruppe24.common.models.Notification;
 import org.fellesprosjekt.gruppe24.common.models.net.*;
 
@@ -88,22 +90,22 @@ public class CalendarController extends ClientController {
 
                 meetings = (List<Meeting>) res.payload;
                 Platform.runLater(CalendarController.this::showMeetings);
-                getClient().removeListener(this);
             }
-
         });
 
-        req = new NotificationRequest(Request.Type.LIST, getApplication().getUser());
+        req = new NotificationRequest(Request.Type.LIST,
+                false, NotificationRequest.Handler.BOTH, getApplication().getUser());
         getClient().sendTCP(req);
         getClient().addListener(new ClientListener() {
             @Override
             public void receivedResponse(Connection conn, Response res) {
                 if (res.type == Response.Type.FAIL) return;
-                if (!listInstanceOf(res.payload, Notification.class)) return;
-
+                if (!listInstanceOf(res.payload, MeetingNotification.class) &&
+                        !listInstanceOf(res.payload, GroupNotification.class)){
+                    return;
+                }
                 notifications = (List<Notification>) res.payload;
                 Platform.runLater(CalendarController.this::showNotificationCount);
-                getClient().removeListener(this);
             }
         });
     }

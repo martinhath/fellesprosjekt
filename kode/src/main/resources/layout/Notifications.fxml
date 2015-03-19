@@ -3,10 +3,9 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="300" prefWidth="250" stylesheets="@../style/style.css"
+<BorderPane prefHeight="300" prefWidth="500" stylesheets="@../style/style.css"
             xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
             styleClass="root"
             fx:controller="org.fellesprosjekt.gruppe24.client.controllers.NotificationController">
@@ -15,16 +14,18 @@
                text="Nye meldinger:" BorderPane.alignment="TOP_LEFT" />
     </top>
     <center>
-        <ScrollPane>
-            <content>
-                <ListView fx:id="listView" BorderPane.alignment="CENTER"/>
-            </content>
-        </ScrollPane>
+                <ListView fx:id="listView"
+                          BorderPane.alignment="CENTER"/>
     </center>
     <bottom>
-        <Pane styleClass="meeting-detail-bottom" >
+        <HBox styleClass="meeting-detail-bottom" >
+            <Button fx:id="buttonAccept" onAction="#accept"
+                    text="Aksepter" styleClass="button-, button-success" />
+            <Button fx:id="buttonDeny" onAction="#deny"
+                    text="Avslå" styleClass="button-, button-warning" />
+            <Pane HBox.hgrow="ALWAYS"/>
             <Button fx:id="abortButton" onAction="#clickAbort" mnemonicParsing="false" text="Avbryt"
                     alignment="BOTTOM_RIGHT" styleClass="button-"  />
-        </Pane>
+        </HBox>
     </bottom>
 </BorderPane>

@@ -1,8 +1,13 @@
 .button- {
 }
+
 .button-warning {
     -fx-background-color: rgba(255, 70, 70, 0.8);
     -fx-text-fill: #fff;
+}
+
+.button-warning:hover {
+    -fx-background-color: derive(rgba(255, 70, 70, 0.8), +10%);
 }
 
 .button-success {
@@ -10,8 +15,8 @@
     -fx-text-fill: #fff;
 }
 
-.button-warning:hover {
-    -fx-background-color: #000;
+.button-success:hover {
+    -fx-background-color: derive(rgba(100, 150, 0, 0.8), +10%);
 }
 
 /* må ha postfix - for å ikke kollidere
@@ -36,6 +41,10 @@ med JavaFX kalenderen .... */
 	-fx-font-family: "Helvetica";
 	-fx-font-size: 14px;
     -fx-padding: 4px;
+}
+
+.label-err {
+    -fx-text-fill: #ff4444;
 }
 
 .label-day {

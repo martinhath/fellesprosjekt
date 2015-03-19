@@ -99,7 +99,9 @@ public class GroupNotificationHandler extends DatabaseHandler<GroupNotification>
         String query = String.format("SELECT * FROM %s WHERE User_userid = %s", fromTable, userId);
         ArrayList<HashMap<String, String>> resultSet = DatabaseManager.getList(query);
         for (HashMap<String, String> row : resultSet) {
-            result.add(generateGroupNotification(row));
+            GroupNotification n = generateGroupNotification(row);
+            if (n != null)
+                result.add(n);
         }
         return result;
     }
@@ -109,7 +111,9 @@ public class GroupNotificationHandler extends DatabaseHandler<GroupNotification>
         String query = String.format("SELECT * FROM %s WHERE User_group_groupid = %s", fromTable, groupId);
         ArrayList<HashMap<String, String>> resultSet = DatabaseManager.getList(query);
         for (HashMap<String, String> row : resultSet) {
-            result.add(generateGroupNotification(row));
+            GroupNotification n = generateGroupNotification(row);
+            if (n != null)
+                result.add(n);
         }
         return result;
     }
