@@ -64,4 +64,8 @@ public class User extends Entity {
     	this.password = password;
     }
     
+    public boolean equals(Object obj) {
+    	return getId() == ((User) obj).getId();
+    }
+    
 }
