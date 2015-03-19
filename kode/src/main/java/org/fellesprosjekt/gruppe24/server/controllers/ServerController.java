@@ -64,6 +64,23 @@ public abstract class ServerController {
     }
 
     /**
+     * Vi later som denne requesten ble sendt fra en klient, og
+     * den skal nå sendes til alle.
+     * @param req
+     */
+    public void simulateReceived(Request req, ServerListener listener, boolean useUser) {
+        for (ServerConnection c : connections ) {
+            if (useUser)
+                req.payload = c.getUser();
+            listener.received(c, req);
+        }
+    }
+
+    public void simulateReceived(Request req, ServerListener listener) {
+        simulateReceived(req, listener, false);
+    }
+
+    /**
      * Brukes når klienten sender info til serveren,
      * uten at det nødvendigvis skal lagres noe sted.
      * Eks, innlogging.

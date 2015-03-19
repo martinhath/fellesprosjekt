@@ -10,6 +10,8 @@ import org.fellesprosjekt.gruppe24.common.models.net.Request;
 import org.fellesprosjekt.gruppe24.common.models.net.Response;
 import org.fellesprosjekt.gruppe24.database.MeetingDatabaseHandler;
 import org.fellesprosjekt.gruppe24.server.ServerConnection;
+import org.fellesprosjekt.gruppe24.server.listeners.MeetingListener;
+import org.fellesprosjekt.gruppe24.server.listeners.NotificationListener;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -67,6 +69,10 @@ public class MeetingController extends ServerController {
                         .list(new MeetingRequest(Request.Type.LIST, null)
                         ), true);
 
+
+        Request r = new MeetingRequest(Request.Type.LIST, null);
+        simulateReceived(r, MeetingListener.GetInstance(), true);
+
         Response res = new Response();
         res.type = Response.Type.OK;
         return res;
@@ -101,12 +107,11 @@ public class MeetingController extends ServerController {
         for (User participant : toBeRemoved) {
             handler.removeUserFromMeeting(meeting, participant);
         }
-        broadcast(users, new NotificationController(connection).list(
-                        new NotificationRequest(Request.Type.LIST, meeting)
-                ));
-        broadcast(users, new MeetingController(connection).list(
-                        new MeetingRequest(Request.Type.LIST, meeting)
-                ));
+        Request r = new NotificationRequest(Request.Type.LIST, null);
+        simulateReceived(r, NotificationListener.GetInstance(), true);
+
+        r = new MeetingRequest(Request.Type.LIST, null);
+        simulateReceived(r, MeetingListener.GetInstance(), true);
 
         // lager respons
         Response res = new Response();
@@ -162,6 +167,9 @@ public class MeetingController extends ServerController {
             return Response.GetFailResponse(
                     "Could not delete meeting " + m.getName());
         }
+        Request r = new MeetingRequest(Request.Type.LIST, null);
+        simulateReceived(r, MeetingListener.GetInstance(), true);
+
         return new Response(Response.Type.OK, null);
 	}
 }
