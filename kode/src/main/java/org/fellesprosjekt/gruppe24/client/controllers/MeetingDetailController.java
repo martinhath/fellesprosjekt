@@ -144,7 +144,7 @@ public class MeetingDetailController extends ClientController {
                         User u = not.getUser();
                         if (not.isConfirmed()) {
                             listParticipants.getItems().add(u);
-                        } else if (not.isRead()) {
+                        } else if (!not.isRead()) {
                             listInvited.getItems().add(u);
                         }
                     }
