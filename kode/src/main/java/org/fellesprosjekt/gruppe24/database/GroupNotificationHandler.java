@@ -126,16 +126,15 @@ public class GroupNotificationHandler extends DatabaseHandler<GroupNotification>
     @Override
     public boolean update(GroupNotification notification) {
         String query = "" +
-                "UPDATE %s SET notification_message = %s, notification_read = ?, confirmed = ? " +
-                "WHERE User_userid = %s AND User_group_groupid = ?;";
+                "UPDATE %s SET notification_message = ?, notification_read = ?, confirmed = ? " +
+                "WHERE user_userid = %s AND user_group_groupid = ?;";
         PreparedStatement ps = DatabaseManager.getPreparedStatement(query);
         try {
-            ps.setString(1, fromTable);
-            ps.setString(2, notification.getMessage());
-            ps.setBoolean(3, notification.isRead());
-            ps.setBoolean(4, notification.isConfirmed());
-            ps.setInt(5, notification.getUser().getId());
-            ps.setInt(6, notification.getGroup().getId());
+            ps.setString(1, notification.getMessage());
+            ps.setBoolean(2, notification.isRead());
+            ps.setBoolean(3, notification.isConfirmed());
+            ps.setInt(4, notification.getUser().getId());
+            ps.setInt(5, notification.getGroup().getId());
             return DatabaseManager.executePS(ps) != -1;
         } catch (SQLException ex) {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);

@@ -63,9 +63,9 @@ public class GroupController extends ServerController{
         }
     	Group g = (Group) req.payload;
     	GroupDatabaseHandler handler = GroupDatabaseHandler.GetInstance();
+    	Group resGroup = handler.insert(g);
         GroupNotificationHandler gnhandler = GroupNotificationHandler.GetInstance();
         UserDatabaseHandler uhandler = UserDatabaseHandler.GetInstance();
-    	handler.insert(g);
 
         User owner = uhandler.get(g.getOwnerId());
 

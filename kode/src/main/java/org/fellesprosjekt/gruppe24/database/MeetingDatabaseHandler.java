@@ -184,12 +184,11 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
             if (groupid == 0) ps.setNull(8, 0);
             else ps.setInt(8, groupid);
             ps.setInt(9, meeting.getId());
-            DatabaseManager.executePS(ps);
+            return DatabaseManager.executePS(ps) != -1;
         } catch (Exception ex) {
             lgr.severe(ex.toString());
             return false;
         }
-        return true;
     }
 
     public void addUserToMeeting(Meeting meeting, User user, String message) {
