@@ -61,6 +61,11 @@ public class LoginController extends ClientController {
             }
         });
     }
+    
+    @FXML
+    public void newUserClick(ActionEvent e) {
+    	getApplication().setScene(getStage(), Layout.NewUser);
+    }
 
     public void handleLogin(Response res){
         getApplication().setUser((User) res.payload);
