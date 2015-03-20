@@ -46,7 +46,6 @@ public class NewUserController extends ClientController {
 	
 	@FXML
 	public void keyReleased(KeyEvent e) {
-		System.out.println(e.getSource());
 		status_txt.setTextFill(Paint.valueOf("#CC0000"));
 		if(((TextField) e.getSource()).getId().equals(usernameField.getId())) {
 			if(!checkUsername(usernameField.getText()))
