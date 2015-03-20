@@ -133,7 +133,7 @@ public class CalendarController extends ClientController {
         });
         for (Node node : toRemove)
             calendarGrid.getChildren().remove(node);
-        
+
         markToday();
         
         if (meetings == null) return;
@@ -164,10 +164,13 @@ public class CalendarController extends ClientController {
 			int row = now.getHour();
 			Pane day = new Pane();
 			Pane time = new Pane();
-			calendarGrid.add(day, col, 0);
+
 			Node n = calendarGrid.getChildren().get(row);
+            calendarGrid.add(day, col, 0);
 			calendarGrid.add(time, 0, row);
-			n.toFront();
+            day.toBack();
+            time.toBack();
+
 			GridPane.setRowSpan(day, 24);
 			GridPane.setColumnSpan(time, 8);
 			day.setStyle("-fx-background-color: rgba(235, 251, 255, 1)");
