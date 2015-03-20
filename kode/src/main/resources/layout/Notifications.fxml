@@ -31,7 +31,7 @@
             <Button fx:id="buttonDeny" onAction="#deny"
                     text="Avslå" styleClass="button-, button-warning" />
             <Pane HBox.hgrow="ALWAYS"/>
-            <Button fx:id="abortButton" onAction="#clickAbort" mnemonicParsing="false" text="Avbryt"
+            <Button fx:id="abortButton" onAction="#clickAbort" mnemonicParsing="false" text="Lukk"
                     alignment="BOTTOM_RIGHT" styleClass="button-"  />
         </HBox>
     </bottom>
