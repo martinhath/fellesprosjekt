@@ -76,7 +76,7 @@ public class NotificationController extends ServerController {
         }
         Response res;
         if(req.payload instanceof User) {
-        	res = getAllNotifications(nr, (User) nr.payload);
+            res = getAllNotifications(nr, (User) nr.payload);
         } else if(req.payload instanceof Meeting) {
         	res = getAllNotifications(nr, (Meeting) nr.payload);
         } else {

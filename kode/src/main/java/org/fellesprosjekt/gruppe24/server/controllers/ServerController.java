@@ -17,18 +17,17 @@ public abstract class ServerController {
     protected ServerConnection connection;
 
     public ServerController(ServerConnection conn){
+        connection = conn;
         if (conn != null) {
-            connection = conn;
-            if (connections.indexOf(connection) == -1)
+            if (connections.indexOf(conn) == -1)
                 connections.add(conn);
         }
     }
 
     public void setConnection(ServerConnection c){
-        if (connections.indexOf(connection) != -1)
-            connections.remove(connection);
         connection = c;
-        connections.add(c);
+        if (connections.indexOf(c) == -1)
+            connections.add(c);
     }
 
     /**
@@ -70,8 +69,9 @@ public abstract class ServerController {
      */
     public void simulateReceived(Request req, ServerListener listener, boolean useUser) {
         for (ServerConnection c : connections ) {
-            if (useUser)
+            if (useUser) {
                 req.payload = c.getUser();
+            }
             listener.received(c, req);
         }
     }

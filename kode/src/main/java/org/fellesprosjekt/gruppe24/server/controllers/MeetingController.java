@@ -55,22 +55,11 @@ public class MeetingController extends ServerController {
                     u,
                     s);
         }
-        /* Sender notifications på nytt til brukerene som har fått
-         * ny notifikasjon
-         */
-        broadcast(new LinkedList<>(uniques),
-                new NotificationController(connection)
-                        .list(new NotificationRequest(Request.Type.LIST, false,
-                                        NotificationRequest.Handler.BOTH, resMeeting)
-                        ));
+        Request r = new NotificationRequest(Request.Type.LIST, true,
+                NotificationRequest.Handler.BOTH, null);
+        simulateReceived(r, NotificationListener.GetInstance(), true);
 
-        broadcast(new LinkedList<>(uniques),
-                new MeetingController(connection)
-                        .list(new MeetingRequest(Request.Type.LIST, null)
-                        ), true);
-
-
-        Request r = new MeetingRequest(Request.Type.LIST, null);
+        r = new MeetingRequest(Request.Type.LIST, null);
         simulateReceived(r, MeetingListener.GetInstance(), true);
 
         Response res = new Response();
@@ -107,7 +96,8 @@ public class MeetingController extends ServerController {
         for (User participant : toBeRemoved) {
             handler.removeUserFromMeeting(meeting, participant);
         }
-        Request r = new NotificationRequest(Request.Type.LIST, null);
+        Request r = new NotificationRequest(Request.Type.LIST, true,
+                NotificationRequest.Handler.BOTH, null);
         simulateReceived(r, NotificationListener.GetInstance(), true);
 
         r = new MeetingRequest(Request.Type.LIST, null);
@@ -167,7 +157,11 @@ public class MeetingController extends ServerController {
             return Response.GetFailResponse(
                     "Could not delete meeting " + m.getName());
         }
-        Request r = new MeetingRequest(Request.Type.LIST, null);
+        Request r = new NotificationRequest(Request.Type.LIST, true,
+                NotificationRequest.Handler.BOTH, null);
+        simulateReceived(r, NotificationListener.GetInstance(), true);
+
+        r = new MeetingRequest(Request.Type.LIST, null);
         simulateReceived(r, MeetingListener.GetInstance(), true);
 
         return new Response(Response.Type.OK, null);
