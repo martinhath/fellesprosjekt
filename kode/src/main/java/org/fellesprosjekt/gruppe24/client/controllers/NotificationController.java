@@ -128,7 +128,7 @@ public class NotificationController extends ClientController {
 
         if (index == notifications.size())
             index--;
-        if (index >= 0)
+        if (index > 0)
             notification = notifications.get(index);
         else
             notification = null;
