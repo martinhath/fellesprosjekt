@@ -5,17 +5,24 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.scene.control.ToggleButton?>
 <BorderPane prefHeight="300" prefWidth="500" stylesheets="@../style/style.css"
             xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
             styleClass="root"
             fx:controller="org.fellesprosjekt.gruppe24.client.controllers.NotificationController">
     <top>
-        <Label fx:id="newMessageLabel" styleClass="label"
-               text="Nye meldinger:" BorderPane.alignment="TOP_LEFT" />
+        <HBox styleClass="meeting-detail-bottom">
+            <Label styleClass="label" text="Nye meldinger:"
+                   BorderPane.alignment="TOP_LEFT" />
+            <Pane HBox.hgrow="ALWAYS"/>
+            <ToggleButton onAction="#toggleShowRead" mnemonicParsing="false"
+                          text="Skjul leste" alignment="TOP_RIGHT"
+                          styleClass="button-"  />
+        </HBox>
     </top>
     <center>
-                <ListView fx:id="listView"
-                          BorderPane.alignment="CENTER"/>
+        <ListView fx:id="listView"
+                  BorderPane.alignment="CENTER"/>
     </center>
     <bottom>
         <HBox styleClass="meeting-detail-bottom" >
