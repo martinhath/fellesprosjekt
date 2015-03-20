@@ -83,8 +83,8 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
                            String location) throws SQLException {
         String query =
                 "INSERT INTO Meeting " +
-                        "(name, description, start_time, end_time, room_roomid, owner_id, group_groupid, location) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+                        "(name, description, start_time, end_time, room_roomid, owner_id, group_groupid, location, create_time) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW());";
         PreparedStatement ps = DatabaseManager.getPreparedStatement(query);
         ps.setString(1, name);
         ps.setString(2, description);

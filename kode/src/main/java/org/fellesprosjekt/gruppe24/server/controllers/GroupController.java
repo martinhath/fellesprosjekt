@@ -31,17 +31,20 @@ public class GroupController extends ServerController{
         }
     	Group g = (Group) req.payload;
     	GroupDatabaseHandler handler = GroupDatabaseHandler.GetInstance();
-    	handler.insert(g);
-    	g = handler.getGroupFromName(g.getName());
+    	Group resGroup = handler.insert(g);
     	Response res = new Response();
-    	if(g == null) {
+    	if(resGroup == null) {
     		res.type = Response.Type.FAIL;
     		res.payload = "Something went wrong";
-    	} else {
-    		res.type = Response.Type.OK;
-    		res.payload = g;
+    		return res;
     	}
-        return res;
+    	for(User u : g.getMembers()) {
+    		handler.addUserToGroup(u, resGroup, "");
+    	}
+    	resGroup.setMembers(g.getMembers());
+		res.type = Response.Type.OK;
+		res.payload = resGroup;
+		return res;
     }
 
     @Override
