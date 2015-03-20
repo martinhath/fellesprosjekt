@@ -22,6 +22,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -101,18 +102,17 @@ public class MeetingDetailController extends ClientController {
         getClient().addListener(new ClientListener() {
             @Override
             public void receivedResponse(Connection conn, Response res) {
-                System.out.println("noe");
                 if (res.type == Response.Type.FAIL) {
                     logger.info((String) res.payload);
                     return;
                 }
-                System.out.println(res.payload);
                 if (!listInstanceOf(res.payload, Room.class)) return;
 
-                comboRoom.getItems().clear();
-                comboRoom.getItems().addAll((List<Room>) res.payload);
-                Platform.runLater(() -> comboRoom.getSelectionModel()
-                                        .select(meeting.getRoom()));
+                Platform.runLater(() -> {
+                    comboRoom.getItems().clear();
+                    comboRoom.getItems().addAll((List<Room>) res.payload);
+                    comboRoom.getSelectionModel().select(meeting.getRoom());
+                });
                 getClient().removeListener(this);
             }
         });
@@ -164,8 +164,20 @@ public class MeetingDetailController extends ClientController {
                 List<Notification> notifications = (List<Notification>) res.payload;
 
                 Platform.runLater(() -> {
-                    listInvited.getItems().clear();
-                    listParticipants.getItems().clear();
+                    Iterator it = listInvited.getItems().iterator();
+                    while (it.hasNext()){
+                        User u = (User) it.next();
+                        comboInvite.getItems().add(u);
+                        comboRemove.getItems().remove(u);
+                        it.remove();
+                    }
+                    it = listParticipants.getItems().iterator();
+                    while (it.hasNext()){
+                        User u = (User) it.next();
+                        comboInvite.getItems().add(u);
+                        comboRemove.getItems().remove(u);
+                        it.remove();
+                    }
                     for (Notification not : notifications) {
                         User u = not.getUser();
                         if (not.isConfirmed()) {
@@ -204,8 +216,8 @@ public class MeetingDetailController extends ClientController {
 
     private void setFields() {
         textDesc.setEditable(editMode);
-        comboOwner.setEditable(editMode);
-        comboRoom.setEditable(editMode);
+        comboOwner.setDisable(!editMode);
+        comboRoom.setDisable(!editMode);
         datePicker.setDisable(!editMode);
         textFrom.setEditable(editMode);
         textTo.setEditable(editMode);
@@ -418,6 +430,7 @@ public class MeetingDetailController extends ClientController {
     public void removeUser(Entity e) {
         if (e == null) return;
         User u = (User) e;
+        comboRemove.getSelectionModel().clearSelection();
         removeInvitedOrConfirmed(u);
     }
 }
