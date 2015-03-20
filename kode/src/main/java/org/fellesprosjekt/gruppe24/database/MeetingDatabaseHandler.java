@@ -153,7 +153,33 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
     }
 
     public boolean update(Meeting meeting) {
-        // TODO
+        int roomid = 0;
+        int groupid = 0;
+        int ownerid = 0;
+        if (meeting.getRoom() != null) roomid = meeting.getRoom().getId();
+        if (meeting.getGroup() != null) groupid = meeting.getGroup().getId();
+        if (meeting.getOwner() != null) ownerid = meeting.getOwner().getId();
+
+        String query = String.format(
+                "UPDATE Meeting SET name = '%s', " +
+                        "description = '%s', " +
+                        "start_time = '%s', " +
+                        "end_time = '%s', " +
+                        "room_roomid = '%s', " +
+                        "location = '%s', " +
+                        "owner_id = '%s', " +
+                        "Group_groupid = '%s'"
+                + " WHERE meetingid = %s;",
+                meeting.getName(),
+                meeting.getDescription(),
+                java.sql.Timestamp.valueOf(meeting.getFrom()),
+                java.sql.Timestamp.valueOf(meeting.getTo()),
+                roomid == 0 ? null : roomid,
+                meeting.getLocation(),
+                ownerid == 0 ? null : ownerid,
+                groupid == 0 ? null : groupid,
+                meeting.getId());
+        DatabaseManager.updateQuery(query);
         return true;
     }
 
