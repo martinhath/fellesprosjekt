@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS `User_invited_to_meeting` (
   `Meeting_meetingid` INT NOT NULL,
   `notification_message` MEDIUMTEXT NOT NULL,
   `notification_read` TINYINT(1) NOT NULL DEFAULT 0,
-  `confirmed` TINYINT(1) NULL,
+  `confirmed` TINYINT(1) NULL DEFAULT 0,
   `hide` TINYINT(1) NOT NULL DEFAULT 0,
   `alarm_time` TIME NULL,
   PRIMARY KEY (`Meeting_meetingid`, `User_userid`),

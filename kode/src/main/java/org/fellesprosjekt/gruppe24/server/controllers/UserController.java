@@ -17,11 +17,10 @@ public class UserController extends ServerController{
     }
 
     @Override
-    public void put(Request req){
+    public Response put(Request req){
         if (!(req.payload instanceof User)) {
-            connection.sendTCP(new Response(Response.Type.FAIL,
-                    "Wrong payload: not User"));
-            return;
+            return Response.GetFailResponse(
+                    "Wrong payload: not User");
         }
         UserDatabaseHandler handler = UserDatabaseHandler.GetInstance();
         Response res = new Response();
@@ -35,11 +34,11 @@ public class UserController extends ServerController{
             res.type = Response.Type.OK;
             res.payload = user;
         }
-        connection.sendTCP(res);
+        return res;
     }
 
     @Override
-    public void get(Request req){
+    public Response get(Request req){
         UserDatabaseHandler handler = UserDatabaseHandler.GetInstance();
         Response res = new Response();
         if (req.payload instanceof Integer) {
@@ -56,48 +55,45 @@ public class UserController extends ServerController{
             res.type = Response.Type.FAIL;
             res.payload = "Unknown payload type.";
         }
-        connection.sendTCP(res);
+        return res;
     }
 
     @Override
-    public void list(Request req) {
+    public Response list(Request req) {
         UserDatabaseHandler handler = UserDatabaseHandler.GetInstance();
         Response res = new Response();
         res.type = Response.Type.OK;
         List<User> users = handler.getAll();
         if (users == null){
-            connection.sendTCP(Response.GetFailResponse("Database returned null."));
-            return;
+            return Response.GetFailResponse("Database returned null.");
         }
         res.payload = users;
-        connection.sendTCP(res);
+        return res;
     }
 
     @Override
-    public void post(Request req) {
+    public Response post(Request req) {
         if (!(req.payload instanceof User)) {
-            connection.sendTCP(new Response(Response.Type.FAIL,
-                    "Wrong payload: not User"));
-            return;
+            return Response.GetFailResponse(
+                    "Wrong payload: not User");
         }
         Response res = new Response();
         User user = (User) req.payload;
-        int ret = UserDatabaseHandler.addNewUser(user, /*password*/"");
+        int ret = UserDatabaseHandler.addNewUser(user, user.getPassword());
         if (ret == -1) {
             res.type = Response.Type.FAIL;
             res.payload = "Something went wrong.";
         } else {
             res.type = Response.Type.OK;
         }
-        connection.sendTCP(res);
+        return res;
     }
 
 	@Override
-	public void delete(Request req) {
+	public Response delete(Request req) {
 		if (!(req.payload instanceof User)) {
-            connection.sendTCP(new Response(Response.Type.FAIL,
-                    "Wrong payload: not User"));
-            return;
+            return Response.GetFailResponse(
+                    "Wrong payload: not User");
         }
 		User user = (User) req.payload;
 		Response res = new Response();
@@ -108,6 +104,6 @@ public class UserController extends ServerController{
 			res.type = Response.Type.FAIL;
 			res.payload = "Something went wrong.";
 		}
-		connection.sendTCP(res);
+        return res;
 	}
 }

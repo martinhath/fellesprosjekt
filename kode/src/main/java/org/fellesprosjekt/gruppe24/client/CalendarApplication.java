@@ -17,6 +17,10 @@ import org.fellesprosjekt.gruppe24.database.DatabaseManager;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Observable;
+import java.util.concurrent.Callable;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.logging.Logger;
 
 public class CalendarApplication extends Application {
@@ -134,12 +138,18 @@ public class CalendarApplication extends Application {
             System.err.println("loader.getController() returned null!");
             return null;
         }
+        if (!pths.contains(path)) {
+            pths.add(path);
+            stage.focusedProperty().addListener((observable) -> controller.focus());
+        }
         controller.setApplication(this);
         controller.setStage(stage);
 		controller.init();
         this.controller = controller;
         return controller;
     }
+    // hack :(
+    private List<String> pths = new LinkedList<>();
 
 	public static void main(String[] args) {
 		launch(args);

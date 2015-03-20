@@ -11,34 +11,32 @@ public class InvitationController extends ServerController {
 	}
 
 	@Override
-	public void post(Request req) {
-		System.out.println("bra jobbat");
+	public Response post(Request req) {
 		Response res = new Response();
         res.type = Response.Type.OK;
-        connection.sendTCP(res);
-
+        return res;
 	}
 
 	@Override
-	public void put(Request req) {
+	public Response put(Request req) {
 		// TODO: implement
 		throw new RuntimeException("Not implemented");
 	}
 
 	@Override
-	public void get(Request req) {
+	public Response get(Request req) {
 		// TODO: implement
 		throw new RuntimeException("Not implemented");
 	}
 
 	@Override
-	public void list(Request req) {
+	public Response list(Request req) {
 		// TODO: implement
 		throw new RuntimeException("Not implemented");
 	}
 
 	@Override
-	public void delete(Request req) {
+	public Response delete(Request req) {
         throw new RuntimeException("Not implemented!");
 	}
 }

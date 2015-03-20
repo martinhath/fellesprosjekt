@@ -70,37 +70,19 @@ public class NotificationController extends ClientController {
 
     public void init() {
         // får notifications fra server
-        NotificationRequest req = new NotificationRequest(Request.Type.LIST,
-                false, NotificationRequest.Handler.BOTH, getApplication().getUser());
-        getClient().sendTCP(req);
-        getClient().addListener(new ClientListener() {
-            @Override
-            public void receivedResponse(Connection conn, Response res) {
-                if (res.type == Response.Type.FAIL) {
-                    logger.info((String) res.payload);
-                    return;
-                }
-                if (!listInstanceOf(res.payload, MeetingNotification.class) &&
-                        !listInstanceOf(res.payload, GroupNotification.class)) {
-                    return;
-                }
-                List<Notification> list = (List<Notification>) res.payload;
-                Platform.runLater(() -> {
-                    listView.getItems().clear();
-                    notifications.clear();
-                    for (Notification n : list) {
-                        addNotificationToList(n);
-                    }
-                });
-                getClient().removeListener(this);
-            }
-        });
+        listView.getItems().clear();
+        notifications.clear();
+        for (Notification n : CalendarController.notifications) {
+            addNotificationToList(n);
+        }
     }
 
     private void addNotificationToList(Notification not) {
         notifications.add(not);
         Label label = new Label();
         label.setText(not.getMessage());
+        if (not.isRead())
+            label.setStyle("-fx-text-fill: #aaa");
         listView.getItems().add(label);
     }
 
@@ -112,27 +94,44 @@ public class NotificationController extends ClientController {
         not.setRead(true);
         Request req = new NotificationRequest(Request.Type.PUT, not);
         getClient().sendTCP(req);
+        int i = notifications.indexOf(not);
+        listView.getItems().get(i).setStyle("-fx-text-fill: #aaa");
     }
 
     public void deny(ActionEvent actionEvent) {
         int index = notifications.indexOf(notification);
         listView.getItems().remove(index);
+        notifications.remove(index);
 
         notification.setConfirmed(false);
         notification.setRead(true);
         Request req = new NotificationRequest(Request.Type.PUT, notification);
         getClient().sendTCP(req);
 
+        if (index == notifications.size())
+            index--;
+        if (index > 0)
+            notification = notifications.get(index);
+        else
+            notification = null;
     }
 
     public void accept(ActionEvent actionEvent) {
         int index = notifications.indexOf(notification);
         listView.getItems().remove(index);
+        notifications.remove(index);
 
         notification.setConfirmed(true);
         notification.setRead(true);
         Request req = new NotificationRequest(Request.Type.PUT, notification);
         getClient().sendTCP(req);
+
+        if (index == notifications.size())
+            index--;
+        if (index >= 0)
+            notification = notifications.get(index);
+        else
+            notification = null;
     }
 
 }

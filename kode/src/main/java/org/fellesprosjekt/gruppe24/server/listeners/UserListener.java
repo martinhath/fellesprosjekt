@@ -1,33 +1,49 @@
 package org.fellesprosjekt.gruppe24.server.listeners;
 
 import org.fellesprosjekt.gruppe24.common.models.net.Request;
+import org.fellesprosjekt.gruppe24.common.models.net.Response;
 import org.fellesprosjekt.gruppe24.common.models.net.UserRequest;
 import org.fellesprosjekt.gruppe24.server.ServerConnection;
 import org.fellesprosjekt.gruppe24.server.controllers.UserController;
 
 public class UserListener extends ServerListener {
 
+    private static UserListener instance;
+
+    public static UserListener GetInstance() {
+        if (instance == null)
+            instance = new UserListener();
+        return instance;
+    }
+
+    private UserListener(){}
+
     @Override
     public void receivedRequest(ServerConnection conn, Request req) {
         if (!(req instanceof UserRequest))
             return;
         UserController controller = new UserController(conn);
+        Response res;
         switch (req.type) {
             case POST:
-                controller.post(req);
+                res = controller.post(req);
                 break;
             case PUT:
-                controller.put(req);
+                res = controller.put(req);
                 break;
             case GET:
-                controller.get(req);
+                res = controller.get(req);
                 break;
             case LIST:
-                controller.list(req);
+                res = controller.list(req);
                 break;
             case DELETE:
-            	controller.delete(req);
+            	res = controller.delete(req);
             	break;
+            default:
+                logger.warning(req.toString());
+                return;
         }
+        conn.sendTCP(res);
     }
 }

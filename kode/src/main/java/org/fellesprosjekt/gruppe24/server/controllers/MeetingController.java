@@ -4,14 +4,16 @@ import org.fellesprosjekt.gruppe24.common.models.Entity;
 import org.fellesprosjekt.gruppe24.common.models.Group;
 import org.fellesprosjekt.gruppe24.common.models.Meeting;
 import org.fellesprosjekt.gruppe24.common.models.User;
+import org.fellesprosjekt.gruppe24.common.models.net.MeetingRequest;
+import org.fellesprosjekt.gruppe24.common.models.net.NotificationRequest;
 import org.fellesprosjekt.gruppe24.common.models.net.Request;
 import org.fellesprosjekt.gruppe24.common.models.net.Response;
 import org.fellesprosjekt.gruppe24.database.MeetingDatabaseHandler;
 import org.fellesprosjekt.gruppe24.server.ServerConnection;
+import org.fellesprosjekt.gruppe24.server.listeners.MeetingListener;
+import org.fellesprosjekt.gruppe24.server.listeners.NotificationListener;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,11 +25,10 @@ public class MeetingController extends ServerController {
     }
 
     @Override
-    public void post(Request req) {
+    public Response post(Request req) {
         Meeting meeting = (Meeting) req.payload;
         if (meeting == null) {
-            connection.sendTCP(Response.GetFailResponse("payload was null"));
-            return;
+            return Response.GetFailResponse("payload was null");
         }
 
         MeetingDatabaseHandler handler = MeetingDatabaseHandler.GetInstance();
@@ -44,7 +45,6 @@ public class MeetingController extends ServerController {
             }
         }
         for(User u : uniques) {
-        	//System.out.println(u.getName());
         	String s;
         	if(resMeeting.getOwner().equals(u))
         		s = "Du opprettet møtet '" + resMeeting.getName() + "'";
@@ -55,18 +55,23 @@ public class MeetingController extends ServerController {
                     u,
                     s);
         }
+        Request r = new NotificationRequest(Request.Type.LIST, true,
+                NotificationRequest.Handler.BOTH, null);
+        simulateReceived(r, NotificationListener.GetInstance(), true);
+
+        r = new MeetingRequest(Request.Type.LIST, null);
+        simulateReceived(r, MeetingListener.GetInstance(), true);
+
         Response res = new Response();
         res.type = Response.Type.OK;
-        res.payload = resMeeting;
-        connection.sendTCP(res);
+        return res;
     }
 
     @Override
-    public void put(Request req) {
+    public Response put(Request req) {
         Meeting meeting = (Meeting) req.payload;
         if (meeting == null) {
-            connection.sendTCP(Response.GetFailResponse("payload was null"));
-            return;
+            return Response.GetFailResponse("payload was null");
         }
 
         MeetingDatabaseHandler handler = MeetingDatabaseHandler.GetInstance();
@@ -74,12 +79,12 @@ public class MeetingController extends ServerController {
         // finner de som var med i møtet, men kanskje skal fjernes
         List<User> toBeRemoved = handler.getUsersOfMeeting(meeting);
         toBeRemoved.removeAll(meeting.getParticipants());
+        List<User> users = new ArrayList<>();
+        users.addAll(toBeRemoved);
         // legger til evt nye deltakere
         for (Entity participant : meeting.getParticipants()) {
-            if (participant.getClass() == Group.class) {
-                // TODO add group to meeting
-
-            } else {
+            if (participant instanceof User) {
+                users.add((User) participant);
                 handler.addUserToMeeting(
                         meeting,
                         (User) participant,
@@ -91,39 +96,44 @@ public class MeetingController extends ServerController {
         for (User participant : toBeRemoved) {
             handler.removeUserFromMeeting(meeting, participant);
         }
+        Request r = new NotificationRequest(Request.Type.LIST, true,
+                NotificationRequest.Handler.BOTH, null);
+        simulateReceived(r, NotificationListener.GetInstance(), true);
+
+        r = new MeetingRequest(Request.Type.LIST, null);
+        simulateReceived(r, MeetingListener.GetInstance(), true);
+
         // lager respons
         Response res = new Response();
         res.type = Response.Type.OK;
-        connection.sendTCP(res);
+        return res;
     }
 
     @Override
-    public void get(Request req) {
+    public Response get(Request req) {
         MeetingDatabaseHandler handler = MeetingDatabaseHandler.GetInstance();
         int id = 0;
         try {
             id = (int) req.payload;
         } catch (ClassCastException ex) {
             logger.log(Level.INFO, ex.getMessage(), ex);
-            connection.sendTCP(Response.GetFailResponse(
-                    String.format("bad payload, expected Integer, got %s", req.payload)));
-            return;
+            return Response.GetFailResponse(
+                    String.format("bad payload, expected Integer, got %s", req.payload));
         }
 
         Meeting meeting = handler.get(id);
         if (meeting == null) {
-            connection.sendTCP(Response.GetFailResponse(
-                    String.format("could not find meeting with id %d", id)));
-            return;
+            return Response.GetFailResponse(
+                    String.format("could not find meeting with id %d", id));
         }
         Response res = new Response();
         res.type = Response.Type.OK;
         res.payload = meeting;
-        connection.sendTCP(res);
+        return res;
     }
 
     @Override
-    public void list(Request req) {
+    public Response list(Request req) {
         MeetingDatabaseHandler handler = MeetingDatabaseHandler.GetInstance();
 
         Response res = new Response();
@@ -135,20 +145,25 @@ public class MeetingController extends ServerController {
         } else {
             res.payload = handler.getAll();
         }
-        System.out.println(String.format("Fant %d møter", ((List<Meeting>) res.payload).size()));
-        connection.sendTCP(res);
+        return res;
     }
 
 	@Override
-	public void delete(Request req) {
+	public Response delete(Request req) {
 		// TODO Auto-generated method stub
 		MeetingDatabaseHandler mhandler = MeetingDatabaseHandler.GetInstance();
         Meeting m = (Meeting) req.payload;
         if (!mhandler.delete(m)){
-            connection.sendTCP(Response.GetFailResponse(
-                    "Could not delete meeting " + m.getName()));
-            return;
+            return Response.GetFailResponse(
+                    "Could not delete meeting " + m.getName());
         }
-        connection.sendTCP(new Response(Response.Type.OK, null));
+        Request r = new NotificationRequest(Request.Type.LIST, true,
+                NotificationRequest.Handler.BOTH, null);
+        simulateReceived(r, NotificationListener.GetInstance(), true);
+
+        r = new MeetingRequest(Request.Type.LIST, null);
+        simulateReceived(r, MeetingListener.GetInstance(), true);
+
+        return new Response(Response.Type.OK, null);
 	}
 }

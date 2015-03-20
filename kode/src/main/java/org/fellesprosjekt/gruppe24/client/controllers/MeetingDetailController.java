@@ -135,6 +135,7 @@ public class MeetingDetailController extends ClientController {
                 if (res.payload == null) return;
                 if (!listInstanceOf(res.payload, MeetingNotification.class)) return;
 
+                System.out.println("gg");
                 List<Notification> notifications = (List<Notification>) res.payload;
 
                 Platform.runLater(() -> {
@@ -144,7 +145,7 @@ public class MeetingDetailController extends ClientController {
                         User u = not.getUser();
                         if (not.isConfirmed()) {
                             listParticipants.getItems().add(u);
-                        } else if (not.isRead()) {
+                        } else if (!not.isRead()) {
                             listInvited.getItems().add(u);
                         }
                     }
@@ -165,7 +166,12 @@ public class MeetingDetailController extends ClientController {
         buttonDelete.setVisible(false);
     }
 
+    // hack
+    List<Notification> nots;
     public void setMeeting(Meeting m) {
+        // HACK
+        nots = CalendarController.notifications;
+        // ikke hack
         meeting = m;
         checkAdmin();
         setFields();
@@ -298,6 +304,8 @@ public class MeetingDetailController extends ClientController {
     }
 
     public void clickBack(ActionEvent actionEvent) {
+        // hack
+        CalendarController.notifications = nots;
         // Må sende PUT request til server, for å oppdatere møtet.
         Platform.runLater(() -> getApplication().setScene(getStage(), Layout.Calendar));
     }

@@ -19,7 +19,7 @@ public class MeetingPane extends VBox {
     private ClientController controller;
 
     private String getColor() {
-        return Colors[meeting.hashCode() % Colors.length];
+        return Colors[Math.abs(meeting.getName().hashCode()) % Colors.length];
     }
 
     public MeetingPane(ClientController controller, Meeting meeting) {

@@ -54,4 +54,6 @@ public abstract class ClientController implements Initializable{
     public CalendarApplication getApplication(){
         return this.application;
     }
+
+    public void focus() {}
 }

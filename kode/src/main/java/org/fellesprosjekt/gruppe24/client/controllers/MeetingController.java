@@ -141,14 +141,16 @@ public class MeetingController extends ClientController {
         hver gang fokus for tekstboksene (ol.) endres.
          */
         fieldFromTime.focusedProperty().addListener(
-                (FocusChangeListener) -> {
+                (observable, notFocus, focus) -> {
+                    if (focus) return;
                     if (validateFromTime())
                         setOKText(fieldFromTime);
                     else
                         setErrText(fieldFromTime);
                 });
         fieldToTime.focusedProperty().addListener(
-                (FocusChangeListener) -> {
+                (observable, notFocus, focus) -> {
+                    if (focus) return;
                     if (validateToTime())
                         setOKText(fieldToTime);
                     else
