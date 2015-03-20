@@ -16,6 +16,7 @@
         <Button layoutX="860.0" layoutY="595.0" mnemonicParsing="false" onAction="#logout" styleClass="button-" text="Logge ut" />
         <Button fx:id="buttonNotification" layoutX="797.0" layoutY="35.0" mnemonicParsing="false" onAction="#seeNotifications" text="Nye meldinger (IKKE SATT)" />
         <Button layoutX="865.0" layoutY="82.0" mnemonicParsing="false" onAction="#newMeeting" styleClass="button-" text="Nytt møte" />
+        <Button layoutX="865.0" layoutY="110.0" mnemonicParsing="false" onAction="#newGroup" styleClass="button-" text="Ny gruppe" />
         <ComboBox fx:id="dropdownGroups" layoutX="612.0" layoutY="35.0" prefWidth="150.0" onAction="#groupsChanged"/>
         <Label layoutX="612.0" layoutY="12.0" text="Grupper" />
         <HBox layoutX="59.0" layoutY="174.0" styleClass="labels-container">

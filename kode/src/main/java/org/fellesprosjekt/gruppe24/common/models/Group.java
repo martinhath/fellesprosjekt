@@ -1,5 +1,6 @@
 package org.fellesprosjekt.gruppe24.common.models;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -9,7 +10,7 @@ public class Group extends Entity{
     private int ownerId;
 
     @SuppressWarnings("unused")
-    public Group(){}
+    public Group(){this.members = new ArrayList<User>();}
 
     public Group(int id, String name, int ownerId) {
         super(id, name);
@@ -39,6 +40,10 @@ public class Group extends Entity{
 
     public int getOwnerId() {
     	return ownerId;
+    }
+
+    public void setOwner(User owner) {
+        this.ownerId = owner.getId();
     }
     
     public void printMembers() {

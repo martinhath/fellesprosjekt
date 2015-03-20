@@ -2,12 +2,17 @@ package org.fellesprosjekt.gruppe24.server.controllers;
 
 import org.fellesprosjekt.gruppe24.common.models.Entity;
 import org.fellesprosjekt.gruppe24.common.models.Group;
+import org.fellesprosjekt.gruppe24.common.models.GroupNotification;
 import org.fellesprosjekt.gruppe24.common.models.User;
 import org.fellesprosjekt.gruppe24.common.models.net.Request;
 import org.fellesprosjekt.gruppe24.common.models.net.Response;
 import org.fellesprosjekt.gruppe24.database.GroupDatabaseHandler;
+import org.fellesprosjekt.gruppe24.database.GroupNotificationHandler;
+import org.fellesprosjekt.gruppe24.database.UserDatabaseHandler;
 import org.fellesprosjekt.gruppe24.server.ServerConnection;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -20,8 +25,35 @@ public class GroupController extends ServerController{
 
     @Override
     public Response post(Request req) {
-        // TODO: implement
-        throw new RuntimeException("Not implemented");
+        if (!(req.payload instanceof Group)) {
+            return Response.GetFailResponse("Wrong payload: not Group");
+        }
+        Group g = (Group) req.payload;
+        GroupDatabaseHandler handler = GroupDatabaseHandler.GetInstance();
+        GroupNotificationHandler gnhandler = GroupNotificationHandler.GetInstance();
+        UserDatabaseHandler uhandler = UserDatabaseHandler.GetInstance();
+
+        List<User> members = g.getMembers();
+        User owner = uhandler.get(g.getOwnerId());
+
+        g = handler.insert(g);
+
+        // inviterer medlemmer til gruppa
+        String invitationString;
+        for (User member : members) {
+            invitationString = String.format("Du er invitert til %s av %s", g, owner);
+            handler.addUserToGroup(member, g, invitationString);
+        }
+
+        Response res = new Response();
+        if(g == null) {
+            res.type = Response.Type.FAIL;
+            res.payload = "Something went wrong";
+        } else {
+            res.type = Response.Type.OK;
+            res.payload = g;
+        }
+        return res;
     }
 
     @Override
@@ -31,7 +63,29 @@ public class GroupController extends ServerController{
         }
     	Group g = (Group) req.payload;
     	GroupDatabaseHandler handler = GroupDatabaseHandler.GetInstance();
-    	Group resGroup = handler.insert(g);
+        GroupNotificationHandler gnhandler = GroupNotificationHandler.GetInstance();
+        UserDatabaseHandler uhandler = UserDatabaseHandler.GetInstance();
+    	handler.insert(g);
+
+        User owner = uhandler.get(g.getOwnerId());
+
+        List<User> deletedMembers = handler.getAllUsersInGroup(g);
+        List<User> currentMembers = g.getMembers();
+        currentMembers.removeAll(deletedMembers);
+        deletedMembers.removeAll(g.getMembers());
+
+
+        // sletter brukere som ikke lenger er med
+        for (User user : deletedMembers) {
+            handler.removeUserFromGroup(user.getId(), g.getId());
+        }
+        // legger til nye brukere
+        for (User user : currentMembers) {
+            handler.addUserToGroup(user, g, String.format("Du er invitert til %s av %s", g, owner));
+        }
+
+    	g = handler.getGroupFromName(g.getName());
+
     	Response res = new Response();
     	if(resGroup == null) {
     		res.type = Response.Type.FAIL;

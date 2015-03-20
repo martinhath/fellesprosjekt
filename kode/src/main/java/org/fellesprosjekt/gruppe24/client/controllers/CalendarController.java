@@ -327,6 +327,12 @@ public class CalendarController extends ClientController {
     }
 
     @FXML
+    public void newGroup(ActionEvent a) {
+        String path = Layout.NewGroup;
+        getApplication().newScene(path);
+    }
+
+    @FXML
     public void clickCurrentWeek(ActionEvent e) {
         date = LocalDateTime.now();
         setCalendarLabels(date);

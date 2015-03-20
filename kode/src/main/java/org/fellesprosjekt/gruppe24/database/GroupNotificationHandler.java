@@ -38,8 +38,8 @@ public class GroupNotificationHandler extends DatabaseHandler<GroupNotification>
             GroupNotification notification = new GroupNotification(
                     uhandler.get(Integer.parseInt(info.get("User_userid"))),
                     info.get("notification_message"),
-                    Boolean.parseBoolean(info.get("notification_read")),
-                    Boolean.parseBoolean(info.get("confirmed")),
+                    info.get("notification_read").equals("1"),
+                    info.get("confirmed").equals("1"),
                     ghandler.get(Integer.parseInt(info.get("User_group_groupid")))
             );
             return notification;
@@ -73,7 +73,7 @@ public class GroupNotificationHandler extends DatabaseHandler<GroupNotification>
 
     public GroupNotification get(int userId, int groupId) {
         String query = String.format(
-                "SELECT * FROM %s WHERE User_userid = %s AND User_group_groupid = %s;", fromTable, userId, groupId);
+                "SELECT * FROM %s WHERE user_userid = %s AND user_group_groupid = %s;", fromTable, userId, groupId);
         try {
             HashMap<String, String> info = DatabaseManager.getRow(String.format(query));
             return generateGroupNotification(info);
