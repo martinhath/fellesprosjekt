@@ -24,8 +24,11 @@ import java.time.LocalTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.Function;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class MeetingDetailController extends ClientController {
     private Logger logger = Logger.getLogger(getClass().getName());
@@ -45,6 +48,7 @@ public class MeetingDetailController extends ClientController {
 
     @FXML public ListView<Entity> listParticipants;
     @FXML public ListView<Entity> listInvited;
+    @FXML public ComboBox<Entity> comboInvite;
 
     @FXML public Label labelError;
 
@@ -75,6 +79,11 @@ public class MeetingDetailController extends ClientController {
             else
                 setErrText(textTo);
         });
+
+        comboInvite.valueProperty().addListener(
+                (observable, t, curr) ->
+                        Platform.runLater(() ->
+                                inviteUser(curr)));
     }
 
     private void getRooms() {
@@ -114,11 +123,19 @@ public class MeetingDetailController extends ClientController {
                     return;
 
                 Platform.runLater(() -> {
+                    List<User> users = (List<User>) res.payload;
+
                     comboOwner.getItems().clear();
-                    comboOwner.getItems().addAll((List<User>) res.payload);
+                    comboOwner.getItems().addAll(users);
                     comboOwner.getSelectionModel().select(
                             meeting.getOwner()
                     );
+                    comboInvite.getItems().clear();
+                    comboInvite.getItems().addAll(users.stream()
+                            .filter((usr) -> !listInvited.getItems().contains(usr))
+                            .filter((usr) -> !listParticipants.getItems().contains(usr))
+                            .sorted((u1, u2) -> u1.getName().compareTo(u2.getUsername()))
+                            .collect(Collectors.toList()));
                 });
                 getClient().removeListener(this);
             }
@@ -148,6 +165,7 @@ public class MeetingDetailController extends ClientController {
                             listInvited.getItems().add(u);
                         }
                     }
+                    comboInvite.getItems().removeAll(listInvited.getItems());
                 });
                 getClient().removeListener(this);
             }
@@ -359,5 +377,13 @@ public class MeetingDetailController extends ClientController {
                 });
             }
         });
+    }
+
+    public void inviteUser(Entity e) {
+        if (e == null) return;
+        User u = (User) e;
+        listInvited.getItems().add(u);
+        comboInvite.getSelectionModel().clearSelection();
+        comboInvite.getItems().remove(e);
     }
 }
