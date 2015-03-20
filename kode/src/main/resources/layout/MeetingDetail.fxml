@@ -51,7 +51,8 @@
                         <ListView fx:id="listParticipants" />
                         <Label styleClass="label"
                                text="Inviterte" />
-                        <ListView fx:id="listInvited"/>
+                        <ListView fx:id="listInvited" />
+                        <ComboBox fx:id="comboInvite" />
                     </children>
                 </VBox>
             </children>
