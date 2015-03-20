@@ -29,6 +29,8 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
 		String name = info.get("name");
 		String password = info.get("password");
 		String email = info.get("email");
+		if(id == null)
+			return null;
         User user = new User(Integer.parseInt(id), username, name, password, email);
         return user;
 	}
@@ -38,6 +40,7 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
      * @param user     a user object
      * @param password the user's desired password
      */
+    @Deprecated
     public static int addNewUser(User user, String password) {
         try {
             String query =
@@ -95,13 +98,15 @@ public class UserDatabaseHandler extends DatabaseHandler<User> {
 		try {
 			String query =
 				"INSERT INTO User " +
-	            "(username, name, password, email, create_time) " +
-	            "VALUES (?, ?, ?, ?, NOW());";
+	            "(username, name, password, salt, email, create_time) " +
+	            "VALUES (?, ?, ?, ?, ?, NOW());";
+			PasswordCryptography pc = new PasswordCryptography(user.getPassword());
 	        PreparedStatement ps = DatabaseManager.getPreparedStatement(query);
 	        ps.setString(1, user.getUsername());
 	        ps.setString(2, user.getName());
-	        ps.setString(3, user.getPassword());
-	        ps.setString(4, user.getEmail());
+	        ps.setString(3, pc.getHash());
+	        ps.setString(4, pc.getSalt());
+	        ps.setString(5, user.getEmail());
 	        int id = DatabaseManager.executePS(ps);
 			if (id < 0) {
 				lgr.severe("Got negative index from DatabaseManager.executePS()");

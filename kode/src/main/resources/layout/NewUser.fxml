@@ -7,12 +7,12 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 
-<BorderPane prefHeight="310.0" prefWidth="307.0" styleClass="anchor-pane" stylesheets="@../style/style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="310.0" prefWidth="350.0" styleClass="anchor-pane" stylesheets="@../style/style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.fellesprosjekt.gruppe24.client.controllers.NewUserController">
    <bottom>
       <HBox alignment="BOTTOM_RIGHT" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="349.0" layoutY="319.0" mnemonicParsing="false" text="OK" />
-            <Button mnemonicParsing="false" text="Avbryt">
+            <Button layoutX="349.0" layoutY="319.0" mnemonicParsing="false" onAction="#registerClick" text="Registrer" />
+            <Button mnemonicParsing="false" onAction="#cancelClick" text="Avbryt">
                <HBox.margin>
                   <Insets left="10.0" />
                </HBox.margin>
@@ -37,23 +37,28 @@
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
          </columnConstraints>
          <rowConstraints>
-            <RowConstraints minHeight="0.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="0.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="25.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="25.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="25.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="25.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="25.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="25.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="35.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <Label layoutX="3.0" layoutY="296.0" text="Etternavn:" GridPane.rowIndex="3" />
-            <Label layoutX="89.0" layoutY="277.0" text="Passord:" GridPane.rowIndex="1" />
-            <Label layoutX="132.0" layoutY="317.0" text="Brukernavn:" />
-            <Label layoutX="44.0" layoutY="251.0" text="Email: " GridPane.rowIndex="4" />
-            <Label layoutX="37.0" layoutY="327.0" text="Fornavn:" GridPane.rowIndex="2" />
-            <TextField GridPane.columnIndex="1" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Label text="Brukernavn:" />
+            <Label text="Passord:" GridPane.rowIndex="1" />
+            <Label text="Bekreft Passord:" GridPane.rowIndex="2" />
+            <Label text="Fornavn:" GridPane.rowIndex="3" />
+            <Label text="Etternavn:" GridPane.rowIndex="4" />
+            <Label text="Email:" GridPane.rowIndex="5" />
+            <TextField GridPane.columnIndex="1" onKeyReleased="#keyReleased" fx:id="usernameField" />
+            <PasswordField GridPane.columnIndex="1" onKeyReleased="#keyReleased" fx:id="passwordField" GridPane.rowIndex="1" />
+            <PasswordField GridPane.columnIndex="1" onKeyReleased="#keyReleased" fx:id="passwordField2" GridPane.rowIndex="2" />
+            <TextField GridPane.columnIndex="1" onKeyReleased="#keyReleased" fx:id="firstName" GridPane.rowIndex="3" />
+            <TextField GridPane.columnIndex="1" onKeyReleased="#keyReleased" fx:id="lastName" GridPane.rowIndex="4" />
+            <TextField GridPane.columnIndex="1" onKeyReleased="#keyReleased" fx:id="emailField" GridPane.rowIndex="5" />
+            <Label fx:id="status_txt" text="" textFill="#CC0000" GridPane.columnSpan="2" GridPane.rowIndex="6" />
          </children>
          <BorderPane.margin>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

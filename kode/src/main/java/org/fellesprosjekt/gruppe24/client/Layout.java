@@ -17,4 +17,6 @@ public class Layout {
     public static final String MeetingDetail = "/layout/MeetingDetail.fxml";
 
     public static final String NewGroup = "/layout/NewGroup.fxml";
+
+    public static final String NewUser = "/layout/NewUser.fxml";
 }
