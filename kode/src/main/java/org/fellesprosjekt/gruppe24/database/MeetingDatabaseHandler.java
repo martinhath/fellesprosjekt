@@ -159,27 +159,36 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
         if (meeting.getRoom() != null) roomid = meeting.getRoom().getId();
         if (meeting.getGroup() != null) groupid = meeting.getGroup().getId();
         if (meeting.getOwner() != null) ownerid = meeting.getOwner().getId();
+        try {
+            String query = String.format(
+                    "UPDATE Meeting SET name = ?, " +
+                            "description = ?, " +
+                            "start_time = ?, " +
+                            "end_time = ?, " +
+                            "room_roomid = ?, " +
+                            "location = ?, " +
+                            "owner_id = ?, " +
+                            "group_groupid = ?"
+                            + " WHERE meetingid = ?;");
+            PreparedStatement ps = DatabaseManager.getPreparedStatement(query);
 
-        String query = String.format(
-                "UPDATE Meeting SET name = '%s', " +
-                        "description = '%s', " +
-                        "start_time = '%s', " +
-                        "end_time = '%s', " +
-                        "room_roomid = '%s', " +
-                        "location = '%s', " +
-                        "owner_id = '%s', " +
-                        "Group_groupid = '%s'"
-                + " WHERE meetingid = %s;",
-                meeting.getName(),
-                meeting.getDescription(),
-                java.sql.Timestamp.valueOf(meeting.getFrom()),
-                java.sql.Timestamp.valueOf(meeting.getTo()),
-                roomid == 0 ? null : roomid,
-                meeting.getLocation(),
-                ownerid == 0 ? null : ownerid,
-                groupid == 0 ? null : groupid,
-                meeting.getId());
-        DatabaseManager.updateQuery(query);
+            ps.setString(1, meeting.getName());
+            ps.setString(2, meeting.getDescription());
+            ps.setTimestamp(3, java.sql.Timestamp.valueOf(meeting.getFrom()));
+            ps.setTimestamp(4, java.sql.Timestamp.valueOf(meeting.getTo()));
+            if (roomid == 0) ps.setNull(5, 0);
+            else ps.setInt(5, roomid);
+            ps.setString(6, meeting.getLocation());
+            if (ownerid == 0) ps.setNull(7, 0);
+            else ps.setInt(7, ownerid);
+            if (groupid == 0) ps.setNull(8, 0);
+            else ps.setInt(8, groupid);
+            ps.setInt(9, meeting.getId());
+            DatabaseManager.executePS(ps);
+        } catch (Exception ex) {
+            lgr.severe(ex.toString());
+            return false;
+        }
         return true;
     }
 
@@ -220,7 +229,7 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
         List<Integer> result = new ArrayList<>();
         String query = String.format("SELECT user_userid FROM User_invited_to_meeting WHERE meeting_meetingid=%d", meetingid);
         ArrayList<HashMap<String, String>> resultSet = DatabaseManager.getList(query);
-        for (HashMap<String, String> row: resultSet) {
+        for (HashMap<String, String> row : resultSet) {
             result.add(Integer.parseInt(row.get("user_userid")));
         }
         return result;

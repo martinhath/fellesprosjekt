@@ -53,13 +53,12 @@ public final class RoomDatabaseHandler extends DatabaseHandler<Room> {
         try {
             String query =
                             "INSERT INTO Room " +
-                            "(room_num, capacity) " +
-                            "VALUES (?, ?);";
+                            "(room_num, capacity, available) " +
+                            "VALUES (?, ?, ?);";
             PreparedStatement ps = DatabaseManager.getPreparedStatement(query);
             ps.setString(1, room.getName());
             ps.setInt(2, room.getCapacity());
-            //ps.setBoolean(3, room.isAccessible());
-            // gikk ikke an å sette boolean-field ...
+            ps.setBoolean(3, room.isAccessible());
             int newId = DatabaseManager.executePS(ps);
             return new Room(newId, room.getName(), room.getCapacity(), room.isAccessible());
         } catch (SQLException ex) {
