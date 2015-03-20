@@ -93,6 +93,8 @@ public class MeetingDetailController extends ClientController {
 
                 comboRoom.getItems().clear();
                 comboRoom.getItems().addAll((List<Room>) res.payload);
+                Platform.runLater(() -> comboRoom.getSelectionModel()
+                                        .select(meeting.getRoom()));
                 getClient().removeListener(this);
             }
         });
@@ -114,6 +116,9 @@ public class MeetingDetailController extends ClientController {
                 Platform.runLater(() -> {
                     comboOwner.getItems().clear();
                     comboOwner.getItems().addAll((List<User>) res.payload);
+                    comboOwner.getSelectionModel().select(
+                            meeting.getOwner()
+                    );
                 });
                 getClient().removeListener(this);
             }
@@ -270,22 +275,11 @@ public class MeetingDetailController extends ClientController {
         return true;
     }
 
-    private boolean validateParticipants() {
-        int n = listInvited.getItems().size() +
-                listParticipants.getItems().size();
-        if (n == 0){
-            labelError.setText("Det er ingen deltakere!");
-            return false;
-        }
-        return true;
-    }
-
     private boolean validateFields() {
         // TODO: denne.
         // bør vise hvilke felter som er gale.
         boolean b =  validateRoom() && validateDate() &&
-                validateFromTime() && validateToTime() &&
-                validateParticipants();
+                validateFromTime() && validateToTime();
         if (!b)
             return false;
         labelError.setText("");
