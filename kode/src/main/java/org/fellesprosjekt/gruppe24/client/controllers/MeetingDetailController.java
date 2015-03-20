@@ -91,10 +91,8 @@ public class MeetingDetailController extends ClientController {
                 System.out.println(res.payload);
                 if (!listInstanceOf(res.payload, Room.class)) return;
 
-                System.out.println("halla");
                 comboRoom.getItems().clear();
                 comboRoom.getItems().addAll((List<Room>) res.payload);
-                System.out.println("wat: " + comboRoom.getItems().size());
                 getClient().removeListener(this);
             }
         });
@@ -195,8 +193,12 @@ public class MeetingDetailController extends ClientController {
         getParticipantsAndInvited();
     }
 
+    /**
+     * Kalles når vi skal ha data fra formen til møteobjektet.
+     */
     private void editMeeting() {
-        meeting.setOwner((User) comboOwner.getSelectionModel().getSelectedItem());
+        meeting.setOwner((User) comboOwner.getSelectionModel()
+                .getSelectedItem());
         meeting.setName(labelTitle.getText());
         meeting.setDescription(textDesc.getText());
 
@@ -207,10 +209,12 @@ public class MeetingDetailController extends ClientController {
 
         LocalTime t = LocalTime.parse(textTo.getText(),
                 Formatters.hhmmformat);
-
-        datePicker.setValue(meeting.getFrom().toLocalDate());
-        textFrom.setText(meeting.getFrom().format(Formatters.hhmmformat));
-        textTo.setText(meeting.getTo().format(Formatters.hhmmformat));
+        meeting.setTo(datePicker.getValue().atStartOfDay()
+                .plusMinutes(t.getHour() * 60 + f.getMinute()));
+        List<Entity> participants = new LinkedList<>();
+        participants.addAll(listInvited.getItems());
+        participants.addAll(listParticipants.getItems());
+        meeting.setParticipants(participants);
     }
 
     private void setOKText(Node n) {
@@ -340,17 +344,20 @@ public class MeetingDetailController extends ClientController {
     }
 
     public void clickSave(ActionEvent actionEvent) {
-        if (!validateFields()) return;
+        if (!validateFields())
+            return;
+
+        editMeeting();
         Request req = new MeetingRequest(Request.Type.PUT, meeting);
         getClient().sendTCP(req);
         getClient().addListener(new ClientListener() {
             @Override
             public void receivedResponse(Connection conn, Response res) {
-                if (res.type == Response.Type.FAIL) return;
+                if (res.type == Response.Type.FAIL)
+                    return;
 
+                editMode = false;
                 Platform.runLater(() -> {
-                    setMeeting(meeting);
-                    editMode = false;
                     buttonEdit.setText("Rediger");
                     buttonSave.setVisible(false);
                     buttonDelete.setVisible(false);
