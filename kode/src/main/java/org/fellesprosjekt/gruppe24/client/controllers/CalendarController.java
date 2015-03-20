@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.text.Text;
@@ -17,10 +18,7 @@ import org.fellesprosjekt.gruppe24.client.Formatters;
 import org.fellesprosjekt.gruppe24.client.components.MeetingPane;
 import org.fellesprosjekt.gruppe24.client.Layout;
 import org.fellesprosjekt.gruppe24.client.listeners.ClientListener;
-import org.fellesprosjekt.gruppe24.common.models.GroupNotification;
-import org.fellesprosjekt.gruppe24.common.models.Meeting;
-import org.fellesprosjekt.gruppe24.common.models.MeetingNotification;
-import org.fellesprosjekt.gruppe24.common.models.Notification;
+import org.fellesprosjekt.gruppe24.common.models.*;
 import org.fellesprosjekt.gruppe24.common.models.net.*;
 
 import java.net.URL;
@@ -53,11 +51,15 @@ public class CalendarController extends ClientController {
     @FXML private GridPane calendarGrid;
     @FXML private ScrollPane scrollPane;
 
+    @FXML private ComboBox<Entity> dropdownGroups;
+
     private LocalDateTime date;
 
     // top kek
     public static List<Meeting> meetings = new LinkedList<>();
     public static List<Notification> notifications = new LinkedList<>();
+    public static List<Entity> groups = new LinkedList<>();
+    public static Map<Integer, MeetingNotification> meetingNotificationMap = new HashMap<Integer, MeetingNotification>();
 
     private static boolean isInited = false;
 
@@ -89,7 +91,18 @@ public class CalendarController extends ClientController {
                     return;
                 }
                 notifications = (List<Notification>) res.payload;
-                Platform.runLater(CalendarController.this::showNotificationCount);
+                Platform.runLater(CalendarController.this::loadNotifications);
+            }
+        });
+        getClient().addListener(new ClientListener() {
+            @Override
+            public void receivedResponse(Connection conn, Response res) {
+                if (res.type == Response.Type.FAIL) return;
+                if (!listInstanceOf(res.payload, Group.class)) {
+                    return;
+                }
+                groups = (List<Entity>) res.payload;
+                Platform.runLater(CalendarController.this::showGroups);
             }
         });
     }
@@ -115,13 +128,26 @@ public class CalendarController extends ClientController {
             Request req = new MeetingRequest(Request.Type.LIST, getApplication().getUser());
             getClient().sendTCP(req);
             req = new NotificationRequest(Request.Type.LIST,
-                    false, NotificationRequest.Handler.BOTH, getApplication().getUser());
+                    true, NotificationRequest.Handler.BOTH, getApplication().getUser());
+            getClient().sendTCP(req);
+            req = new GroupRequest(Request.Type.LIST, getApplication().getUser());
             getClient().sendTCP(req);
 
             isInited = true;
         } else {
             showMeetings();
             showNotificationCount();
+            showGroups();
+        }
+    }
+
+    private void loadNotifications() {
+        showNotificationCount();
+        for (Notification not : notifications) {
+            if (not instanceof MeetingNotification) {
+                MeetingNotification mnot = (MeetingNotification) not;
+                meetingNotificationMap.put(mnot.getMeeting().getId(), mnot);
+            }
         }
     }
 
@@ -167,6 +193,11 @@ public class CalendarController extends ClientController {
         setDefaultScrollPosition();
     }
 
+    private void showGroups() {
+        groups.add(getApplication().getUser());
+        dropdownGroups.getItems().addAll(groups);
+    }
+
     private void markToday() {
 		LocalDateTime now = LocalDateTime.now();
 		WeekFields weekFields = WeekFields.of(Locale.getDefault()); 
@@ -198,6 +229,8 @@ public class CalendarController extends ClientController {
      * @param hidden om det kan skules fullstendig bak et annet møte
      */
     private void showMeeting(Meeting m, boolean hidden) {
+        if (!meetingConfirmed(m)) return;
+
         LocalDateTime from = m.getFrom();
         LocalDateTime to = m.getTo();
 
@@ -214,6 +247,11 @@ public class CalendarController extends ClientController {
         MeetingPane pane = new MeetingPane(this, m);
         if (hidden) {
             // TODO gjøre den litt breiere sånn at den er synlig uansett?
+        }
+
+        if (!meetingRead(m)) {
+            // TODO gi den litt grå farge elns?
+            pane.getChildren().add(new Label("Ikke lest"));
         }
         calendarGrid.add(pane, col, row);
         int duration = m.getTo().getHour() - m.getFrom().getHour() + 1;
@@ -239,6 +277,33 @@ public class CalendarController extends ClientController {
 
         labelWeek.setText("Uke " + date.format(Formatters.weekformat));
         labelMonth.setText(date.format(Formatters.monthformat));
+    }
+
+    /**
+     * Sjekker om et møte er confirmed for brukeren
+     * @param meeting
+     * @return
+     */
+    private boolean meetingConfirmed(Meeting meeting) {
+        if (dropdownGroups.getValue() instanceof Group) return true;
+        try {
+            return meetingNotificationMap.get(meeting.getId()).isConfirmed();
+        } catch (NullPointerException ex) {
+            return true;
+        }
+    }
+
+    /**
+     * Sjekker om et møte sin notification er lest av brukeren
+     * @param meeting
+     * @return
+     */
+    private boolean meetingRead(Meeting meeting) {
+        try {
+            return meetingNotificationMap.get(meeting.getId()).isRead();
+        } catch (NullPointerException ex) {
+            return true;
+        }
     }
 
     @FXML
@@ -293,5 +358,11 @@ public class CalendarController extends ClientController {
                 getClient().removeListener(this);
             }
         });
+    }
+
+    @FXML
+    public void groupsChanged() {
+        Request req = new MeetingRequest(Request.Type.LIST, dropdownGroups.getValue());
+        getClient().sendTCP(req);
     }
 }
