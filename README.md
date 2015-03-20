@@ -1,3 +1,7 @@
+#OBS!
+
+For å kunne koble til databasen må man være koblet til Eduroam.
+
 #HALLLO!!  [![Build status](https://ci.frigg.io/badges/martinhath/fellesprosjekt/)](https://ci.frigg.io/martinhath/fellesprosjekt/last/)
 
 Gruppe 24 er best! 
