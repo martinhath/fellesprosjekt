@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.controlsfx.control.CheckComboBox?>
+<BorderPane prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            stylesheets="@../style/style.css" styleClass="border-pane"
+            fx:controller="org.fellesprosjekt.gruppe24.client.controllers.GroupController">
+    <top>
+        <Label styleClass="group-title" text="Ny gruppe" />
+    </top>
+    <center>
+        <GridPane BorderPane.alignment="CENTER" styleClass="group-grid">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="-Infinity" />
+                <ColumnConstraints />
+            </columnConstraints>
+            <children>
+                <Label text="Navn:"
+                       GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <TextField fx:id="fieldName"
+                           GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                <Label text="Medlemmer: " styleClass="group-label"
+                       GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+                <CheckComboBox fx:id="dropdownMembers"
+                               GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+            </children>
+        </GridPane>
+    </center>
+    <bottom>
+        <FlowPane prefHeight="50.0" prefWidth="200.0" alignment="CENTER_RIGHT">
+            <children>
+                <Button fx:id="buttonAbort" onAction="#clickAbort" text="Avbryt"/>
+                <Button fx:id="buttonOk" onAction="#clickOk" text="OK" />
+            </children>
+        </FlowPane>
+    </bottom>
+</BorderPane>

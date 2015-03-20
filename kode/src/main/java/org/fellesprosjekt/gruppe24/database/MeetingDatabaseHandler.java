@@ -153,8 +153,42 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
     }
 
     public boolean update(Meeting meeting) {
-        // TODO
-        return true;
+        int roomid = 0;
+        int groupid = 0;
+        int ownerid = 0;
+        if (meeting.getRoom() != null) roomid = meeting.getRoom().getId();
+        if (meeting.getGroup() != null) groupid = meeting.getGroup().getId();
+        if (meeting.getOwner() != null) ownerid = meeting.getOwner().getId();
+        try {
+            String query = String.format(
+                    "UPDATE Meeting SET name = ?, " +
+                            "description = ?, " +
+                            "start_time = ?, " +
+                            "end_time = ?, " +
+                            "room_roomid = ?, " +
+                            "location = ?, " +
+                            "owner_id = ?, " +
+                            "group_groupid = ?"
+                            + " WHERE meetingid = ?;");
+            PreparedStatement ps = DatabaseManager.getPreparedStatement(query);
+
+            ps.setString(1, meeting.getName());
+            ps.setString(2, meeting.getDescription());
+            ps.setTimestamp(3, java.sql.Timestamp.valueOf(meeting.getFrom()));
+            ps.setTimestamp(4, java.sql.Timestamp.valueOf(meeting.getTo()));
+            if (roomid == 0) ps.setNull(5, 0);
+            else ps.setInt(5, roomid);
+            ps.setString(6, meeting.getLocation());
+            if (ownerid == 0) ps.setNull(7, 0);
+            else ps.setInt(7, ownerid);
+            if (groupid == 0) ps.setNull(8, 0);
+            else ps.setInt(8, groupid);
+            ps.setInt(9, meeting.getId());
+            return DatabaseManager.executePS(ps) != -1;
+        } catch (Exception ex) {
+            lgr.severe(ex.toString());
+            return false;
+        }
     }
 
     public void addUserToMeeting(Meeting meeting, User user, String message) {
@@ -194,7 +228,7 @@ public class MeetingDatabaseHandler extends DatabaseHandler<Meeting> {
         List<Integer> result = new ArrayList<>();
         String query = String.format("SELECT user_userid FROM User_invited_to_meeting WHERE meeting_meetingid=%d", meetingid);
         ArrayList<HashMap<String, String>> resultSet = DatabaseManager.getList(query);
-        for (HashMap<String, String> row: resultSet) {
+        for (HashMap<String, String> row : resultSet) {
             result.add(Integer.parseInt(row.get("user_userid")));
         }
         return result;

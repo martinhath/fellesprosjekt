@@ -32,8 +32,8 @@ public class MeetingDatabaseHandlerTest {
         rhandler = RoomDatabaseHandler.GetInstance();
 
         user = uhandler.getAll().get(0);
-        Meeting meeting = mhandler.insert(new Meeting(
-                "Fredagspils",
+        meeting = mhandler.insert(new Meeting(
+                "Her blir det liv",
                 "Som vanlig ses vi på fredag.",
                 null,
                 LocalDateTime.now(),
@@ -81,6 +81,17 @@ public class MeetingDatabaseHandlerTest {
         assertNotNull(meeting);
         assertNotNull(meeting.getOwner());
         assertNotNull(meeting.getName());
+    }
+
+    @Test
+    public void testCanUpdateMeeting() {
+        List<Meeting> meetingList = mhandler.getAll();
+        String expected = "Jadda";
+        meeting.setDescription(expected);
+        mhandler.update(meeting);
+        meeting = mhandler.get(meeting.getId());
+        assertNotNull(meeting);
+        assertEquals(expected, meeting.getDescription());
     }
 
     @Test
