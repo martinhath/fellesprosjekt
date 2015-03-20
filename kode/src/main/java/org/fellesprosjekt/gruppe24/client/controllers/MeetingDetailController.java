@@ -9,6 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import org.fellesprosjekt.gruppe24.client.Formatters;
 import org.fellesprosjekt.gruppe24.client.Layout;
 import org.fellesprosjekt.gruppe24.client.listeners.ClientListener;
@@ -49,6 +50,7 @@ public class MeetingDetailController extends ClientController {
     @FXML public ListView<Entity> listParticipants;
     @FXML public ListView<Entity> listInvited;
     @FXML public ComboBox<Entity> comboInvite;
+    @FXML public ComboBox<Entity> comboRemove;
 
     @FXML public Label labelError;
 
@@ -56,6 +58,9 @@ public class MeetingDetailController extends ClientController {
     @FXML public Button buttonEdit;
     @FXML public Button buttonSave;
     @FXML public Button buttonDelete;
+
+    @FXML public HBox hboxAdd;
+    @FXML public HBox hboxRemove;
 
     private LocalTime totime;
     private LocalTime fromtime;
@@ -84,6 +89,10 @@ public class MeetingDetailController extends ClientController {
                 (observable, t, curr) ->
                         Platform.runLater(() ->
                                 inviteUser(curr)));
+        comboRemove.valueProperty().addListener(
+                (observable, t, curr) ->
+                        Platform.runLater(() ->
+                                removeUser(curr)));
     }
 
     private void getRooms() {
@@ -160,12 +169,11 @@ public class MeetingDetailController extends ClientController {
                     for (Notification not : notifications) {
                         User u = not.getUser();
                         if (not.isConfirmed()) {
-                            listParticipants.getItems().add(u);
+                            addConfirmed(u);
                         } else if (!not.isRead()) {
-                            listInvited.getItems().add(u);
+                            addInvited(u);
                         }
                     }
-                    comboInvite.getItems().removeAll(listInvited.getItems());
                 });
                 getClient().removeListener(this);
             }
@@ -201,11 +209,13 @@ public class MeetingDetailController extends ClientController {
         datePicker.setDisable(!editMode);
         textFrom.setEditable(editMode);
         textTo.setEditable(editMode);
+        hboxAdd.setVisible(editMode);
+        hboxRemove.setVisible(editMode);
 
         if (meeting == null)
             return;
 
-        comboOwner.getItems().add(meeting.getOwner());
+        addInvited(meeting.getOwner());
         comboOwner.getSelectionModel().select(meeting.getOwner());
         labelTitle.setText(meeting.getName());
         textDesc.setText(meeting.getDescription());
@@ -379,11 +389,35 @@ public class MeetingDetailController extends ClientController {
         });
     }
 
+    private void addInvited(User u) {
+        comboInvite.getItems().remove(u);
+        comboRemove.getItems().add(u);
+        listInvited.getItems().add(u);
+    }
+
+    private void addConfirmed(User u) {
+        listParticipants.getItems().add(u);
+        listInvited.getItems().remove(u);
+    }
+
+    private void removeInvitedOrConfirmed(User u) {
+        comboInvite.getItems().add(u);
+        comboRemove.getItems().remove(u);
+
+        listInvited.getItems().remove(u);
+        listParticipants.getItems().remove(u);
+    }
+
     public void inviteUser(Entity e) {
         if (e == null) return;
         User u = (User) e;
-        listInvited.getItems().add(u);
         comboInvite.getSelectionModel().clearSelection();
-        comboInvite.getItems().remove(e);
+        addInvited(u);
+    }
+
+    public void removeUser(Entity e) {
+        if (e == null) return;
+        User u = (User) e;
+        removeInvitedOrConfirmed(u);
     }
 }

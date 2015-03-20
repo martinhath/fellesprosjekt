@@ -52,7 +52,14 @@
                         <Label styleClass="label"
                                text="Inviterte" />
                         <ListView fx:id="listInvited" />
-                        <ComboBox fx:id="comboInvite" />
+                        <HBox fx:id="hboxAdd">
+                            <Label text="Legg til:" minWidth="-Infinity"/>
+                            <ComboBox fx:id="comboInvite" />
+                        </HBox>
+                        <HBox fx:id="hboxRemove">
+                            <Label text="Fjern" minWidth="-Infinity"/>
+                            <ComboBox fx:id="comboRemove" />
+                        </HBox>
                     </children>
                 </VBox>
             </children>
