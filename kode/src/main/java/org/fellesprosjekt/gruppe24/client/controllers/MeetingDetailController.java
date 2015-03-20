@@ -78,26 +78,23 @@ public class MeetingDetailController extends ClientController {
     }
 
     private void getRooms() {
-        Request groupReq = new GroupRequest(Request.Type.LIST, null);
+        Request groupReq = new RoomRequest(Request.Type.LIST, null);
         getClient().sendTCP(groupReq);
         getClient().addListener(new ClientListener() {
             @Override
             public void receivedResponse(Connection conn, Response res) {
+                System.out.println("noe");
                 if (res.type == Response.Type.FAIL) {
                     logger.info((String) res.payload);
                     return;
                 }
-                try{
-                    List<Room> rooms = (List<Room>) res.payload;
-                    if (rooms != null && rooms.get(0) instanceof Room) {
-                        comboRoom.getItems().clear();
-                        comboRoom.getItems().addAll(rooms);
-                    }
-                } catch (ClassCastException e){
-                    logger.warning("Payload was of wrong type: " + res.payload);
-                    return;
-                } catch (IndexOutOfBoundsException e){
-                }
+                System.out.println(res.payload);
+                if (!listInstanceOf(res.payload, Room.class)) return;
+
+                System.out.println("halla");
+                comboRoom.getItems().clear();
+                comboRoom.getItems().addAll((List<Room>) res.payload);
+                System.out.println("wat: " + comboRoom.getItems().size());
                 getClient().removeListener(this);
             }
         });
@@ -135,7 +132,6 @@ public class MeetingDetailController extends ClientController {
                 if (res.payload == null) return;
                 if (!listInstanceOf(res.payload, MeetingNotification.class)) return;
 
-                System.out.println("gg");
                 List<Notification> notifications = (List<Notification>) res.payload;
 
                 Platform.runLater(() -> {
@@ -197,6 +193,24 @@ public class MeetingDetailController extends ClientController {
         textTo.setText(meeting.getTo().format(Formatters.hhmmformat));
 
         getParticipantsAndInvited();
+    }
+
+    private void editMeeting() {
+        meeting.setOwner((User) comboOwner.getSelectionModel().getSelectedItem());
+        meeting.setName(labelTitle.getText());
+        meeting.setDescription(textDesc.getText());
+
+        LocalTime f = LocalTime.parse(textFrom.getText(),
+                Formatters.hhmmformat);
+        meeting.setFrom(datePicker.getValue().atStartOfDay()
+                .plusMinutes(f.getHour() * 60 + f.getMinute()));
+
+        LocalTime t = LocalTime.parse(textTo.getText(),
+                Formatters.hhmmformat);
+
+        datePicker.setValue(meeting.getFrom().toLocalDate());
+        textFrom.setText(meeting.getFrom().format(Formatters.hhmmformat));
+        textTo.setText(meeting.getTo().format(Formatters.hhmmformat));
     }
 
     private void setOKText(Node n) {
