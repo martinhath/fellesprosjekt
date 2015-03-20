@@ -6,16 +6,9 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
-import javafx.application.Platform;
-import org.fellesprosjekt.gruppe24.client.listeners.ClientListener;
-import org.fellesprosjekt.gruppe24.common.models.GroupNotification;
-import org.fellesprosjekt.gruppe24.common.models.MeetingNotification;
 import org.fellesprosjekt.gruppe24.common.models.Notification;
 import org.fellesprosjekt.gruppe24.common.models.net.NotificationRequest;
 import org.fellesprosjekt.gruppe24.common.models.net.Request;
-import org.fellesprosjekt.gruppe24.common.models.net.Response;
-
-import com.esotericsoftware.kryonet.Connection;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -36,6 +29,7 @@ public class NotificationController extends ClientController {
     @FXML public Button buttonAccept;
     @FXML public Button buttonDeny;
 
+    private boolean showRead = true;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -73,7 +67,8 @@ public class NotificationController extends ClientController {
         listView.getItems().clear();
         notifications.clear();
         for (Notification n : CalendarController.notifications) {
-            addNotificationToList(n);
+            if (showRead || !n.isRead())
+                addNotificationToList(n);
         }
     }
 
@@ -84,6 +79,11 @@ public class NotificationController extends ClientController {
         if (not.isRead())
             label.setStyle("-fx-text-fill: #aaa");
         listView.getItems().add(label);
+    }
+
+    public void toggleShowRead() {
+        showRead = !showRead;
+        init();
     }
 
     public void clickAbort(ActionEvent actionEvent) {
